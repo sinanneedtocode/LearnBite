@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Challenge - LearnBite</title>
+    <style>
+        :root {
+            --primary-color: #58CC02; /* Duolingo green */
+            --secondary-color: #1CB0F6;
+            --accent-color: #FF6B6B;
+            --text-color: #2D2D2D;
+            --white: #FFFFFF;
+            --bg-color: #F8F9FA;
+            --card-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            --border-radius: 24px;
+            --button-radius: 50px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Rubik', sans-serif;
+        }
+
+        body {
+            background: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.5;
+        }
+
+        .challenge-container {
+            max-width: 800px;
+            margin: 100px auto 2rem;
+            padding: 2rem;
+        }
+
+        .challenge-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--primary-color);
+            color: var(--white);
+            padding: 1.5rem 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 16px rgba(88, 204, 2, 0.2);
+            margin-bottom: 2rem;
+        }
+
+        .timer {
+            font-size: 1.25rem;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 16px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .score-container {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .gems, .streak {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: bold;
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+        }
+
+        .question-card {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .question-card h2 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .question-card p {
+            font-size: 1.4rem;
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .option-btn {
+            padding: 1.5rem 2rem;
+            border: 3px solid #E5E5E5;
+            border-radius: var(--button-radius);
+            background: var(--white);
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-size: 1.2rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .option-btn:hover {
+            transform: scale(1.03);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+        }
+
+        .option-btn.correct {
+            border-color: var(--primary-color);
+            background: var(--primary-color);
+            color: var(--white);
+            animation: correctBounce 0.5s ease;
+        }
+
+        .option-btn.incorrect {
+            border-color: var(--accent-color);
+            background: var(--accent-color);
+            color: var(--white);
+            animation: shake 0.4s ease;
+        }
+
+        .progress-bar {
+            height: 12px;
+            background: #E3E4E8;
+            border-radius: 50px;
+            margin: 2rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary-color);
+            border-radius: 50px;
+            transition: width 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .results-screen {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: var(--primary-color);
+            color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            display: none;
+        }
+
+        .celebration {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: celebrate 1s ease infinite;
+        }
+
+        .action-btn {
+            background: var(--white);
+            color: var(--primary-color);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 2rem;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+        }
+
+        @keyframes correctBounce {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(10px); }
+            50% { transform: translateX(-10px); }
+            75% { transform: translateX(5px); }
+            100% { transform: translateX(0); }
+        }
+
+        @keyframes celebrate {
+            0% { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(15deg) scale(1.2); }
+            50% { transform: rotate(-15deg) scale(1.3); }
+            75% { transform: rotate(10deg) scale(1.2); }
+            100% { transform: rotate(0deg) scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="challenge-container">
+        <div class="challenge-header">
+            <div class="timer">⏳ 10:00</div>
+            <div class="score-container">
+                <div class="gems">💎 <span id="score">0</span></div>
+                <div class="streak">🔥 <span id="streak">0</span>x</div>
+            </div>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" style="width: 0%"></div>
+        </div>
+
+        <div id="questionContainer"></div>
+        <div id="resultsScreen" class="results-screen">
+            <div class="celebration">🎉</div>
+            <h2>Challenge Complete!</h2>
+            <p>You earned <span id="finalScore">0</span> Gems!</p>
+            <button onclick="window.location.href = 'index.html'" class="action-btn">
+                🏡 Return to Dashboard
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const API_KEY = 'YOUR_API_KEY';
+        let currentQuestion = 0;
+        let score = 0;
+        let streak = 0;
+        let timeLeft = 600;
+        let questions = [];
+        let timerInterval;
+
+        const backupQuestions = [
+            {
+                question: "What is 15% of 200?",
+                options: ["30", "15", "45", "20"],
+                correct: 0
+            },
+            {
+                question: "Solve for x: 2x + 5 = 15",
+                options: ["5", "10", "7.5", "3"],
+                correct: 0
+            },
+            {
+                question: "What is the area of a square with side length 4 cm?",
+                options: ["16 cm²", "8 cm²", "12 cm²", "20 cm²"],
+                correct: 0
+            }
+        ];
+
+        async function initializeChallenge() {
+            try {
+                const generatedQuestions = await generateQuestions();
+                questions = parseQuestions(generatedQuestions);
+            } catch (error) {
+                console.error('Using backup questions:', error);
+                questions = backupQuestions;
+            }
+            
+            showQuestion();
+            startTimer();
+        }
+
+        async function generateQuestions() {
+            const prompt = `Generate 3 CBSE-grade math problems with 4 options each and mark the correct answer. Format:
+            Q1. [Question]
+            A) [Option1]
+            B) [Option2]
+            C) [Option3]
+            D) [Option4]
+            Answer: A`;
+
+            const { GoogleGenerativeAI } = await import("https://esm.run/@google/generative-ai");
+            const genAI = new GoogleGenerativeAI(API_KEY);
+            const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+            const result = await model.generateContent(prompt);
+            return result.response.text();
+        }
+
+        function parseQuestions(text) {
+            const questionBlocks = text.split(/(Q\d+\.)/g).filter(block => block.trim());
+            const parsedQuestions = [];
+
+            for (let i = 0; i < questionBlocks.length; i += 2) {
+                const questionPart = questionBlocks[i + 1];
+                const lines = questionPart.split('\n').map(line => line.trim()).filter(line => line);
+                
+                const question = {
+                    question: lines[0],
+                    options: [],
+                    correct: 0
+                };
+
+                for (let j = 1; j < 5; j++) {
+                    if (lines[j]) {
+                        question.options.push(lines[j].replace(/^[A-D]\)\s*/, ''));
+                    }
+                }
+
+                const answerLine = lines.find(line => line.startsWith('Answer:'));
+                if (answerLine) {
+                    question.correct = answerLine.charCodeAt(7) - 65;
+                }
+
+                parsedQuestions.push(question);
+            }
+
+            return parsedQuestions.slice(0, 3);
+        }
+
+        function showQuestion() {
+            const question = questions[currentQuestion];
+            const html = `
+                <div class="question-card">
+                    <h2>Question ${currentQuestion + 1}</h2>
+                    <p>${question.question}</p>
+                    <div class="options-grid">
+                        ${question.options.map((opt, i) => `
+                            <div class="option-btn" onclick="checkAnswer(${i})">
+                                ${String.fromCharCode(65 + i)}) ${opt}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            document.getElementById('questionContainer').innerHTML = html;
+            updateProgress();
+        }
+        let totalGems = localStorage.getItem('gems') ? parseInt(localStorage.getItem('gems')) : 1250;
+
+        async function initializeChallenge() {
+            try {
+                // Load initial gems
+                document.getElementById('score').textContent = totalGems;
+                
+                // Rest of existing initialization code
+                const generatedQuestions = await generateQuestions();
+                questions = parseQuestions(generatedQuestions);
+            } catch (error) {
+                console.error('Using backup questions:', error);
+                questions = backupQuestions;
+            }
+            
+            showQuestion();
+            startTimer();
+        }
+
+        // Modified checkAnswer function
+        function checkAnswer(selectedIndex) {
+            const question = questions[currentQuestion];
+            const buttons = document.querySelectorAll('.option-btn');
+            
+            buttons.forEach(btn => btn.style.pointerEvents = 'none');
+            
+            if (selectedIndex === question.correct) {
+                buttons[selectedIndex].classList.add('correct');
+                score += 10;
+                streak++;
+                
+                // Update gems in localStorage
+                totalGems += 10;
+                localStorage.setItem('gems', totalGems);
+                document.getElementById('score').textContent = totalGems;
+                
+                document.getElementById('streak').textContent = streak;
+            } else {
+                buttons[selectedIndex].classList.add('incorrect');
+                buttons[question.correct].classList.add('correct');
+                streak = 0;
+            }
+
+
+            setTimeout(() => {
+                currentQuestion++;
+                if (currentQuestion < questions.length) {
+                    showQuestion();
+                } else {
+                    document.querySelector('.progress-fill').style.width = '100%';
+                    setTimeout(endChallenge, 300);
+                }
+            }, 1500);
+        }
+
+        function startTimer() {
+            const timerElement = document.querySelector('.timer');
+            
+            function updateTimer() {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timerElement.textContent = `⏳ ${minutes}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    endChallenge();
+                }
+                timeLeft--;
+            }
+
+            updateTimer();
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        function updateProgress() {
+            const progress = (currentQuestion / questions.length) * 100;
+            document.querySelector('.progress-fill').style.width = `${progress}%`;
+        }
+
+        function endChallenge() {
+            clearInterval(timerInterval);
+            document.getElementById('questionContainer').style.display = 'none';
+            document.getElementById('resultsScreen').style.display = 'block';
+            document.getElementById('finalScore').textContent = score;
+            document.querySelector('.progress-fill').style.width = '100%';
+        }
+
+        initializeChallenge().catch(console.error);
+    </script>
+</body>
+</html>

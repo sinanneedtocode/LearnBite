@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SocialSphere - CBSE Class 9 Social Studies</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Rubik:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --history: #EF4444;
+            --geography: #10B981;
+            --politics: #3B82F6;
+            --economics: #8B5CF6;
+            --text: #2D2D2D;
+            --white: #FFFFFF;
+            --bg: #f8fafc;
+            --card-shadow: 0 12px 24px rgba(0,0,0,0.08);
+            --radius: 24px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Rubik', sans-serif;
+        }
+
+        body {
+            background: var(--bg);
+            background-image: url("data:image/svg+xml,%3Csvg width='52' height='26' viewBox='0 0 52 26' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 10c0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6h2c0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4v2c-3.314 0-6-2.686-6-6 0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6zm-6 8c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z' fill='%23F87171' fill-opacity='0.06' fill-rule='evenodd'/%3E%3C/svg%3E");
+            color: var(--text);
+            line-height: 1.6;
+            padding: 2rem;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .grammar-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(12px);
+            border-radius: var(--radius);
+            padding: 2.5rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        .grammar-section {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: var(--radius);
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+
+        /* Subject Color Coding */
+        .history { border-color: rgba(239, 68, 68, 0.1); }
+        .geography { border-color: rgba(16, 185, 129, 0.1); }
+        .politics { border-color: rgba(59, 130, 246, 0.1); }
+        .economics { border-color: rgba(139, 92, 246, 0.1); }
+
+        .grammar-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--subject-color) 0%, var(--subject-secondary) 100%);
+        }
+
+        .history { --subject-color: var(--history); --subject-secondary: #F87171; }
+        .geography { --subject-color: var(--geography); --subject-secondary: #34D399; }
+        .politics { --subject-color: var(--politics); --subject-secondary: #60A5FA; }
+        .economics { --subject-color: var(--economics); --subject-secondary: #A78BFA; }
+
+        .concept-card {
+            padding: 2rem;
+            border-radius: calc(var(--radius) - 8px);
+            margin: 2rem 0;
+            background: var(--white);
+            border-left: 4px solid var(--subject-color);
+            box-shadow: var(--card-shadow);
+        }
+
+        .example-box {
+            background: rgba(239, 68, 68, 0.04);
+            padding: 1.75rem;
+            border-radius: 16px;
+            margin: 2rem 0;
+            border-left: 4px solid var(--subject-color);
+        }
+
+        .quiz-container {
+            margin: 2.5rem 0;
+            padding: 2.5rem;
+            border-radius: var(--radius);
+            background: var(--white);
+            box-shadow: var(--card-shadow);
+        }
+
+        .option-btn {
+            padding: 1rem 2rem;
+            margin: 0.5rem;
+            border: 2px solid rgba(0,0,0,0.1);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font: 500 1rem 'Poppins', sans-serif;
+        }
+
+        h1 {
+            background: linear-gradient(90deg, var(--subject-color) 0%, var(--subject-secondary) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 2rem;
+            font: 700 2rem 'Poppins', sans-serif;
+        }
+
+        /* Keep previous animations and responsive styles */
+    </style>
+</head>
+<body>
+    <div class="grammar-container">
+        <!-- History Section -->
+        <div class="grammar-section history">
+            <h1><span>📜</span> History - The French Revolution</h1>
+            
+            <div class="concept-card">
+                <h2>Key Causes</h2>
+                <ul>
+                    <li>Social Inequality (Estates System)</li>
+                    <li>Economic Crisis & Rising Bread Prices</li>
+                    <li>Influence of Enlightenment Philosophers</li>
+                    <li>Weak Leadership of Louis XVI</li>
+                </ul>
+                <div class="example-box">
+                    <p><strong>Important Event:</strong> Storming of Bastille - July 14, 1789</p>
+                </div>
+            </div>
+
+            <div class="quiz-container">
+                <h3>Quick Quiz</h3>
+                <p>What was the slogan of French Revolution?</p>
+                <button class="option-btn">Freedom, Equality, Justice</button>
+                <button class="option-btn" data-correct="true">Liberty, Equality, Fraternity</button>
+                <button class="option-btn">Power to the People</button>
+                <div class="feedback"></div>
+            </div>
+        </div>
+
+        <!-- Geography Section -->
+        <div class="grammar-section geography">
+            <h1><span>🌍</span> Geography - Physical Features</h1>
+            
+            <div class="concept-card">
+                <h2>Major Physiographic Divisions</h2>
+                <ol>
+                    <li>The Himalayan Mountains</li>
+                    <li>The Northern Plains</li>
+                    <li>The Peninsular Plateau</li>
+                    <li>The Indian Desert</li>
+                    <li>The Coastal Plains</li>
+                </ol>
+                <div class="example-box">
+                    <p><strong>Example:</strong> The Himalayas form India's northern boundary</p>
+                </div>
+            </div>
+
+            <div class="quiz-container">
+                <h3>Quick Quiz</h3>
+                <p>Which is the oldest landmass in India?</p>
+                <button class="option-btn">Himalayas</button>
+                <button class="option-btn" data-correct="true">Peninsular Plateau</button>
+                <button class="option-btn">Northern Plains</button>
+                <div class="feedback"></div>
+            </div>
+        </div>
+
+        <!-- Political Science Section -->
+        <div class="grammar-section politics">
+            <h1><span>🏛️</span> Political Science - Electoral Politics</h1>
+            
+            <div class="concept-card">
+                <h2>Electoral System Components</h2>
+                <ul>
+                    <li>Voter's List</li>
+                    <li>Nomination of Candidates</li>
+                    <li>Election Campaign</li>
+                    <li>Polling & Counting</li>
+                </ul>
+                <div class="example-box">
+                    <p><strong>Fact:</strong> Election Commission of India conducts elections</p>
+                </div>
+            </div>
+
+            <div class="quiz-container">
+                <h3>Quick Quiz</h3>
+                <p>What is the minimum voting age in India?</p>
+                <button class="option-btn">21</button>
+                <button class="option-btn" data-correct="true">18</button>
+                <button class="option-btn">25</button>
+                <div class="feedback"></div>
+            </div>
+        </div>
+
+        <!-- Economics Section -->
+        <div class="grammar-section economics">
+            <h1><span>💸</span> Economics - Poverty as Challenge</h1>
+            
+            <div class="concept-card">
+                <h2>Poverty Measures</h2>
+                <ul>
+                    <li>Income Level (₹816/month rural)</li>
+                    <li>Consumption Levels</li>
+                    <li>Human Poverty Index</li>
+                </ul>
+                <div class="example-box">
+                    <p><strong>Current Data:</strong> 21.9% population below poverty line (2011-12)</p>
+                </div>
+            </div>
+
+            <div class="quiz-container">
+                <h3>Quick Quiz</h3>
+                <p>Which state has highest poverty rate?</p>
+                <button class="option-btn">Kerala</button>
+                <button class="option-btn">Gujarat</button>
+                <button class="option-btn" data-correct="true">Bihar</button>
+                <div class="feedback"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Same JavaScript as previous implementation
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.option-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const quizContainer = this.closest('.quiz-container');
+                    const feedback = quizContainer.querySelector('.feedback');
+                    const isCorrect = this.dataset.correct === 'true';
+                    
+                    quizContainer.querySelectorAll('.option-btn').forEach(btn => {
+                        btn.classList.remove('correct', 'incorrect');
+                    });
+
+                    if (isCorrect) {
+                        feedback.textContent = "✅ Correct! Well done!";
+                        feedback.className = "feedback correct";
+                    } else {
+                        const correctAnswer = quizContainer.querySelector('[data-correct="true"]').textContent;
+                        feedback.textContent = `❌ Incorrect. Correct answer: ${correctAnswer}`;
+                        feedback.className = "feedback incorrect";
+                    }
+                    feedback.style.display = 'block';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

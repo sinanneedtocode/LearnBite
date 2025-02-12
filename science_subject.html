@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ScienceSphere - STEM Learning Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Rubik:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --physics: #3B82F6;
+            --chemistry: #8B5CF6;
+            --biology: #10B981;
+            --text: #2D2D2D;
+            --white: #FFFFFF;
+            --bg: #f8fafc;
+            --card-shadow: 0 12px 24px rgba(0,0,0,0.08);
+            --radius: 24px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Rubik', sans-serif;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 2rem;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='52' height='26' viewBox='0 0 52 26' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 10c0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6h2c0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4v2c-3.314 0-6-2.686-6-6 0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6zm-6 8c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z' fill='%233b82f6' fill-opacity='0.06' fill-rule='evenodd'/%3E%3C/svg%3E");
+            z-index: -1;
+        }
+
+        .grammar-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(12px);
+            border-radius: var(--radius);
+            padding: 2.5rem;
+            box-shadow: var(--card-shadow);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+
+        .grammar-section {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: var(--radius);
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .grammar-section.physics {
+            border-color: rgba(59, 130, 246, 0.1);
+        }
+
+        .grammar-section.chemistry {
+            border-color: rgba(139, 92, 246, 0.1);
+        }
+
+        .grammar-section.biology {
+            border-color: rgba(16, 185, 129, 0.1);
+        }
+
+        .grammar-section:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 32px rgba(0,0,0,0.1);
+        }
+
+        .grammar-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: linear-gradient(135deg, var(--subject-color) 0%, var(--subject-secondary) 100%);
+        }
+
+        .physics { --subject-color: var(--physics); --subject-secondary: #60A5FA; }
+        .chemistry { --subject-color: var(--chemistry); --subject-secondary: #A78BFA; }
+        .biology { --subject-color: var(--biology); --subject-secondary: #34D399; }
+
+        .concept-card {
+            padding: 2rem;
+            border-radius: calc(var(--radius) - 8px);
+            margin: 2rem 0;
+            transition: all 0.3s ease;
+            background: var(--white);
+            border-left: 4px solid var(--subject-color);
+            position: relative;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .concept-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+        }
+
+        .example-box {
+            background: rgba(59, 130, 246, 0.04);
+            padding: 1.75rem;
+            border-radius: 16px;
+            margin: 2rem 0;
+            border-left: 4px solid var(--subject-color);
+            position: relative;
+        }
+
+        .quiz-container {
+            margin: 2.5rem 0;
+            padding: 2.5rem;
+            border-radius: var(--radius);
+            background: var(--white);
+            box-shadow: var(--card-shadow);
+            border: 2px solid rgba(0,0,0,0.1);
+        }
+
+        .option-btn {
+            padding: 1.25rem 2rem;
+            margin: 0.75rem;
+            border: 2px solid rgba(0,0,0,0.1);
+            border-radius: 50px;
+            background: rgba(0,0,0,0.03);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font: 500 1rem 'Poppins', sans-serif;
+            letter-spacing: 0.5px;
+            color: var(--text);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .option-btn:hover {
+            border-color: var(--subject-color);
+            background: rgba(0,0,0,0.06);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            transform: translateY(-2px);
+        }
+
+        .feedback {
+            padding: 1.75rem;
+            margin: 1.5rem 0;
+            border-radius: 16px;
+            display: none;
+            animation: slideDown 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            font: 500 1.1rem 'Poppins', sans-serif;
+        }
+
+        h1 {
+            background: linear-gradient(135deg, var(--subject-color) 0%, var(--subject-secondary) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 2rem;
+            font: 700 2.4rem 'Poppins', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: var(--subject-color);
+            margin-bottom: 1.5rem;
+            font: 600 1.8rem 'Poppins', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .emoji {
+            font-size: 1.5em;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: rgba(0,0,0,0.08);
+            border-radius: 4px;
+            margin: 3rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 33%;
+            background: linear-gradient(90deg, var(--physics) 0%, var(--chemistry) 50%, var(--biology) 100%);
+            border-radius: 4px;
+            animation: progressWave 2s infinite linear;
+        }
+
+        @keyframes progressWave {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(200%); }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .correct { 
+            background: rgba(59, 130, 246, 0.08) !important; 
+            border-color: var(--physics) !important;
+        }
+
+        .incorrect { 
+            background: rgba(255, 200, 0, 0.08) !important; 
+            border-color: var(--chemistry) !important;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+            
+            .grammar-container {
+                padding: 1.5rem;
+                border-radius: 20px;
+            }
+            
+            .grammar-section {
+                padding: 1.5rem;
+            }
+            
+            .option-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="grammar-container">
+        <div class="progress-bar">
+            <div class="progress-fill"></div>
+        </div>
+
+        <!-- Physics Section -->
+        <div class="grammar-section physics">
+            <h1><span class="emoji">⚛️</span>Physics Fundamentals</h1>
+            
+            <div class="concept-card" data-subject="physics">
+                <h2><span class="emoji">🌌</span>Newton's Laws of Motion</h2>
+                <p>
+                    1. <strong>Law of Inertia:</strong> An object at rest stays at rest<br>
+                    2. <strong>F=ma:</strong> Force = mass × acceleration<br>
+                    3. <strong>Action-Reaction:</strong> Every action has equal reaction
+                </p>
+                <div class="example-box">
+                    <p><strong>Example Calculation:</strong><br>
+                    F = 5kg × 2m/s² = 10N</p>
+                </div>
+            </div>
+
+            <div class="concept-card" data-subject="physics">
+                <h2><span class="emoji">🔥</span>Thermodynamics Laws</h2>
+                <p>
+                    1st Law: ΔU = Q - W<br>
+                    2nd Law: Entropy always increases<br>
+                    Carnot Efficiency: η = 1 - T<sub>cold</sub>/T<sub>hot</sub>
+                </p>
+            </div>
+
+            <div class="quiz-container">
+                <h3>Physics Check <span class="emoji">✅</span></h3>
+                <p>What's Newton's Third Law?</p>
+                <button class="option-btn">F=ma</button>
+                <button class="option-btn" data-correct="true">Action-Reaction</button>
+                <button class="option-btn">Law of Inertia</button>
+                <div class="feedback"></div>
+            </div>
+        </div>
+
+        <!-- Chemistry Section -->
+        <div class="grammar-section chemistry">
+            <h1><span class="emoji">🧪</span>Chemistry Essentials</h1>
+            
+            <div class="concept-card" data-subject="chemistry">
+                <h2><span class="emoji">⚗️</span>Periodic Trends</h2>
+                <p>
+                    • Electronegativity increases → and ↑<br>
+                    • Atomic radius decreases → and ↑<br>
+                    • Ionization energy increases → and ↑
+                </p>
+                <div class="example-box">
+                    <p><strong>Example Element:</strong><br>
+                    Fluorine (F) has highest electronegativity (4.0)</p>
+                </div>
+            </div>
+
+            <div class="concept-card" data-subject="chemistry">
+                <h2><span class="emoji">🔗</span>Chemical Bonds</h2>
+                <p>
+                    <strong>Ionic:</strong> Metal + Non-metal (NaCl)<br>
+                    <strong>Covalent:</strong> Electron sharing (H<sub>2</sub>O)<br>
+                    <strong>Metallic:</strong> Electron sea model
+                </p>
+            </div>
+
+            <div class="quiz-container">
+                <h3>Chemistry Check <span class="emoji">✅</span></h3>
+                <p>Which element is most electronegative?</p>
+                <button class="option-btn">Oxygen</button>
+                <button class="option-btn" data-correct="true">Fluorine</button>
+                <button class="option-btn">Chlorine</button>
+                <div class="feedback"></div>
+            </div>
+        </div>
+
+        <!-- Biology Section -->
+        <div class="grammar-section biology">
+            <h1><span class="emoji">🧬</span>Biology Basics</h1>
+            
+            <div class="concept-card" data-subject="biology">
+                <h2><span class="emoji">🔬</span>Cell Theory</h2>
+                <p>
+                    1. All living things are made of cells<br>
+                    2. Cells are basic structural units<br>
+                    3. New cells come from existing cells
+                </p>
+                <div class="example-box">
+                    <p><strong>Did You Know?</strong><br>
+                    Human body contains ≈37.2 trillion cells</p>
+                </div>
+            </div>
+
+            <div class="concept-card" data-subject="biology">
+                <h2><span class="emoji">🧫</span>Genetics Basics</h2>
+                <p>
+                    DNA → RNA → Protein<br>
+                    Mendelian Inheritance<br>
+                    Genotype vs Phenotype
+                </p>
+            </div>
+
+            <div class="quiz-container">
+                <h3>Biology Check <span class="emoji">✅</span></h3>
+                <p>What's the genetic makeup called?</p>
+                <button class="option-btn">Phenotype</button>
+                <button class="option-btn" data-correct="true">Genotype</button>
+                <button class="option-btn">Karyotype</button>
+                <div class="feedback"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.option-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const quizContainer = this.closest('.quiz-container');
+                    const feedback = quizContainer.querySelector('.feedback');
+                    const isCorrect = this.dataset.correct === 'true';
+                    
+                    quizContainer.querySelectorAll('.option-btn').forEach(btn => {
+                        btn.classList.remove('correct', 'incorrect');
+                    });
+
+                    if (isCorrect) {
+                        feedback.textContent = "🎉 Correct! Well done!";
+                        feedback.className = "feedback correct";
+                        this.classList.add('correct');
+                        createConfetti(this);
+                    } else {
+                        const correctAnswer = quizContainer.querySelector('[data-correct="true"]').textContent;
+                        feedback.textContent = `❌ Almost! Correct answer: ${correctAnswer}`;
+                        feedback.className = "feedback incorrect";
+                        this.classList.add('incorrect');
+                    }
+                    
+                    feedback.style.display = 'block';
+                });
+            });
+
+            function createConfetti(element) {
+                for(let i = 0; i < 12; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.style.cssText = `
+                        position: absolute;
+                        width: 8px;
+                        height: 8px;
+                        background: ${['#3B82F6', '#8B5CF6', '#10B981'][i%3]};
+                        border-radius: 2px;
+                        pointer-events: none;
+                        animation: confetti 1s ease-out;
+                    `;
+                    
+                    const rect = element.getBoundingClientRect();
+                    confetti.style.left = `${rect.left + rect.width/2}px`;
+                    confetti.style.top = `${rect.top}px`;
+                    
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), 1000);
+                }
+            }
+        });
+
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes confetti {
+                0% { transform: translate(0,0) rotate(0); opacity: 1; }
+                100% { transform: translate(${Math.random()*100-50}px, 100vh) rotate(360deg); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

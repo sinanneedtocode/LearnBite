@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chapter - LearnBite</title>
+  <style>
+    /* Import Google Fonts */
+    @import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap');
+
+    /* CSS Variables and Global Styles */
+    :root {
+      --primary-color: #FF6B6B;    /* Fun, playful red-pink */
+      --secondary-color: #1CB0F6;  /* Bright blue */
+      --accent-color: #58CC02;     /* Fresh green */
+      --text-color: #2D2D2D;
+      --white: #FFFFFF;
+      --bg-color: #F8F9FA;
+      --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      --border-radius: 16px;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Rubik', sans-serif;
+    }
+    .hidden {
+      display: none;
+    }
+    body {
+      /* A fun pastel gradient background for extra pizzazz */
+      background: linear-gradient(135deg, #FFDEE9, #B5FFFC);
+      color: var(--text-color);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+    
+    /* Header */
+    .header {
+      position: sticky;
+      top: 0;
+      width: 100%;
+      padding: 1rem 2rem;
+      background: var(--white);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--card-shadow);
+      z-index: 1000;
+      border-bottom: 3px solid var(--secondary-color);
+    }
+    .logo {
+      height: 50px;
+      transition: transform 0.2s ease, filter 0.2s ease;
+    }
+    .logo:hover {
+      transform: scale(1.1);
+      filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));
+    }
+    .main_nav_list {
+      display: flex;
+      gap: 1.5rem;
+      list-style: none;
+      align-items: center;
+    }
+    .main_nav_link {
+      text-decoration: none;
+      color: var(--text-color);
+      font-weight: 500;
+      padding: 0.75rem 1.25rem;
+      border-radius: 50px;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .main_nav_link:hover {
+      background: rgba(28, 176, 246, 0.15);
+      transform: translateY(-2px);
+    }
+    .larry_btn {
+      background: var(--secondary-color);
+      color: var(--white);
+      box-shadow: 0 3px 0 #0F8ECB;
+      text-decoration: none;
+      padding: 0.75rem 1.25rem;
+      border-radius: 50px;
+    }
+    
+    /* Main container for chapter content */
+    .container {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: var(--white);
+      border-radius: var(--border-radius);
+      box-shadow: var(--card-shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    /* Fun animated background pattern */
+    .container::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background-image: radial-gradient(circle, rgba(255,255,255,0.15) 1px, transparent 1px);
+      background-size: 20px 20px;
+      opacity: 0.5;
+      pointer-events: none;
+      animation: rotateBackground 20s linear infinite;
+    }
+    @keyframes rotateBackground {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    
+    /* Breadcrumb */
+    .breadcrumb {
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+    .breadcrumb a {
+      text-decoration: none;
+      color: var(--secondary-color);
+    }
+    .breadcrumb span {
+      margin: 0 0.5rem;
+      color: #888;
+    }
+    
+    /* Chapter Header and Tags */
+    .chapter-title {
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      text-align: center;
+      animation: pop 0.6s ease-out forwards;
+    }
+    @keyframes pop {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .tags {
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    .tag {
+      display: inline-block;
+      background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+      color: var(--white);
+      padding: 0.4rem 0.8rem;
+      border-radius: 20px;
+      margin-right: 0.5rem;
+      font-size: 0.9rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    
+    /* Chapter Content */
+    .chapter-content {
+      margin-bottom: 2rem;
+      line-height: 1.8;
+      font-size: 1.1rem;
+    }
+    
+    /* Quiz Section */
+    .quiz-section {
+      margin-top: 2rem;
+      padding: 1rem;
+      background: #fff9e6;
+      border: 2px dashed var(--secondary-color);
+      border-radius: 12px;
+    }
+    .quiz-section h2 {
+      margin-bottom: 1rem;
+      text-align: center;
+      color: var(--primary-color);
+    }
+    .quiz-question {
+      border: 1px solid #ddd;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      transition: transform 0.2s ease;
+    }
+    .quiz-question:hover {
+      transform: scale(1.02);
+    }
+    .quiz-question.correct {
+      border-color: var(--primary-color);
+    }
+    .quiz-question.incorrect {
+      border-color: var(--accent-color);
+    }
+    .quiz-question .question {
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+    .quiz-options label {
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+    .quiz-result {
+      margin-top: 1rem;
+      padding: 1rem;
+      border-radius: 8px;
+      font-weight: bold;
+      text-align: center;
+      background: #e0ffe0;
+    }
+    
+    /* Related Chapters */
+    .related-chapters {
+      margin-top: 2rem;
+    }
+    .related-chapter-card {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 0.8rem;
+      margin-bottom: 1rem;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .related-chapter-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    .related-chapter-card a {
+      text-decoration: none;
+      color: var(--secondary-color);
+    }
+    
+    /* Footer */
+    .footer {
+      background: var(--secondary-color);
+      color: var(--white);
+      text-align: center;
+      padding: 1rem;
+      margin-top: 2rem;
+    }
+    
+    /* Action Button */
+    .action-btn {
+      background: var(--primary-color);
+      color: var(--white);
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+      margin-top: 1rem;
+      display: inline-block;
+    }
+    .action-btn:hover {
+      background: #e05555;
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+  <!-- Header (Same as in main page) -->
+  <header class="header">
+    <img src="imgs/duolingo-landscape-lockup.png" alt="LearnBite Logo" class="logo">
+    <nav>
+      <ul class="main_nav_list">
+        <li><a href="index.html" class="main_nav_link">Home</a></li>
+        <li><a href="larry.html" class="main_nav_link larry_btn">Ask Larry</a></li>
+        <li><a href="timer.html" class="main_nav_link larry_btn">Study Companion</a></li>
+      </ul>
+    </nav>
+  </header>
+  
+  <!-- Main Container for Chapter Content -->
+  <main class="container">
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb">
+      <a href="index.html">Home</a> <span>/</span>
+      <span id="subjectBreadcrumb">Web Dev</span> <span>/</span>
+      <span id="chapterBreadcrumb">Fun with HTML &amp; CSS</span>
+    </nav>
+    
+    <!-- Chapter Header -->
+    <h1 id="chapterTitle" class="chapter-title">Fun with HTML &amp; CSS!</h1>
+    <div class="tags">
+      <span id="subjectTag" class="tag">Web Development</span>
+      <span id="difficultyTag" class="tag">Beginner</span>
+    </div>
+    
+    <!-- Chapter Content -->
+    <div id="chapterContent" class="chapter-content">
+      <p>Welcome to this super fun chapter where we explore the magical world of HTML and CSS! Get ready to dive into exciting code, creative designs, and interactive quizzes that will test your skills. Let’s code, experiment, and have a blast!</p>
+    </div>
+    
+    <!-- Quiz Section -->
+    <section id="quizSection" class="quiz-section">
+      <h2>Chapter Quiz</h2>
+      <div id="quizContainer">
+        <!-- Quiz questions will be inserted here by chapter.js -->
+      </div>
+      <button onclick="submitQuiz()" class="action-btn">Submit Quiz</button>
+      <div id="quizResult" class="quiz-result hidden"></div>
+    </section>
+    
+    <!-- Related Chapters Section -->
+    <section class="related-chapters">
+      <h2>Related Chapters</h2>
+      <div id="relatedChapters">
+        <!-- Related chapters will be injected here by chapter.js -->
+      </div>
+    </section>
+  </main>
+  
+  <!-- Footer -->
+  <footer class="footer">
+    <p>© 2025 LearnBite. All rights reserved.</p>
+  </footer>
+  
+  <!-- Load Chapter Script -->
+  <script src="chapter.js"></script>
+</body>
+</html>

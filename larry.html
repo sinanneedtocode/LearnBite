@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study AI Assistant</title>
+    <style>
+        
+        body {
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background-color: white;
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 90vh;
+            border: 3px solid #e5e5e5;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #58CC02 0%, #9ADD00 100%);
+            color: white;
+            padding: 18px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            border-bottom: 4px solid #46a302;
+        }
+
+        .mascot {
+            width: 50px;
+            height: 50px;
+            background: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid #46a302;
+        }
+
+        .mascot svg {
+            width: 70%;
+            height: 70%;
+            color: #58CC02;
+        }
+
+        .chat-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .message {
+            margin-bottom: 12px;
+            padding: 14px 20px;
+            border-radius: 20px;
+            max-width: 75%;
+            position: relative;
+            animation: popIn 0.5s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+            line-height: 1.4;
+            font-size: 16px;
+            box-shadow: 0 2px 4px rgba(113, 84, 84, 0.05);
+        }
+
+        .user-message {
+            background: #58CC02;
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 5px;
+            border: 2px solid #46a302;
+        }
+
+        .ai-message {
+            background: white;
+            color: #2d2d2d;
+            border-bottom-left-radius: 5px;
+            border: 2px solid #e5e5e5;
+        }
+
+        .ai-message strong {
+            color: #58CC02;
+        }
+
+        .input-container {
+            display: flex;
+            gap: 10px;
+            padding: 15px;
+            background-color: white;
+            border-top: 3px solid #e5e5e5;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 14px 20px;
+            border: 2px solid #e5e5e5;
+            border-radius: 16px;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.2s;
+            background: #f8f9fa;
+        }
+
+        input[type="text"]:focus {
+            border-color: #58CC02;
+            box-shadow: 0 0 0 3px rgba(88, 204, 2, 0.2);
+        }
+
+        button {
+            padding: 14px 28px;
+            background: #58CC02;
+            color: white;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.2s;
+            border-bottom: 4px solid #46a302;
+        }
+
+        button:hover {
+            background: #4ebd00;
+            transform: translateY(1px);
+            border-bottom-width: 3px;
+        }
+
+        button:active {
+            transform: translateY(2px);
+            border-bottom-width: 2px;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .dot-flashing {
+            display: inline-flex;
+            gap: 6px;
+        }
+
+        .dot-flashing div {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #d8d8d8;
+            animation: bounce 1.4s infinite ease-in-out;
+        }
+
+        .dot-flashing div:nth-child(2) { animation-delay: 0.2s; }
+        .dot-flashing div:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+        }
+        .highlight {
+            background-color: #e0f2fe;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 500;
+            color: #4f832a;
+            display: inline-block;
+            margin: 2px 0;
+        }
+
+        .concept-list {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .concept-list li {
+            margin-bottom: 8px;
+        }
+
+        .practice-questions {
+            background-color: #f8f9fa;
+            border-left: 4px solid #4ebd00;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
+        .example-box {
+            background-color: #fff9e6;
+            border: 1px solid #ffeeba;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        /* WebKit Scrollbar Styling */
+.chat-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.chat-container::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 4px;
+}
+
+.chat-container::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.4);
+    border-radius: 4px;
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.chat-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(255,255,255,0.5);
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="mascot">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-2-3.5h4v2h-4zm5.5-3.5c0 1.38-1.12 2.5-2.5 2.5h-1v-2h1c.28 0 .5-.22.5-.5s-.22-.5-.5-.5h-1.25c-.83 0-1.5-.67-1.5-1.5v-.5c0-.83.67-1.5 1.5-1.5h1v-2h-3V8h3c1.38 0 2.5 1.12 2.5 2.5v1z"/>
+                </svg>
+            </div>
+            <span>Larry🦉</span>
+        </div>
+        <div class="chat-container" id="chatContainer"></div>
+        <div class="loading" id="loading">
+            <div class="dot-flashing">
+                <div></div><div></div><div></div>
+            </div>
+        </div>
+        <div class="input-container">
+            <input type="text" id="userInput" placeholder="Ask me anything about your studies... 📚">
+            <button onclick="sendMessage()">Send →</button>
+        </div>
+    </div>
+
+    <script>
+const API_KEY = 'AIzaSyCASUDy0da3IOOsPn3Z9otr6yMAc50SWEw'; // Replace with your Gemini API key
+        const MAX_HISTORY = 6; // Keep last 6 messages as context
+        const SESSION_STORAGE_KEY = 'chatHistory';
+        const chatContainer = document.getElementById('chatContainer');
+        const userInput = document.getElementById('userInput');
+        const loading = document.getElementById('loading');
+    
+        // Initialize Google AI
+        async function initializeGoogleAI() {
+            const { GoogleGenerativeAI } = await import("https://esm.run/@google/generative-ai");
+            return new GoogleGenerativeAI(API_KEY);
+        }
+        
+        function updateChatHistory(role, content) {
+            const history = JSON.parse(sessionStorage.getItem(SESSION_STORAGE_KEY) || '[]');
+            history.push({ role, content, timestamp: new Date().toISOString() });
+            if(history.length > MAX_HISTORY) history.splice(0, history.length - MAX_HISTORY);
+            sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(history));
+        }
+        
+    
+        // Modify the addMessage function's formatting section:
+function addMessage(message, isUser = false) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${isUser ? 'user-message' : 'ai-message'}`;
+    
+    let formattedMessage = message
+        // Format code blocks
+        .replace(/```([\s\S]*?)```/g, (_, content) => {
+            return `<div class="equation-container">${content
+                .replace(/•/g, '<span class="operator">•</span>')
+                .replace(/(\d+)\^(\d+)/g, '$1<sup>$2</sup>')
+                .replace(/([a-zA-Z]+)\s*=/g, '<span class="variable">$1</span> =')
+                .replace(/(\d+\/\d+)/g, '<span class="fraction">$1</span>')
+                .replace(/(\d+)([a-zA-Z]+)/g, '<span class="number">$1</span><span class="unit">$2</span>')
+                .replace(/\n/g, '<div class="equation-step">')}</div>`
+        })
+        .replace(/\*\*(.*?)\*\*/g, '<span class="highlight">$1</span>')
+        .replace(/\* /g, '• ')
+        .replace(/Practice Questions/g, '<div class="practice-questions"><strong>Practice Questions</strong>')
+        .replace(/Study Techniques/g, '<div class="example-box"><strong>Study Techniques</strong>')
+        .replace(/\n/g, '<br>');
+
+    messageDiv.innerHTML = formattedMessage;
+    chatContainer.appendChild(messageDiv);
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+    updateChatHistory(isUser ? 'user' : 'assistant', message);
+}
+    
+        async function sendMessage() {
+            const question = userInput.value.trim();
+            if (!question) return;
+    
+            addMessage(question, true);
+            userInput.value = '';
+            loading.style.display = 'block';
+    
+            try {
+                const googleAI = await initializeGoogleAI();
+                const model = googleAI.getGenerativeModel({ model: "gemini-pro" });
+                const history = JSON.parse(sessionStorage.getItem(SESSION_STORAGE_KEY) || '[]');
+                
+                const prompt = `As a study assistant with conversation memory, consider this context:
+                ${history.slice(0, -1).map(msg => `${msg.role}: ${msg.content}`).join('\n')}
+    
+                Your tasks:
+                1. Answer clearly while maintaining context
+                2. Reference previous discussions when relevant
+                4. Provide examples matching the user's level
+                5. Make learning fun (not fun fact)
+                6. If the user asks for a specific chapter then give them detailed expplanation of that chapter. if the chapter contains formulas then give the formulas 
+                7. Summarize the topic and cover all the thing
+                Current question: ${question}`;
+    
+                const result = await model.generateContent(prompt);
+                const response = await result.response;
+                addMessage(response.text());
+            } catch (error) {
+                addMessage("Sorry, I'm having trouble answering that. Please try again.");
+            } finally {
+                loading.style.display = 'none';
+            }
+        }
+    
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+    
+        // Load chat history on page load
+        window.addEventListener('load', () => {
+            const history = JSON.parse(sessionStorage.getItem(SESSION_STORAGE_KEY) || '[]');
+            history.forEach(msg => addMessage(msg.content, msg.role === 'user'));
+        });
+    </script>
+</body>
+</html>

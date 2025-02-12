@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LitGuide - Class 9 English Literature</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --prose: #F97316;
+            --poetry: #8B5CF6;
+            --drama: #3B82F6;
+            --grammar: #10B981;
+            --text: #2D2D2D;
+            --white: #FFFFFF;
+            --bg: #fff9f2;
+            --page-color: #f5e6d3;
+            --card-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            --radius: 16px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Merriweather', serif;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            padding: 2rem;
+            background-image: url("data:image/svg+xml,%3Csvg width='52' height='26' viewBox='0 0 52 26' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 10c0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6h2c0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4v2c-3.314 0-6-2.686-6-6 0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6zm-6 8c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z' fill='%23F97316' fill-opacity='0.06' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+
+        .literature-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 245, 235, 0.96);
+            border-radius: var(--radius);
+            padding: 2.5rem;
+            box-shadow: var(--card-shadow);
+            border: 1px solid rgba(249, 115, 22, 0.1);
+        }
+
+        .chapter-section {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: var(--radius);
+            margin-bottom: 2rem;
+            position: relative;
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--subject-color);
+        }
+
+        .prose { --subject-color: var(--prose); }
+        .poetry { --subject-color: var(--poetry); }
+        .drama { --subject-color: var(--drama); }
+        .grammar { --subject-color: var(--grammar); }
+
+        .literature-card {
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .quote-box {
+            background: rgba(249, 115, 22, 0.05);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 4px solid var(--subject-color);
+            border-radius: 8px;
+            font-style: italic;
+        }
+
+        h1 {
+            color: var(--prose);
+            margin-bottom: 2rem;
+            font: 700 2.2rem 'Poppins', sans-serif;
+            border-bottom: 2px solid rgba(249, 115, 22, 0.1);
+            padding-bottom: 1rem;
+        }
+
+        h2 {
+            color: var(--subject-color);
+            margin: 1rem 0;
+            font: 600 1.6rem 'Poppins', sans-serif;
+        }
+
+        .quiz-container {
+            background: rgba(249, 115, 22, 0.03);
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: var(--radius);
+        }
+
+        .option-btn {
+            padding: 0.8rem 1.5rem;
+            margin: 0.5rem;
+            border: 2px solid rgba(249, 115, 22, 0.1);
+            border-radius: 24px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .option-btn:hover {
+            border-color: var(--subject-color);
+            transform: translateY(-2px);
+        }
+
+        .book-emoji {
+            font-size: 1.4rem;
+            margin-right: 0.8rem;
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 1rem; }
+            .literature-container { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="literature-container">
+        <!-- Prose Section -->
+        <div class="chapter-section prose">
+            <h1><span class="book-emoji">📖</span>Prose - The Lost Child</h1>
+            
+            <div class="literature-card">
+                <h2>Key Themes</h2>
+                <ul>
+                    <li>Child-parent relationship</li>
+                    <li>Innocence vs Desire</li>
+                    <li>Social gathering symbolism</li>
+                </ul>
+                
+                <div class="quote-box">
+                    "The child turned his face from the sweetmeat seller and said sobingly,
+                    'I want my mother, I want my father!'"
+                </div>
+            </div>
+
+            <div class="quiz-container">
+                <h2>Chapter Quiz</h2>
+                <p>What distracts the child at the fair?</p>
+                <button class="option-btn">Toys</button>
+                <button class="option-btn" data-correct="true">Sweetmeats</button>
+                <button class="option-btn">Balloons</button>
+                <div class="feedback"></div>
+            </div>
+        </div>
+
+        <!-- Poetry Section -->
+        <div class="chapter-section poetry">
+            <h1><span class="book-emoji">📜</span>Poetry - The Road Not Taken</h1>
+            
+            <div class="literature-card">
+                <h2>Poetic Devices</h2>
+                <ul>
+                    <li>Metaphor: Road as life choices</li>
+                    <li>Repetition: "And that has made all the difference"</li>
+                    <li>Symbolism: Yellow wood</li>
+                </ul>
+                
+                <div class="quote-box">
+                    "Two roads diverged in a wood, and I—<br>
+                    I took the one less traveled by..."
+                </div>
+            </div>
+
+            <div class="quiz-container">
+                <h2>Poetry Quiz</h2>
+                <p>Who wrote "The Road Not Taken"?</p>
+                <button class="option-btn">Wordsworth</button>
+                <button class="option-btn" data-correct="true">Robert Frost</button>
+                <button class="option-btn">Byron</button>
+                <div class="feedback"></div>
+            </div>
+        </div>
+
+        <!-- Drama Section -->
+        <div class="chapter-section drama">
+            <h1><span class="book-emoji">🎭</span>Drama - The Bishop's Candlesticks</h1>
+            
+            <div class="literature-card">
+                <h2>Character Analysis</h2>
+                <ul>
+                    <li>Bishop: Compassionate, forgiving</li>
+                    <li>Convict: Desperate, transformed</li>
+                    <li>Persome: Practical, skeptical</li>
+                </ul>
+            </div>
+
+            <div class="quiz-container">
+                <h2>Drama Quiz</h2>
+                <p>What does the convict steal?</p>
+                <button class="option-btn">Money</button>
+                <button class="option-btn" data-correct="true">Candlesticks</button>
+                <button class="option-btn">Food</button>
+                <div class="feedback"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.option-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const quizContainer = this.closest('.quiz-container');
+                    const feedback = quizContainer.querySelector('.feedback');
+                    const isCorrect = this.dataset.correct === 'true';
+                    
+                    quizContainer.querySelectorAll('.option-btn').forEach(btn => {
+                        btn.classList.remove('correct', 'incorrect');
+                    });
+
+                    if (isCorrect) {
+                        feedback.textContent = "📚 Correct! Well analyzed!";
+                        feedback.style.color = "#10B981";
+                    } else {
+                        const correctAnswer = quizContainer.querySelector('[data-correct="true"]').textContent;
+                        feedback.textContent = `✏️ Better luck! Answer: ${correctAnswer}`;
+                        feedback.style.color = "#EF4444";
+                    }
+                    feedback.style.display = 'block';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

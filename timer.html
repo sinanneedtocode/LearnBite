@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gamified Study Companion</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnH1zX+6jX7DQ8+qZZlZfw8ldKhcWsuHfQv6K0fFK/q+LTHxBc3cCqZQv/e7sZ5tvkuY/jgRQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+    
+    :root {
+        --primary-color: #58CC02;
+        --secondary-color: #1CB0F6;
+        --accent-color: #FF6B6B;
+        --text-color: #2D2D2D;
+        --white: #FFFFFF;
+        --bg-color: #F8F9FA;
+        --card-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        --border-radius: 16px;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Rubik', sans-serif;
+    }
+
+    body {
+        /* A playful pastel gradient background */
+        background: linear-gradient(135deg, #FFDEE9, #B5FFFC);
+        color: var(--text-color);
+        line-height: 1.5;
+    }
+
+    /* Header */
+    .header {
+        position: sticky;
+        top: 0;
+        width: 100%;
+        padding: 1rem 2rem;
+        background: var(--white);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: var(--card-shadow);
+        z-index: 1000;
+        border-bottom: 3px solid var(--secondary-color);
+    }
+
+    .logo {
+        height: 50px;
+        transition: transform 0.3s ease, filter 0.3s ease;
+    }
+
+    .logo:hover {
+        transform: scale(1.1);
+        filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+    }
+
+    .main_nav_list {
+        display: flex;
+        gap: 1.5rem;
+        list-style: none;
+        align-items: center;
+    }
+
+    .main_nav_link {
+        text-decoration: none;
+        color: var(--text-color);
+        font-weight: 500;
+        padding: 0.75rem 1.25rem;
+        border-radius: 50px;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: rgba(88, 204, 2, 0.05);
+    }
+
+    .main_nav_link:hover {
+        background: rgba(88, 204, 2, 0.15);
+        transform: translateY(-2px);
+    }
+
+    .larry_btn {
+        background: var(--secondary-color);
+        color: var(--white) !important;
+        box-shadow: 0 3px 0 #0F8ECB;
+    }
+
+    main {
+        margin-top: 100px;
+        padding: 2rem;
+    }
+
+    .dashboard {
+        max-width: 1200px;
+        margin: 0 auto;
+        position: relative;
+    }
+
+    
+
+    /* Timer Section */
+    #timer-section {
+        text-align: center;
+        background: linear-gradient(135deg, #FFFFFF, #FFF5F5);
+        padding: 2rem;
+        border-radius: var(--border-radius);
+        box-shadow: var(--card-shadow);
+        margin-bottom: 2rem;
+        transition: transform 0.3s ease;
+    }
+
+    #timer-section:hover {
+        transform: scale(1.02);
+    }
+
+    #timer {
+        font-size: 4rem;
+        font-weight: bold;
+        color: var(--primary-color);
+        margin: 1.5rem 0;
+        font-family: monospace;
+        text-align: center;
+        /* Subtle pulse animation for an engaging effect */
+        animation: pulse 1s ease-in-out infinite alternate;
+    }
+    
+    @keyframes pulse {
+        from { transform: scale(1); }
+        to { transform: scale(1.05); }
+    }
+
+    /* Rewards Section */
+    #rewards-section {
+        background: linear-gradient(135deg, #FFFFFF, #E0F7FF);
+        padding: 2rem;
+        border-radius: var(--border-radius);
+        box-shadow: var(--card-shadow);
+        text-align: center;
+        transition: transform 0.3s ease;
+    }
+
+    #rewards-section:hover {
+        transform: scale(1.02);
+    }
+
+    /* Buttons */
+    #start-button, #reset-button {
+        padding: 0.8rem 2rem;
+        border-radius: 50px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        margin: 0 0.5rem;
+        border: none;
+        cursor: pointer;
+    }
+
+    #start-button {
+        background: var(--primary-color);
+        color: var(--white);
+        box-shadow: 0 3px 0 #3CA900;
+    }
+
+    #reset-button {
+        background: var(--accent-color);
+        color: var(--white);
+        box-shadow: 0 3px 0 #CC3636;
+    }
+
+    #start-button:hover, #reset-button:hover {
+        transform: scale(1.05);
+    }
+
+    #reset-button:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
+
+    /* Points Display */
+    #points {
+        font-size: 2.5rem;
+        color: var(--secondary-color);
+        font-weight: bold;
+        display: block;
+        margin: 1rem 0;
+    }
+
+    #motivation {
+        color: var(--text-color);
+        font-style: italic;
+        margin-top: 1rem;
+    }
+
+    /* Iframe */
+    iframe {
+        width: 100%;
+        height: 500px;
+        border: none;
+        border-radius: var(--border-radius);
+        box-shadow: var(--card-shadow);
+        margin-top: 2rem;
+        transition: transform 0.3s ease;
+    }
+
+    iframe:hover {
+        transform: scale(1.02);
+    }
+    .footer {
+  background: linear-gradient(135deg, #1CB0F6, #58CC02);
+  color: #fff;
+  text-align: center;
+  padding: 2rem 1rem;
+  margin-top: 2rem;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.15);
+  font-size: 1.1rem;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer p {
+  margin: 0;
+  padding-bottom: 0.5rem;
+}
+
+.footer .social-icons {
+  margin-top: 1rem;
+}
+
+.footer .social-icons a {
+  color: #fff;
+  margin: 0 0.5rem;
+  font-size: 1.5rem;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer .social-icons a:hover {
+  color: #FF6B6B;
+}
+
+  </style>
+</head>
+<body>
+  <header class="header">
+    <img src="imgs/duolingo-landscape-lockup.png" alt="learnbite_logo" class="logo">
+    <nav class="main_nav">
+      <ul class="main_nav_list">
+        <li><a href="index.html#home" class="main_nav_link">🏠 Home</a></li>
+        <li><a href="index.html#subjects" class="main_nav_link">📚 Subjects</a></li>
+        <li><a href="index.html#about" class="main_nav_link">ℹ️ About</a></li>
+        <li><a href="dowload.html" class="main_nav_link">Extension</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="dashboard">
+    <div class="grid md:grid-cols-2 gap-8 mb-8">
+      <section id="timer-section">
+        <h2 class="text-2xl font-bold mb-4">Study Timer</h2>
+        <div id="timer" class="mb-4">
+          <span id="minutes">25</span>:<span id="seconds">00</span>
+        </div>
+        <div class="flex justify-center gap-4">
+          <button id="start-button">Start Studying</button>
+          <button id="reset-button" disabled>Give Up</button>
+        </div>
+        <br>
+        <p><strong>Note: </strong>you have to download our web extension to block websites</p>
+      </section>
+
+      <section id="rewards-section">
+        <h2 class="text-2xl font-bold mb-4">Rewards</h2>
+        <p class="text-lg mb-2">Points Earned: <span id="points">0</span></p>
+        <p id="motivation">"Success is the sum of small efforts repeated daily"</p>
+      </section>
+    </div>
+
+    <!-- Embedded Larry Chat -->
+    <iframe src="Mio.html" 
+            title="Mio ai"
+            loading="lazy">
+    </iframe>
+  </main>
+  <script src="com_script.js"></script>
+  <footer class="footer">
+    <div class="footer-container">
+      <p>© 2025 LearnBite. All rights reserved.</p>
+    </div>
+  </footer>  
+</body>
+</html>
