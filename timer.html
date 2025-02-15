@@ -1,15 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-PSEYPL9P20"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-PSEYPL9P20');
-</script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gamified Study Companion</title>
@@ -190,7 +184,7 @@
     }
 
     /* Points Display */
-    #points {
+    #gemCount {
         font-size: 2.5rem;
         color: var(--secondary-color);
         font-weight: bold;
@@ -286,7 +280,7 @@
 
       <section id="rewards-section">
         <h2 class="text-2xl font-bold mb-4">Rewards</h2>
-        <p class="text-lg mb-2">Points Earned: <span id="points">0</span></p>
+        <p class="text-lg mb-2">Gems Earned: <span id="gemCount">0</span></p>
         <p id="motivation">"Success is the sum of small efforts repeated daily"</p>
       </section>
     </div>

@@ -90,15 +90,17 @@ function updateTimerDisplay(remaining) {
 }
 
 function handleReset() {
-  if (confirm("Do you want to abandon your study session? 😢 (WARNING: if you give up ONE POINT WILL BE REDUSED)")) {
-    totalPoints -= 1;
-    pointsSpan.textContent = totalPoints;
-    localStorage.setItem('studyPoints', totalPoints.toString());
+  if (confirm("Do you want to abandon your study session? 😢 (WARNING: if you give up, 5 gems will be reduced)")) {
+    // Subtract 5 gems from Firebase
+    updateGems(-5);
+
+    // Stop the timer, reset the UI, and unblock distracting websites
     cleanupTimer();
     resetUI();
-    unblockWebsites(); // Unblock websites if the user gives up early
+    unblockWebsites();
   }
 }
+
 
 function endStudySession() {
   totalPoints += 10;
@@ -108,6 +110,8 @@ function endStudySession() {
   motivationText.textContent = "Great work! Take a break! 🎉";
   cleanupTimer();
   console.log("Study session complete – unblocking websites...");
+  const gemsEarned = calculateGemsBasedOnTime(); // Implement your logic here
+  updateGems(gemsEarned);
   unblockWebsites(); // Unblock websites when the study session ends naturally
 }
 
@@ -179,3 +183,49 @@ function updateIframePoints() {
     }, '*');
   }
 }
+  // Firebase Configuration (same as index.html)
+  const firebaseConfig = {
+    apiKey: "AIzaSyA6At0_PeY351303P85_o0wtYMXGQ_d_xg",
+    authDomain: "learnbite-e7673.firebaseapp.com",
+    databaseURL: "https://learnbite-e7673-default-rtdb.firebaseio.com/",
+    projectId: "learnbite-e7673",
+    storageBucket: "learnbite-e7673.firebasestorage.app",
+    messagingSenderId: "897857889201",
+    appId: "1:897857889201:web:c601789ccba7f1fe8b9390"
+  };
+  firebase.initializeApp(firebaseConfig);
+
+  function updateGems(amount) {
+    const user = firebase.auth().currentUser;
+    if (user) {
+      const uid = user.uid;
+      const userRef = firebase.database().ref('users/' + uid);
+      userRef.transaction((currentData) => {
+        if (currentData) {
+          currentData.points = (currentData.points || 0) + amount;
+        }
+        return currentData;
+      });
+    }
+  }
+
+    // Listen for auth state changes
+    firebase.auth().onAuthStateChanged(user => {
+      const loginBtn = document.getElementById('loginBtn');
+      if (user) {
+        // Update gems display
+        const uid = user.uid;
+        firebase.database().ref('users/' + uid).on('value', (snapshot) => {
+          const data = snapshot.val();
+          if (data) {
+            document.getElementById('gemCount').textContent = data.points || 0;
+          }
+        });
+        
+        loginBtn.textContent = "Logout";
+        loginBtn.onclick = () => firebase.auth().signOut();
+      } else {
+        loginBtn.textContent = "Login";
+        loginBtn.onclick = () => window.location.href = 'index.html';
+      }
+    });
