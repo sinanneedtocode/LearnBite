@@ -12,7 +12,7 @@
 </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LearnBiti - Smart Learning for CBSE</title>
+  <title>LearnBite - Smart Learning for CBSE</title>
 
   <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
@@ -449,6 +449,73 @@
         text-align: center;
       }
     }
+    .leaderboard-section {
+  background: var(--white);
+  padding: 2rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--card-shadow);
+  margin: 3rem 0;
+}
+
+.leaderboard-section h2 {
+  margin-bottom: 1.5rem;
+  color: var(--text-color);
+  font-size: 1.5rem;
+}
+
+.leaderboard-entries {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.leaderboard-entry {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  background: var(--bg-color);
+  border-radius: var(--border-radius);
+  transition: transform 0.2s ease;
+}
+
+.leaderboard-entry:hover {
+  transform: translateX(5px);
+}
+
+.rank {
+  font-weight: 600;
+  width: 40px;
+  text-align: center;
+  color: var(--secondary-color);
+}
+
+.username {
+  flex: 1;
+  font-weight: 500;
+}
+
+.grade {
+  margin: 0 1rem;
+  color: var(--text-color);
+  opacity: 0.8;
+}
+
+.gems {
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.leaderboard-entry:nth-child(1) .rank {
+  color: #ffd700;
+}
+
+.leaderboard-entry:nth-child(2) .rank {
+  color: #c0c0c0;
+}
+
+.leaderboard-entry:nth-child(3) .rank {
+  color: #cd7f32;
+}
   </style>
 </head>
 <body>
@@ -710,6 +777,12 @@
     </section>
   </main>
 
+  <section class="leaderboard-section">
+    <h2>🏆 Leaderboard</h2>
+    <div id="leaderboardEntries" class="leaderboard-entries">
+      <!-- Entries will be dynamically added here -->
+    </div>
+  </section>
   <!-- Footer -->
   <footer class="footer">
     <div class="footer-container">
@@ -792,15 +865,17 @@
       }
       firebase.auth().createUserWithEmailAndPassword(email, password)
         .then((userCredential) => {
-          const uid = userCredential.user.uid;
-          firebase.database().ref('users/' + uid).set({
-            points: 0,
-            streak: 1,
-            grade: grade
-          }).then(() => {
-            closeRegisterModal();
-          });
-        })
+        const uid = userCredential.user.uid;
+        const email = userCredential.user.email;
+        firebase.database().ref('users/' + uid).set({
+        points: 0,
+        streak: 1,
+        grade: grade,
+        email: email // Add this line
+       }).then(() => {
+          closeRegisterModal();
+      });
+})
         .catch((error) => {
           alert("Registration Error: " + error.message);
         });
@@ -926,6 +1001,46 @@
         showChaptersModal(subject);
       });
     });
+    function updateLeaderboard() {
+  const leaderboardEntries = document.getElementById('leaderboardEntries');
+  leaderboardEntries.innerHTML = '<div class="loading">Loading leaderboard...</div>';
+
+  firebase.database().ref('users').once('value').then(snapshot => {
+    const users = [];
+    snapshot.forEach(userSnapshot => {
+      const userData = userSnapshot.val();
+      const email = userData.email || '';
+      const username = email.split('@')[0] || 'Anonymous';
+      users.push({
+        username: username,
+        grade: userData.grade || 'N/A',
+        gems: userData.points || 0,
+      });
+    });
+
+    // Sort users by gems descending
+    users.sort((a, b) => b.gems - a.gems);
+
+    leaderboardEntries.innerHTML = '';
+    users.forEach((user, index) => {
+      const entry = document.createElement('div');
+      entry.className = 'leaderboard-entry';
+      entry.innerHTML = `
+        <div class="rank">${index + 1}</div>
+        <div class="username">${user.username}</div>
+        <div class="grade">Grade ${user.grade}</div>
+        <div class="gems">💎 ${user.gems}</div>
+      `;
+      leaderboardEntries.appendChild(entry);
+    });
+  }).catch(error => {
+    leaderboardEntries.innerHTML = '<div class="error">Error loading leaderboard</div>';
+    console.error('Error fetching leaderboard data:', error);
+  });
+}
+
+// Call on page load
+window.addEventListener('load', updateLeaderboard);
   </script>
 </body>
 </html>
