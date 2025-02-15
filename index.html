@@ -1,9 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PSEYPL9P20"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-PSEYPL9P20');
+</script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>LearnBite - Smart Learning for CBSE</title>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900&display=swap');
 
@@ -295,8 +310,8 @@
     .modal-overlay:not(.hidden) {
       display: flex;
     }
-    .course-modal,
     .login-modal,
+    .course-modal,
     .larry-modal-content {
       background: white;
       border-radius: 20px;
@@ -441,21 +456,46 @@
   <div class="modal-overlay hidden" id="loginModal">
     <div class="login-modal">
       <div class="modal-header">
-        <h2>Login / Register</h2>
+        <h2>Login</h2>
         <button class="close-modal" onclick="closeLoginModal()">×</button>
       </div>
       <form id="loginForm">
         <div style="margin-bottom: 1rem;">
           <label for="email">Email:</label>
-          <input type="email" id="email" name="email" required style="width: 100%; padding: 0.5rem; margin-top: 0.5rem;"/>
+          <input type="email" id="email" name="email" required style="width: 100%; padding: 0.5rem; margin-top: 0.5rem;" />
         </div>
         <div style="margin-bottom: 1rem;">
           <label for="password">Password:</label>
-          <input type="password" id="password" name="password" required style="width: 100%; padding: 0.5rem; margin-top: 0.5rem;"/>
+          <input type="password" id="password" name="password" required style="width: 100%; padding: 0.5rem; margin-top: 0.5rem;" />
+        </div>
+        <button type="submit" class="action-btn" style="margin-bottom: 1rem;">Login</button>
+      </form>
+      <div style="text-align: center;">
+        <p>Don't have an account?</p>
+        <button class="action-btn" onclick="openRegisterModal()">Register</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Register Modal -->
+  <div class="modal-overlay hidden" id="registerModal">
+    <div class="login-modal">
+      <div class="modal-header">
+        <h2>Register</h2>
+        <button class="close-modal" onclick="closeRegisterModal()">×</button>
+      </div>
+      <form id="registerForm">
+        <div style="margin-bottom: 1rem;">
+          <label for="regEmail">Email:</label>
+          <input type="email" id="regEmail" name="regEmail" required style="width: 100%; padding: 0.5rem; margin-top: 0.5rem;" />
         </div>
         <div style="margin-bottom: 1rem;">
-          <label for="grade">Select Grade:</label>
-          <select id="grade" name="grade" required style="width: 100%; padding: 0.5rem; margin-top: 0.5rem;">
+          <label for="regPassword">Password:</label>
+          <input type="password" id="regPassword" name="regPassword" required style="width: 100%; padding: 0.5rem; margin-top: 0.5rem;" />
+        </div>
+        <div style="margin-bottom: 1rem;">
+          <label for="regGrade">Select Grade:</label>
+          <select id="regGrade" name="regGrade" required style="width: 100%; padding: 0.5rem; margin-top: 0.5rem;">
             <option value="">--Choose Grade--</option>
             <option value="grade1">Grade 1</option>
             <option value="grade2">Grade 2</option>
@@ -471,8 +511,12 @@
             <option value="grade12">Grade 12</option>
           </select>
         </div>
-        <button type="submit" class="action-btn" style="margin-bottom: 1rem;">Login / Register</button>
+        <button type="submit" class="action-btn" style="margin-bottom: 1rem;">Register</button>
       </form>
+      <div style="text-align: center;">
+        <p>Already have an account?</p>
+        <button class="action-btn" onclick="openLoginModal()">Login</button>
+      </div>
     </div>
   </div>
 
@@ -493,7 +537,6 @@
   <div class="modal-overlay hidden" id="larryModal">
     <div class="larry-modal-content">
       <button class="close-modal" onclick="closeLarryModal()">×</button>
-      <!-- Using an iframe here isolates Larry’s chat (larry.html) from the index page -->
       <iframe src="larry.html" style="width:100%; height:100%; border:0;"></iframe>
     </div>
   </div>
@@ -507,18 +550,20 @@
         <span class="hamburger"></span>
         <span class="hamburger"></span>
       </button>
+      <!-- This button's text and onclick will update based on auth state -->
       <button class="login_btn" onclick="openLoginModal()">Login</button>
     </div>
     <nav class="main_nav" id="mainNav">
       <ul class="main_nav_list">
-        <li><a href="index.html#home" class="main_nav_link">🏠 Home</a></li>
-        <li><a href="index.html#subjects" class="main_nav_link">📚 Subjects</a></li>
+        <li><a href="#home" class="main_nav_link">🏠 Home</a></li>
+        <li><a href="#subjects" class="main_nav_link">📚 Subjects</a></li>
         <li><a href="#" class="main_nav_link larry_btn" onclick="openLarryModal()">🦉 Ask Larry</a></li>
         <li><a href="timer.html" class="main_nav_link larry_btn">⏱️ Study Companion</a></li>
       </ul>
     </nav>
   </header>
 
+  <!-- Main Content -->
   <main class="dashboard">
     <div class="status-bar">
       <div class="status-card">
@@ -625,15 +670,25 @@
       <h2>Solve 5 Math Problems in 10 Minutes</h2>
       <p>Earn 2x Gems and a Special Badge!</p>
       <button class="action-btn" style="margin-top: 1.5rem; background: var(--accent-color);"
-        onclick="window.location.href = 'challenge.html'">
+        onclick="window.location.href='challenge.html'">
         🚀 Start Challenge
       </button>
     </section>
 
     <!-- Ad Container -->
     <div class="ad-container">
-      <p>Advertisement</p>
-      <p>Your ad could be here!</p>
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+         crossorigin="anonymous"></script>
+      <!-- LearnBite Ad Unit -->
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+           data-ad-slot="1234567890"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>
+           (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
     </div>
 
     <section class="achievements-section">
@@ -655,15 +710,139 @@
     </section>
   </main>
 
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <p>© 2025 LearnBite. All rights reserved.</p>
+    </div>
+  </footer>
+
   <script>
-    // ----------------------------
-    // Daily Streak Functionality
-    // ----------------------------
+    // --------------------------------------------------
+    // Firebase Configuration (Replace with your own values)
+    // --------------------------------------------------
+    const firebaseConfig = {
+      apiKey: "AIzaSyA6At0_PeY351303P85_o0wtYMXGQ_d_xg",
+      authDomain: "learnbite-e7673.firebaseapp.com",
+      databaseURL: "https://learnbite-e7673-default-rtdb.firebaseio.com/",
+      projectId: "learnbite-e7673",
+      storageBucket: "learnbite-e7673.firebasestorage.app",
+      messagingSenderId: "897857889201",
+      appId: "1:897857889201:web:c601789ccba7f1fe8b9390"
+    };
+    firebase.initializeApp(firebaseConfig);
+
+    // --------------------------------------------------
+    // Modal Functions
+    // --------------------------------------------------
+    function openLoginModal() {
+      document.getElementById('loginModal').classList.remove('hidden');
+      document.getElementById('registerModal').classList.add('hidden');
+    }
+    function closeLoginModal() {
+      document.getElementById('loginModal').classList.add('hidden');
+    }
+    function openRegisterModal() {
+      document.getElementById('registerModal').classList.remove('hidden');
+      document.getElementById('loginModal').classList.add('hidden');
+    }
+    function closeRegisterModal() {
+      document.getElementById('registerModal').classList.add('hidden');
+    }
+    function closeChaptersModal() {
+      document.getElementById('chaptersModal').classList.add('hidden');
+    }
+    function openLarryModal() {
+      document.getElementById('larryModal').classList.remove('hidden');
+    }
+    function closeLarryModal() {
+      document.getElementById('larryModal').classList.add('hidden');
+    }
+    function toggleMenu() {
+      var nav = document.getElementById('mainNav');
+      nav.classList.toggle('active');
+    }
+
+    // --------------------------------------------------
+    // Firebase Authentication and Database
+    // --------------------------------------------------
+    // --- Login Form Submission ---
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
+      firebase.auth().signInWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          closeLoginModal();
+          // UI will update via onAuthStateChanged
+        })
+        .catch((error) => {
+          alert("Login Error: " + error.message);
+        });
+    });
+    // --- Register Form Submission ---
+    document.getElementById('registerForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const email = document.getElementById('regEmail').value.trim();
+      const password = document.getElementById('regPassword').value.trim();
+      const grade = document.getElementById('regGrade').value;
+      if (password.length < 6) {
+        alert("Password must be at least 6 characters long.");
+        return;
+      }
+      firebase.auth().createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          const uid = userCredential.user.uid;
+          firebase.database().ref('users/' + uid).set({
+            points: 0,
+            streak: 1,
+            grade: grade
+          }).then(() => {
+            closeRegisterModal();
+          });
+        })
+        .catch((error) => {
+          alert("Registration Error: " + error.message);
+        });
+    });
+    // --- Update User Data ---
+    function updateUserData(user) {
+      const uid = user.uid;
+      const userRef = firebase.database().ref('users/' + uid);
+      userRef.on('value', (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+          document.getElementById('gemCount').textContent = data.points;
+          document.getElementById('streakCount').textContent = data.streak + "-Day Streak";
+        }
+      });
+    }
+    // --- Listen for Auth State Changes and Update the Header Button ---
+    firebase.auth().onAuthStateChanged(user => {
+      const loginBtn = document.querySelector('.login_btn');
+      if (user) {
+        updateUserData(user);
+        loginBtn.textContent = "Logout";
+        loginBtn.onclick = function() {
+          firebase.auth().signOut().then(() => {
+            alert("Logged out successfully");
+          }).catch(error => {
+            alert("Error signing out: " + error.message);
+          });
+        };
+      } else {
+        loginBtn.textContent = "Login";
+        loginBtn.onclick = openLoginModal;
+      }
+    });
+
+    // --------------------------------------------------
+    // Daily Streak and Gems Fallback (localStorage)
+    // --------------------------------------------------
     function updateStreak() {
       const today = new Date().toISOString().slice(0, 10);
       const lastVisit = localStorage.getItem('lastVisit');
       let streak = parseInt(localStorage.getItem('streak') || '0', 10);
-
       if (!lastVisit) {
         streak = 1;
       } else if (lastVisit === today) {
@@ -682,23 +861,18 @@
       localStorage.setItem('lastVisit', today);
       document.getElementById('streakCount').textContent = streak + "-Day Streak";
     }
-
-    // ----------------------------
-    // Gems Functionality
-    // ----------------------------
-    function loadGems() {
-      const gems = localStorage.getItem('gems') || 1250;
+    function loadGems() {x
+      
       document.getElementById('gemCount').textContent = gems;
     }
-
     window.addEventListener('load', () => {
       loadGems();
       updateStreak();
     });
 
-    // ----------------------------
-    // Chapters Modal and Integration
-    // ----------------------------
+    // --------------------------------------------------
+    // Chapters Modal (Sample Implementation)
+    // --------------------------------------------------
     const chaptersDatabase = {
       science: [
         { title: "Structure of Atom", progress: 0 },
@@ -715,20 +889,14 @@
         { title: "The Road Not Taken", progress: 0 }
       ]
     };
-
     function showChaptersModal(subject) {
       const modal = document.getElementById('chaptersModal');
       const pathContainer = document.getElementById('chaptersPath');
       const chapters = chaptersDatabase[subject];
-
-      // Clear previous content
       pathContainer.innerHTML = '';
-
-      // Add chapters to the modal
       chapters.forEach((chapter, index) => {
         const chapterEl = document.createElement('div');
-        chapterEl.className =
-          'flex items-center p-4 rounded-lg border ' +
+        chapterEl.className = 'flex items-center p-4 rounded-lg border ' + 
           (chapter.progress > 0 ? 'bg-teal-50 border-teal-200' : 'bg-gray-50 border-gray-200');
         chapterEl.innerHTML = `
           <div class="w-8 h-8 rounded-full flex items-center justify-center ${chapter.progress === 100 ? 'bg-teal-500 text-white' : 'bg-white border-2 border-teal-500'}">
@@ -747,64 +915,17 @@
         `;
         pathContainer.appendChild(chapterEl);
       });
-
       modal.classList.remove('hidden');
-      document.getElementById('modalSubject').textContent =
+      document.getElementById('modalSubject').textContent = 
         subject.charAt(0).toUpperCase() + subject.slice(1) + " Learning Path";
     }
-
-    function closeChaptersModal() {
-      document.getElementById('chaptersModal').classList.add('hidden');
-    }
-
-    // Update the Explore button click handlers
     document.querySelectorAll('.explore-btn').forEach(button => {
-      button.addEventListener('click', function (e) {
+      button.addEventListener('click', function(e) {
         e.preventDefault();
         const subject = this.closest('[data-subject]').dataset.subject;
         showChaptersModal(subject);
       });
     });
-
-    // ----------------------------
-    // Larry Chat Modal Functions
-    // ----------------------------
-    function openLarryModal() {
-      document.getElementById('larryModal').classList.remove('hidden');
-    }
-    function closeLarryModal() {
-      document.getElementById('larryModal').classList.add('hidden');
-    }
-
-    // ----------------------------
-    // Login Modal Functions
-    // ----------------------------
-    function openLoginModal() {
-      document.getElementById('loginModal').classList.remove('hidden');
-    }
-    function closeLoginModal() {
-      document.getElementById('loginModal').classList.add('hidden');
-    }
-    // Sample login form submission handling
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      // Process login / registration (this is a placeholder)
-      alert("Logged in as: " + document.getElementById('email').value + " with grade: " + document.getElementById('grade').value);
-      closeLoginModal();
-    });
-
-    // ----------------------------
-    // Menu Toggle for Mobile Navigation
-    // ----------------------------
-    function toggleMenu() {
-      var nav = document.getElementById('mainNav');
-      nav.classList.toggle('active');
-    }
   </script>
-  <footer class="footer">
-    <div class="footer-container">
-      <p>© 2025 LearnBite. All rights reserved.</p>
-    </div>
-  </footer>  
 </body>
 </html>

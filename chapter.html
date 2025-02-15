@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PSEYPL9P20"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-PSEYPL9P20');
+</script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Chapter - LearnBite</title>
@@ -34,6 +43,12 @@
       color: var(--text-color);
       line-height: 1.5;
       min-height: 100vh;
+      /* Add slight animation to background for a playful feel */
+      animation: bgPulse 6s ease-in-out infinite;
+    }
+    @keyframes bgPulse {
+      0%, 100% { filter: brightness(1); }
+      50% { filter: brightness(1.05); }
     }
     
     /* Header with Menu Toggle */
@@ -45,6 +60,12 @@
       box-shadow: var(--card-shadow);
       z-index: 1000;
       border-bottom: 3px solid var(--secondary-color);
+      /* Slight bounce animation on load */
+      animation: headerBounce 0.6s ease-out;
+    }
+    @keyframes headerBounce {
+      0% { transform: translateY(-10px); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
     }
     .header-container {
       display: flex;
@@ -74,6 +95,9 @@
       height: 3px;
       background: var(--text-color);
       transition: all 0.3s ease;
+    }
+    .menu-toggle:hover .hamburger {
+      transform: scaleX(1.1);
     }
     /* Navigation */
     .main_nav {
@@ -108,6 +132,10 @@
       text-decoration: none;
       padding: 0.75rem 1.25rem;
       border-radius: 50px;
+      transition: transform 0.3s ease;
+    }
+    .larry_btn:hover {
+      transform: scale(1.03);
     }
     
     /* Main container for chapter content */
@@ -120,6 +148,12 @@
       box-shadow: var(--card-shadow);
       position: relative;
       overflow: hidden;
+      /* Slight pop-in effect */
+      animation: popIn 0.8s ease-out;
+    }
+    @keyframes popIn {
+      0% { opacity: 0; transform: scale(0.95); }
+      100% { opacity: 1; transform: scale(1); }
     }
     /* Fun animated background pattern */
     .container::before {
@@ -144,6 +178,7 @@
     .breadcrumb {
       font-size: 0.9rem;
       margin-bottom: 1rem;
+      text-align: center;
     }
     .breadcrumb a {
       text-decoration: none;
@@ -179,6 +214,10 @@
       margin-right: 0.5rem;
       font-size: 0.9rem;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+    .tag:hover {
+      transform: scale(1.05);
     }
     
     /* Chapter Content */
@@ -186,6 +225,7 @@
       margin-bottom: 2rem;
       line-height: 1.8;
       font-size: 1.1rem;
+      text-align: justify;
     }
     
     /* Quiz Section */
@@ -195,6 +235,10 @@
       background: #fff9e6;
       border: 2px dashed var(--secondary-color);
       border-radius: 12px;
+      transition: transform 0.2s ease;
+    }
+    .quiz-section:hover {
+      transform: scale(1.01);
     }
     .quiz-section h2 {
       margin-bottom: 1rem;
