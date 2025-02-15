@@ -206,6 +206,23 @@
     </style>
 </head>
 <body>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+<script>
+  // Firebase Initialization
+  const firebaseConfig = {
+    apiKey: "AIzaSyA6At0_PeY351303P85_o0wtYMXGQ_d_xg",
+    authDomain: "learnbite-e7673.firebaseapp.com",
+    databaseURL: "https://learnbite-e7673-default-rtdb.firebaseio.com/",
+    projectId: "learnbite-e7673",
+    storageBucket: "learnbite-e7673.firebasestorage.app",
+    messagingSenderId: "897857889201",
+    appId: "1:897857889201:web:c601789ccba7f1fe8b9390"
+  };
+  firebase.initializeApp(firebaseConfig);
+</script>
     <div class="challenge-container">
         <div class="challenge-header">
             <div class="timer">⏳ 10:00</div>
@@ -335,7 +352,78 @@
             document.getElementById('questionContainer').innerHTML = html;
             updateProgress();
         }
-        let totalGems = localStorage.getItem('gems') ? parseInt(localStorage.getItem('gems')) : 1250;
+        let totalGems = 0;
+let currentUser = null;
+
+// Initialize auth listener
+firebase.auth().onAuthStateChanged(user => {
+  currentUser = user;
+  if (user) {
+    // Load gems from Firebase
+    const userRef = firebase.database().ref('users/' + user.uid);
+    userRef.on('value', (snapshot) => {
+      const data = snapshot.val();
+      if (data && data.points) {
+        totalGems = data.points;
+        document.getElementById('score').textContent = totalGems;
+      }
+    });
+  } else {
+    // Load from localStorage if not logged in
+    
+    document.getElementById('score').textContent = totalGems;
+  }
+});
+
+function updateGems(value) {
+  totalGems += value;
+  document.getElementById('score').textContent = totalGems;
+  
+  if (currentUser) {
+    // Update Firebase
+    const userRef = firebase.database().ref('users/' + currentUser.uid);
+    userRef.transaction((userData) => {
+      if (userData) {
+        userData.points += value;
+      }
+      return userData;
+    });
+  } else {
+    // Update localStorage
+    localStorage.setItem('gems', totalGems);
+  }
+}
+
+// Modified checkAnswer function
+function checkAnswer(selectedIndex) {
+  const question = questions[currentQuestion];
+  const buttons = document.querySelectorAll('.option-btn');
+  
+  buttons.forEach(btn => btn.style.pointerEvents = 'none');
+  
+  if (selectedIndex === question.correct) {
+    buttons[selectedIndex].classList.add('correct');
+    updateGems(10); // Update gems through centralized function
+    streak++;
+    document.getElementById('streak').textContent = streak;
+  } else {
+    buttons[selectedIndex].classList.add('incorrect');
+    buttons[question.correct].classList.add('correct');
+    streak = 0;
+  }
+
+  setTimeout(() => {
+    currentQuestion++;
+    if (currentQuestion < questions.length) {
+      showQuestion();
+    } else {
+      document.querySelector('.progress-fill').style.width = '100%';
+      setTimeout(endChallenge, 300);
+    }
+  }, 1500);
+}
+
+// Remove the let totalGems = ... line from the original code
 
         async function initializeChallenge() {
             try {
