@@ -503,12 +503,26 @@ function checkAnswer(selectedIndex) {
         }
 
         function endChallenge() {
-            clearInterval(timerInterval);
-            document.getElementById('questionContainer').style.display = 'none';
-            document.getElementById('resultsScreen').style.display = 'block';
-            document.getElementById('finalScore').textContent = score;
-            document.querySelector('.progress-fill').style.width = '100%';
-        }
+  clearInterval(timerInterval);
+  document.getElementById('questionContainer').style.display = 'none';
+  document.getElementById('resultsScreen').style.display = 'block';
+  document.getElementById('finalScore').textContent = score;
+  document.querySelector('.progress-fill').style.width = '100%';
+  
+  // Update final score in Firebase/localStorage
+  if (currentUser) {
+    const userRef = firebase.database().ref('users/' + currentUser.uid);
+    userRef.transaction((userData) => {
+      if (userData) {
+        userData.points += score;
+      }
+      return userData;
+    });
+  } else {
+    const finalGems = parseInt(localStorage.getItem('gems') || 0) + score;
+    localStorage.setItem('gems', finalGems);
+  }
+}
 
         initializeChallenge().catch(console.error);
     </script>
