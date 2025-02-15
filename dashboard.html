@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard - LearnBite</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Firebase App (the core Firebase SDK) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <!-- Firebase Authentication -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <!-- Firebase Firestore -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <style>
+    body { font-family: sans-serif; background: #f8f9fa; margin: 0; padding: 2rem; }
+    .dashboard { max-width: 600px; margin: auto; background: #fff; padding: 2rem; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    h2 { margin-bottom: 1rem; }
+    .data { margin: 1rem 0; font-size: 1.2rem; }
+    button { padding: 0.5rem 1rem; background: #1cb0f6; color: #fff; border: none; border-radius: 5px; cursor: pointer; }
+    button:hover { background: #58cc02; }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <h2>Welcome to Your Dashboard</h2>
+    <div class="data">
+      <p>Points: <span id="points">Loading...</span></p>
+      <p>Streak: <span id="streak">Loading...</span></p>
+    </div>
+    <button id="earnPoints">Earn 10 Points</button>
+    <button id="incrementStreak">Increase Streak</button>
+    <button id="logout">Logout</button>
+  </div>
+
+  <script>
+const firebaseConfig = {
+  apiKey: "AIzaSyDVdPkTjGsSUD6tXJs2w1AitE6Uqlgmmpo",
+  authDomain: "learnbite-10962.firebaseapp.com",
+  projectId: "learnbite-10962",
+  storageBucket: "learnbite-10962.firebasestorage.app",
+  messagingSenderId: "106427351575",
+  appId: "1:106427351575:web:9868f58ebecaa5f6821252",
+  measurementId: "G-V6KFK6WEPZ"
+};
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    // Ensure the user is logged in
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        loadUserData(user);
+      } else {
+        // If not logged in, redirect to login page.
+        window.location.href = "login.html";
+      }
+    });
+
+    // Function to load user data from Firestore
+    function loadUserData(user) {
+      db.collection("users").doc(user.uid).get().then((doc) => {
+        if (doc.exists) {
+          const data = doc.data();
+          document.getElementById("points").textContent = data.points;
+          document.getElementById("streak").textContent = data.streak;
+        } else {
+          console.log("No user data found!");
+        }
+      }).catch((error) => {
+        console.error("Error fetching user data:", error);
+      });
+    }
+
+    // Example function: Increase points by 10
+    document.getElementById("earnPoints").addEventListener("click", () => {
+      const user = auth.currentUser;
+      if (user) {
+        const userRef = db.collection("users").doc(user.uid);
+        // Use a transaction to safely update the points value
+        db.runTransaction((transaction) => {
+          return transaction.get(userRef).then((doc) => {
+            if (!doc.exists) {
+              throw "Document does not exist!";
+            }
+            const newPoints = (doc.data().points || 0) + 10;
+            transaction.update(userRef, { points: newPoints });
+          });
+        }).then(() => {
+          loadUserData(user);
+        }).catch((error) => {
+          console.error("Transaction failed: ", error);
+        });
+      }
+    });
+
+    // Example function: Increase streak by 1
+    document.getElementById("incrementStreak").addEventListener("click", () => {
+      const user = auth.currentUser;
+      if (user) {
+        const userRef = db.collection("users").doc(user.uid);
+        db.runTransaction((transaction) => {
+          return transaction.get(userRef).then((doc) => {
+            if (!doc.exists) {
+              throw "Document does not exist!";
+            }
+            const newStreak = (doc.data().streak || 0) + 1;
+            transaction.update(userRef, { streak: newStreak });
+          });
+        }).then(() => {
+          loadUserData(user);
+        }).catch((error) => {
+          console.error("Transaction failed: ", error);
+        });
+      }
+    });
+
+    // Logout function
+    document.getElementById("logout").addEventListener("click", () => {
+      auth.signOut().then(() => {
+        window.location.href = "login.html";
+      });
+    });
+  </script>
+</body>
+</html>

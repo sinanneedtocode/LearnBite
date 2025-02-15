@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Register - LearnBite</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Firebase App (the core Firebase SDK) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <!-- Firebase Authentication -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <!-- Firebase Firestore -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <style>
+    /* ... (styles remain the same) ... */
+    body { background: #f8f9fa; font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+    .container { background: #fff; padding: 2rem; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 300px; text-align: center; }
+    h2 { margin-bottom: 1rem; }
+    input { width: 100%; padding: 0.75rem; margin: 0.5rem 0; border: 1px solid #ccc; border-radius: 5px; }
+    button { width: 100%; padding: 0.75rem; background: #1cb0f6; color: #fff; border: none; border-radius: 5px; cursor: pointer; margin-top: 1rem; }
+    button:hover { background: #58cc02; }
+    .link { margin-top: 1rem; }
+    .link a { color: #1cb0f6; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Register</h2>
+    <form id="registerForm">
+      <input type="email" id="registerEmail" placeholder="Email" required>
+      <input type="password" id="registerPassword" placeholder="Password" required>
+      <button type="submit">Register</button>
+    </form>
+    <div class="link">
+      <p>Already have an account? <a href="login.html">Login</a></p>
+    </div>
+  </div>
+
+  <script>
+    // Replace with your Firebase project configuration
+    const firebaseConfig = {
+  apiKey: "AIzaSyDVdPkTjGsSUD6tXJs2w1AitE6Uqlgmmpo",
+  authDomain: "learnbite-10962.firebaseapp.com",
+  projectId: "learnbite-10962",
+  storageBucket: "learnbite-10962.firebasestorage.app",
+  messagingSenderId: "106427351575",
+  appId: "1:106427351575:web:9868f58ebecaa5f6821252",
+  measurementId: "G-V6KFK6WEPZ"
+};
+
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    // Registration form event listener
+    document.getElementById('registerForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const email = document.getElementById('registerEmail').value;
+      const password = document.getElementById('registerPassword').value;
+
+      auth.createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          // Create a Firestore document for the user with default points and streak values.
+          return db.collection("users").doc(user.uid).set({
+            email: user.email,
+            points: 0,
+            streak: 0,
+            // Optionally, record a timestamp for when the user joined
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+          });
+        })
+        .then(() => {
+          alert("Registration successful and user data initialized.");
+          // Optionally redirect to a dashboard page:
+          window.location.href = "dashboard.html";
+        })
+        .catch((error) => {
+          alert("Error: " + error.message);
+        });
+    });
+  </script>
+</body>
+</html>

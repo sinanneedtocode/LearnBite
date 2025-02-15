@@ -46,6 +46,7 @@
       justify-content: space-between;
       align-items: center;
       padding: 1rem 2rem;
+      flex-wrap: wrap;
     }
     .logo {
       height: 50px;
@@ -97,7 +98,7 @@
       background: rgba(88, 204, 2, 0.15);
       transform: translateY(-2px);
     }
-    .larry_btn {
+    .larry_btn, .login_btn {
       background: var(--secondary-color);
       color: var(--white) !important;
       box-shadow: 0 3px 0 #0f8ecb;
@@ -278,7 +279,7 @@
       margin-bottom: 1rem;
     }
 
-    /* Chapters Modal & Larry Popup (styles remain unchanged) */
+    /* Modal Overlays */
     .modal-overlay {
       position: fixed;
       top: 0;
@@ -294,7 +295,9 @@
     .modal-overlay:not(.hidden) {
       display: flex;
     }
-    .course-modal {
+    .course-modal,
+    .login-modal,
+    .larry-modal-content {
       background: white;
       border-radius: 20px;
       padding: 2rem;
@@ -304,23 +307,33 @@
       overflow-y: auto;
     }
     .larry-modal-content {
-      background: white;
-      border-radius: 20px;
-      width: 90%;
       max-width: 800px;
       height: 90vh;
       position: relative;
       overflow: hidden;
     }
-    .larry-modal-content .close-modal {
-      position: absolute;
-      top: 10px;
-      right: 10px;
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    .close-modal {
       background: none;
       border: none;
       font-size: 24px;
       cursor: pointer;
-      z-index: 10;
+    }
+
+    /* Ad Container */
+    .ad-container {
+      background: #fff;
+      border: 1px solid #ddd;
+      padding: 1rem;
+      text-align: center;
+      margin: 2rem 0;
+      border-radius: var(--border-radius);
+      box-shadow: var(--card-shadow);
     }
 
     /* Footer */
@@ -390,6 +403,7 @@
         margin: 2rem 0;
       }
       .course-modal,
+      .login-modal,
       .larry-modal-content {
         width: 95%;
       }
@@ -423,6 +437,45 @@
   </style>
 </head>
 <body>
+  <!-- Login Modal -->
+  <div class="modal-overlay hidden" id="loginModal">
+    <div class="login-modal">
+      <div class="modal-header">
+        <h2>Login / Register</h2>
+        <button class="close-modal" onclick="closeLoginModal()">×</button>
+      </div>
+      <form id="loginForm">
+        <div style="margin-bottom: 1rem;">
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" required style="width: 100%; padding: 0.5rem; margin-top: 0.5rem;"/>
+        </div>
+        <div style="margin-bottom: 1rem;">
+          <label for="password">Password:</label>
+          <input type="password" id="password" name="password" required style="width: 100%; padding: 0.5rem; margin-top: 0.5rem;"/>
+        </div>
+        <div style="margin-bottom: 1rem;">
+          <label for="grade">Select Grade:</label>
+          <select id="grade" name="grade" required style="width: 100%; padding: 0.5rem; margin-top: 0.5rem;">
+            <option value="">--Choose Grade--</option>
+            <option value="grade1">Grade 1</option>
+            <option value="grade2">Grade 2</option>
+            <option value="grade3">Grade 3</option>
+            <option value="grade4">Grade 4</option>
+            <option value="grade5">Grade 5</option>
+            <option value="grade6">Grade 6</option>
+            <option value="grade7">Grade 7</option>
+            <option value="grade8">Grade 8</option>
+            <option value="grade9">Grade 9</option>
+            <option value="grade10">Grade 10</option>
+            <option value="grade11">Grade 11</option>
+            <option value="grade12">Grade 12</option>
+          </select>
+        </div>
+        <button type="submit" class="action-btn" style="margin-bottom: 1rem;">Login / Register</button>
+      </form>
+    </div>
+  </div>
+
   <!-- Chapters Modal (for chapter selection) -->
   <div class="modal-overlay hidden" id="chaptersModal">
     <div class="course-modal">
@@ -454,6 +507,7 @@
         <span class="hamburger"></span>
         <span class="hamburger"></span>
       </button>
+      <button class="login_btn" onclick="openLoginModal()">Login</button>
     </div>
     <nav class="main_nav" id="mainNav">
       <ul class="main_nav_list">
@@ -575,6 +629,12 @@
         🚀 Start Challenge
       </button>
     </section>
+
+    <!-- Ad Container -->
+    <div class="ad-container">
+      <p>Advertisement</p>
+      <p>Your ad could be here!</p>
+    </div>
 
     <section class="achievements-section">
       <div class="achievement-card">
@@ -717,14 +777,21 @@
     }
 
     // ----------------------------
-    // (Optional) Other JS code (e.g., courses data) can go here
+    // Login Modal Functions
     // ----------------------------
-    const courses = {
-      mathematics: { categories: { chapters: "math_subject.html" } },
-      science: { categories: { chapters: "science_subject.html" } },
-      english: { categories: { literature: "liturature_subject.html", grammar: "english_tenses.html" } },
-      social: { categories: { chapters: "ss_subject.html" } }
-    };
+    function openLoginModal() {
+      document.getElementById('loginModal').classList.remove('hidden');
+    }
+    function closeLoginModal() {
+      document.getElementById('loginModal').classList.add('hidden');
+    }
+    // Sample login form submission handling
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      // Process login / registration (this is a placeholder)
+      alert("Logged in as: " + document.getElementById('email').value + " with grade: " + document.getElementById('grade').value);
+      closeLoginModal();
+    });
 
     // ----------------------------
     // Menu Toggle for Mobile Navigation
