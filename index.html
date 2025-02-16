@@ -516,6 +516,26 @@
 .leaderboard-entry:nth-child(3) .rank {
   color: #cd7f32;
 }
+#chaptersPath {
+  max-height: 70vh;
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+.modal-header {
+  position: sticky;
+  top: 0;
+  background: white;
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+  z-index: 1;
+}
+
+.modal-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
   </style>
 </head>
 <body>
@@ -618,6 +638,7 @@
         <li><a href="#subjects" class="main_nav_link">📚 Subjects</a></li>
         <li><a href="#" class="main_nav_link larry_btn" onclick="openLarryModal()">🦉 Ask Larry</a></li>
         <li><a href="timer.html" class="main_nav_link larry_btn">⏱️ Study Companion</a></li>
+        <li><a href="profile.html" class="main_nav_link">👤 Profile</a></li>
       </ul>
     </nav>
   </header>
@@ -783,6 +804,75 @@
   </footer>
 
   <script>
+    // Progress tracking functions
+function calculateSubjectProgress(chapters) {
+  if (!chapters || chapters.length === 0) return 0;
+  const totalProgress = chapters.reduce((sum, chapter) => sum + (chapter.progress || 0), 0);
+  return Math.round((totalProgress / (chapters.length * 100)) * 100);
+}
+
+function updateProgressCircle(element, progress) {
+  const circle = element.querySelector('path:last-child');
+  const text = element.querySelector('.progress-text');
+  if (circle && text) {
+    circle.setAttribute('stroke-dasharray', `${progress}, 100`);
+    text.textContent = `${progress}%`;
+  }
+}
+
+function initializeProgress(uid) {
+  const subjectsRef = firebase.database().ref(`users/${uid}/subjects`);
+  
+  subjectsRef.once('value').then((snapshot) => {
+    if (!snapshot.exists()) {
+      const defaultSubjects = {
+        mathematics: chaptersDatabase.mathematics.map(chapter => ({
+          title: chapter.title,
+          progress: 0
+        })),
+        science: chaptersDatabase.science.map(chapter => ({
+          title: chapter.title,
+          progress: 0
+        })),
+        english: chaptersDatabase.english.map(chapter => ({
+          title: chapter.title,
+          progress: 0
+        }))
+      };
+      subjectsRef.set(defaultSubjects);
+    }
+  });
+}
+
+function listenToProgressUpdates(uid) {
+  const subjectsRef = firebase.database().ref(`users/${uid}/subjects`);
+  
+  subjectsRef.on('value', (snapshot) => {
+    const subjects = snapshot.val() || {};
+    
+    Object.keys(subjects).forEach(subject => {
+      const progress = calculateSubjectProgress(subjects[subject]);
+      const subjectCard = document.querySelector(`[data-subject="${subject}"]`);
+      if (subjectCard) {
+        const progressCircle = subjectCard.querySelector('.progress-circle');
+        updateProgressCircle(progressCircle, progress);
+      }
+    });
+  });
+}
+
+function updateChapterProgress(uid, subject, chapterTitle, progress) {
+  const chapterRef = firebase.database()
+    .ref(`users/${uid}/subjects/${subject}`)
+    .orderByChild('title')
+    .equalTo(chapterTitle);
+
+  chapterRef.once('value', (snapshot) => {
+    snapshot.forEach((childSnapshot) => {
+      childSnapshot.ref.update({ progress: progress });
+    });
+  });
+}
     // --------------------------------------------------
     // Firebase Configuration (Replace with your own values)
     // --------------------------------------------------
@@ -971,42 +1061,62 @@
       ]
     };
     function showChaptersModal(subject) {
-      const modal = document.getElementById('chaptersModal');
-      const pathContainer = document.getElementById('chaptersPath');
-      const chapters = chaptersDatabase[subject];
+    const modal = document.getElementById('chaptersModal');
+    const pathContainer = document.getElementById('chaptersPath');
+    const user = firebase.auth().currentUser;
+
+    if (!user) {
+      alert('Please login to view chapters');
+      openLoginModal();
+      return;
+    }
+
+    const subjectRef = firebase.database().ref(`users/${user.uid}/subjects/${subject}`);
+    
+    subjectRef.once('value').then((snapshot) => {
+      const chapters = snapshot.val() || chaptersDatabase[subject];
       pathContainer.innerHTML = '';
+      
       chapters.forEach((chapter, index) => {
         const chapterEl = document.createElement('div');
-        chapterEl.className = 'flex items-center p-4 rounded-lg border ' + 
-          (chapter.progress > 0 ? 'bg-teal-50 border-teal-200' : 'bg-gray-50 border-gray-200');
+        chapterEl.style.margin = '1rem 0';
+        chapterEl.style.padding = '1.5rem';
+        chapterEl.style.backgroundColor = 'white';
+        chapterEl.style.borderRadius = 'var(--border-radius)';
+        chapterEl.style.boxShadow = 'var(--card-shadow)';
+        
+        const progressBarWidth = chapter.progress || 0;
+        
         chapterEl.innerHTML = `
-          <div class="w-8 h-8 rounded-full flex items-center justify-center ${chapter.progress === 100 ? 'bg-teal-500 text-white' : 'bg-white border-2 border-teal-500'}">
-            ${chapter.progress === 100 ? '✓' : index + 1}
-          </div>
-          <div class="ml-4 flex-1">
-            <h4 class="font-semibold">${chapter.title}</h4>
-            <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
-              <div class="bg-teal-500 h-2 rounded-full" style="width: ${chapter.progress}%"></div>
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <div style="display: flex; align-items: center; gap: 1rem;">
+              <div style="width: 40px; height: 40px; border-radius: 50%; background: ${chapter.progress === 100 ? 'var(--primary-color)' : 'white'}; 
+                          border: 2px solid var(--primary-color); display: flex; align-items: center; justify-content: center; color: ${chapter.progress === 100 ? 'white' : 'var(--primary-color)'}">
+                ${chapter.progress === 100 ? '✓' : (index + 1)}
+              </div>
+              <div>
+                <h4 style="font-weight: 600; margin-bottom: 0.5rem;">${chapter.title}</h4>
+                <div style="width: 200px; height: 8px; background: #eee; border-radius: 4px; overflow: hidden;">
+                  <div style="width: ${progressBarWidth}%; height: 100%; background: var(--primary-color);"></div>
+                </div>
+              </div>
             </div>
+            <a href="chapter.html?subject=${subject}&chapter=${encodeURIComponent(chapter.title)}" 
+              class="action-btn" style="margin: 0; padding: 0.5rem 1rem;">
+              ${chapter.progress === 0 ? 'Start' : chapter.progress === 100 ? 'Review' : 'Continue'}
+            </a>
           </div>
-          <a href="chapter.html?subject=${subject}&chapter=${encodeURIComponent(chapter.title)}"
-             class="ml-4 px-4 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600">
-            ${chapter.progress === 0 ? 'Start' : chapter.progress === 100 ? 'Review' : 'Continue'}
-          </a>
         `;
+        
         pathContainer.appendChild(chapterEl);
       });
+      
       modal.classList.remove('hidden');
       document.getElementById('modalSubject').textContent = 
         subject.charAt(0).toUpperCase() + subject.slice(1) + " Learning Path";
-    }
-    document.querySelectorAll('.explore-btn').forEach(button => {
-      button.addEventListener('click', function(e) {
-        e.preventDefault();
-        const subject = this.closest('[data-subject]').dataset.subject;
-        showChaptersModal(subject);
-      });
     });
+  }
+
     function updateLeaderboard() {
   const leaderboardEntries = document.getElementById('leaderboardEntries');
   leaderboardEntries.innerHTML = '<div class="loading">Loading leaderboard...</div>';
@@ -1044,7 +1154,22 @@
     console.error('Error fetching leaderboard data:', error);
   });
 }
-
+// Add event listeners for explore buttons
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.explore-btn').forEach(button => {
+    button.addEventListener('click', function() {
+      const subject = this.closest('.subject-card').dataset.subject;
+      showChaptersModal(subject);
+    });
+  });
+});
+// Initialize progress tracking when user logs in
+firebase.auth().onAuthStateChanged(user => {
+  if (user) {
+    initializeProgress(user.uid);
+    listenToProgressUpdates(user.uid);
+  }
+});
 // Call on page load
 window.addEventListener('load', updateLeaderboard);
   </script>

@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profile - LearnBite</title>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900&display=swap');
+
+    :root {
+      --primary-color: #58cc02;
+      --secondary-color: #1cb0f6;
+      --accent-color: #ff6b6b;
+      --text-color: #2d2d2d;
+      --white: #ffffff;
+      --bg-color: #f8f9fa;
+      --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --border-radius: 16px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Rubik', sans-serif;
+    }
+
+    body {
+      background: var(--bg-color);
+      color: var(--text-color);
+      line-height: 1.5;
+    }
+
+    /* header styles */
+    .header {
+      position: sticky;
+      top: 0;
+      width: 100%;
+      background: var(--white);
+      box-shadow: var(--card-shadow);
+      z-index: 1000;
+      border-bottom: 3px solid var(--secondary-color);
+    }
+    .header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      flex-wrap: wrap;
+    }
+    .logo {
+      height: 50px;
+      transition: transform 0.2s ease;
+    }
+    .logo:hover {
+      transform: scale(1.05);
+    }
+    .menu-toggle {
+      display: none;
+    }
+    .main_nav_list {
+      display: flex;
+      gap: 1.5rem;
+      list-style: none;
+      padding: 0 2rem 1rem;
+      align-items: center;
+      justify-content: center;
+    }
+    .main_nav_link {
+      text-decoration: none;
+      color: var(--text-color);
+      font-weight: 500;
+      padding: 0.75rem 1.25rem;
+      border-radius: 50px;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(88, 204, 2, 0.05);
+    }
+    .main_nav_link:hover {
+      background: rgba(88, 204, 2, 0.15);
+      transform: translateY(-2px);
+    }
+    .login_btn {
+      background: var(--secondary-color);
+      color: var(--white);
+      padding: 0.75rem 1.25rem;
+      border-radius: 50px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 3px 0 #0f8ecb;
+    }
+
+    .profile-section {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 2rem;
+}
+
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.profile-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.profile-card {
+  background: var(--white);
+  border-radius: var(--border-radius);
+  padding: 2rem;
+  box-shadow: var(--card-shadow);
+}
+
+.profile-info {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.avatar {
+  width: 80px;
+  height: 80px;
+  background: var(--primary-color);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.user-details h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.user-level {
+  color: var(--primary-color);
+  margin-top: 0.5rem;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.stat-card {
+  background: var(--bg-color);
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.stat-icon {
+  font-size: 1.5rem;
+}
+
+.stats-section {
+  background: var(--white);
+  border-radius: var(--border-radius);
+  padding: 2rem;
+  box-shadow: var(--card-shadow);
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: var(--bg-color);
+  border-radius: var(--border-radius);
+  margin: 1rem 0;
+}
+
+.stat-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.stat-value {
+  font-weight: bold;
+}
+
+.achievements-list {
+  margin-top: 1rem;
+}
+
+.achievement-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: var(--bg-color);
+  border-radius: var(--border-radius);
+  margin: 0.5rem 0;
+}
+
+.edit-form {
+  margin: 1rem 0;
+}
+
+.edit-form.hidden {
+  display: none;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: var(--border-radius);
+}
+
+@media (max-width: 768px) {
+  .profile-content {
+    grid-template-columns: 1fr;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .profile-section {
+    padding: 0 1rem;
+  }
+}
+
+    @media (max-width: 768px) {
+      .header-container {
+        padding: 0.75rem 1rem;
+      }
+      .menu-toggle {
+        display: flex;
+      }
+      .main_nav {
+        display: none;
+      }
+      .main_nav.active {
+        display: block;
+      }
+      .main_nav_list {
+        flex-direction: column;
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- header -->
+  <header class="header">
+    <div class="header-container">
+      <a href="index.html">
+        <img src="imgs/duolingo-landscape-lockup.png" alt="learnbite_logo" class="logo" />
+      </a>
+      <button class="menu-toggle" onclick="toggleMenu()">
+        <span class="hamburger"></span>
+        <span class="hamburger"></span>
+        <span class="hamburger"></span>
+      </button>
+      <button class="login_btn" onclick="handleAuthAction()">Login</button>
+    </div>
+    <nav class="main_nav" id="mainNav">
+      <ul class="main_nav_list">
+        <li><a href="index.html" class="main_nav_link">🏠 Home</a></li>
+        <li><a href="index.html#subjects" class="main_nav_link">📚 Subjects</a></li>
+        <li><a href="#" class="main_nav_link larry_btn" onclick="openLarryModal()">🦉 Ask Larry</a></li>
+        <li><a href="timer.html" class="main_nav_link larry_btn">⏱️ Study Companion</a></li>
+        <li><a href="profile.html" class="main_nav_link">👤 Profile</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="profile-section">
+    <div class="profile-header">
+      <h2>My Profile</h2>
+      <button class="action-btn edit-profile-btn" onclick="toggleEditMode()">
+        ✏️ Edit Profile
+      </button>
+    </div>
+  
+    <div class="profile-content">
+      <!-- user Info -->
+      <div class="profile-card">
+        <div class="profile-info">
+          <div class="avatar">You</div>
+          <div class="user-details">
+            <h3 id="userName">John Doe</h3>
+            <p id="userGrade">Grade 10 Student</p>
+            <p class="user-level">🏆 Advanced Learner</p>
+          </div>
+        </div>
+  
+        <!-- edit form (its hidden by default) -->
+        <div class="edit-form hidden" id="editForm">
+          <div class="form-group">
+            <label for="editName">Display Name:</label>
+            <input type="text" id="editName" value="John Doe">
+          </div>
+          <div class="form-group">
+            <label for="editGrade">Grade:</label>
+            <select id="editGrade">
+              <option value="9">Grade 9</option>
+              <option value="10" selected>Grade 10</option>
+              <option value="11">Grade 11</option>
+              <option value="12">Grade 12</option>
+            </select>
+          </div>
+          <button class="action-btn save-btn" onclick="saveProfile()">
+            💾 Save Changes
+          </button>
+        </div>
+  
+        <div class="stats-grid">
+          <div class="stat-card">
+            <span class="stat-icon">📅</span>
+            <div class="stat-info">
+              <h4>Joined</h4>
+              <p>January 2025</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <span class="stat-icon">📚</span>
+            <div class="stat-info">
+              <h4>Lessons</h4>
+              <p>127 Completed</p>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <!-- statistics -->
+      <div class="stats-section">
+        <h3>Statistics</h3>
+        <div class="stat-row">
+          <div class="stat-label">
+            <span class="stat-icon">🔥</span>
+            Current Streak
+          </div>
+          <div class="stat-value" id="streakValue">7 Days</div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-label">
+            <span class="stat-icon">💎</span>
+            Total Gems
+          </div>
+          <div class="stat-value" id="gemsValue">1,240</div>
+        </div>
+  
+        <h3>Recent Achievements</h3>
+        <div class="achievements-list">
+          <div class="achievement-item">
+            <span class="achievement-icon">🏆</span>
+            Math Master
+          </div>
+          <div class="achievement-item">
+            <span class="achievement-icon">🏆</span>
+            Science Whiz
+          </div>
+          <div class="achievement-item">
+            <span class="achievement-icon">🏆</span>
+            Perfect Week
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Firebase Configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyA6At0_PeY351303P85_o0wtYMXGQ_d_xg",
+      authDomain: "learnbite-e7673.firebaseapp.com",
+      databaseURL: "https://learnbite-e7673-default-rtdb.firebaseio.com/",
+      projectId: "learnbite-e7673",
+      storageBucket: "learnbite-e7673.firebasestorage.app",
+      messagingSenderId: "897857889201",
+      appId: "1:897857889201:web:c601789ccba7f1fe8b9390"
+    };
+    firebase.initializeApp(firebaseConfig);
+
+    // Authentication check
+    firebase.auth().onAuthStateChanged(user => {
+      if (!user) {
+        // Redirect to index if not logged in
+        window.location.href = 'index.html';
+      }
+    });
+
+    // Function to toggle edit mode
+function toggleEditMode() {
+  const editForm = document.getElementById('editForm');
+  const editBtn = document.querySelector('.edit-profile-btn');
+  
+  if (editForm.classList.contains('hidden')) {
+    editForm.classList.remove('hidden');
+    editBtn.innerHTML = '❌ Cancel';
+  } else {
+    editForm.classList.add('hidden');
+    editBtn.innerHTML = '✏️ Edit Profile';
+  }
+}
+
+// Function to save profile changes
+function saveProfile() {
+  const newName = document.getElementById('editName').value;
+  const newGrade = document.getElementById('editGrade').value;
+  
+  // Update display
+  document.getElementById('userName').textContent = newName;
+  document.getElementById('userGrade').textContent = `Grade ${newGrade} Student`;
+  
+  // If using Firebase, update the database
+  const user = firebase.auth().currentUser;
+  if (user) {
+    firebase.database().ref('users/' + user.uid).update({
+      displayName: newName,
+      grade: newGrade
+    }).then(() => {
+      alert('Profile updated successfully!');
+      toggleEditMode();
+    }).catch(error => {
+      alert('Error updating profile: ' + error.message);
+    });
+  }
+}
+
+// Load user data when authenticated
+firebase.auth().onAuthStateChanged(user => {
+  if (user) {
+    firebase.database().ref('users/' + user.uid).once('value')
+      .then(snapshot => {
+        const data = snapshot.val();
+        if (data) {
+          document.getElementById('userName').textContent = data.displayName || user.email.split('@')[0];
+          document.getElementById('userGrade').textContent = `Grade ${data.grade || 'N/A'} Student`;
+          document.getElementById('streakValue').textContent = `${data.streak || 0} Days`;
+          document.getElementById('gemsValue').textContent = data.points || 0;
+          
+          // Set form values
+          document.getElementById('editName').value = data.displayName || user.email.split('@')[0];
+          document.getElementById('editGrade').value = data.grade || '10';
+        }
+      });
+  }
+});
+
+    function toggleMenu() {
+      const nav = document.getElementById('mainNav');
+      nav.classList.toggle('active');
+    }
+
+    function handleAuthAction() {
+      const user = firebase.auth().currentUser;
+      if (user) {
+        firebase.auth().signOut()
+          .then(() => {
+            window.location.href = 'index.html';
+          })
+          .catch(error => {
+            alert('Error signing out: ' + error.message);
+          });
+      } else {
+        window.location.href = 'index.html';
+      }
+    }
+  </script>
+</body>
+</html>
