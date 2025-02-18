@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>LearnBite - Interactive Quiz</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-green: #58cc02;
+      --secondary-blue: #1cb0f6;
+      --accent-red: #ff3b30;
+      --light-gray: #f8f9fa;
+      --dark-text: #2d2d2d;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Rubik', sans-serif;
+    }
+
+    body {
+      background: var(--light-gray);
+      min-height: 100vh;
+    }
+
+    #game-container {
+      max-width: 1000px;
+      height: 700px;
+      margin: 2rem auto;
+      border-radius: 20px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      overflow: hidden;
+      background: white;
+      display: flex;
+      position: relative;
+    }
+
+    #game-area {
+      flex: 7;
+      position: relative;
+      padding: 20px;
+      background: linear-gradient(160deg, #ffffff 0%, #f8f9fa 100%);
+    }
+
+    #question {
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--dark-text);
+      text-align: center;
+      margin: 1.5rem 0;
+      padding: 1.5rem;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    #score {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: white;
+      padding: 12px 24px;
+      border-radius: 30px;
+      font-weight: 700;
+      color: var(--primary-green);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    #score::before {
+      content: '💎';
+      font-size: 1.2em;
+    }
+
+    canvas {
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      background: white;
+    }
+
+    #optionList {
+      flex: 3;
+      background: var(--light-gray);
+      padding: 2rem;
+      border-left: 3px solid var(--primary-green);
+    }
+
+    #optionList h3 {
+      color: var(--dark-text);
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    #optionList ul {
+      list-style: none;
+      display: grid;
+      gap: 1rem;
+    }
+
+    #optionList li {
+      background: white;
+      padding: 1.2rem;
+      border-radius: 12px;
+      font-weight: 500;
+      color: var(--dark-text);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      transition: transform 0.2s ease;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    #optionList li:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    #optionsButton {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 12px 32px;
+      border: none;
+      border-radius: 30px;
+      background: var(--secondary-blue);
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 0 #0f8ecb;
+      transition: all 0.2s ease;
+    }
+
+    #optionsButton:hover {
+      transform: translateX(-50%) translateY(-2px);
+      box-shadow: 0 6px 0 #0f8ecb;
+    }
+
+    #pauseModal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+    }
+
+    #pauseModalContent {
+      background: white;
+      padding: 2rem 3rem;
+      border-radius: 20px;
+      text-align: center;
+    }
+
+    #pauseModalContent h2 {
+      color: var(--dark-text);
+      margin-bottom: 1.5rem;
+    }
+
+    #resumeButton {
+      background: var(--primary-green);
+      color: white;
+      padding: 12px 32px;
+      border: none;
+      border-radius: 30px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 0 #3ca900;
+      transition: all 0.2s ease;
+    }
+
+    #resumeButton:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 #3ca900;
+    }
+
+    .deco-circle {
+      position: fixed;
+      border-radius: 50%;
+      opacity: 0.1;
+      z-index: -1;
+    }
+  </style>
+</head>
+<body>
+  <div class="deco-circle" style="width: 200px; height: 200px; background: var(--primary-green); top: -50px; right: -50px;"></div>
+  <div class="deco-circle" style="width: 150px; height: 150px; background: var(--secondary-blue); bottom: -50px; left: -50px;"></div>
+
+  <div id="game-container">
+    <div id="game-area">
+      <div id="question">Loading question...</div>
+      <div id="score">0</div>
+      <canvas id="gameCanvas"></canvas>
+      <button id="optionsButton">Options</button>
+      <div id="pauseModal">
+        <div id="pauseModalContent">
+          <h2>Game Paused</h2>
+          <button id="resumeButton">Resume Learning</button>
+        </div>
+      </div>
+    </div>
+    <div id="optionList">
+      <h3>Answer Options</h3>
+      <ul>
+        <li id="optionA">A: ...</li>
+        <li id="optionB">B: ...</li>
+        <li id="optionC">C: ...</li>
+        <li id="optionD">D: ...</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    const GEMINI_API_KEY = 'AIzaSyDbACHvo_4uBs-xmDIKGE25bwT29vLECA8'; // Replace with your Gemini API key
+
+    async function fetchQuestionsFromGemini() {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}`;
+      const prompt = `Generate 5 CBSE trivia questions with 4 answers each. Format as JSON array:
+[{
+  "question": "Question text",
+  "options": {"A": "Answer 1", "B": "Answer 2", "C": "Answer 3", "D": "Answer 4"},
+  "correct": "A"
+}] Include diverse topics from science, history, and geography.`;
+
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            contents: [{parts: [{text: prompt}]}]
+          })
+        });
+
+        const data = await response.json();
+        const jsonText = data.candidates[0].content.parts[0].text;
+        const cleanedJson = jsonText.replace(/```json|```/g, '');
+        return JSON.parse(cleanedJson);
+      } catch (error) {
+        console.error('API Error:', error);
+        return [{
+          question: "What is the capital of France?",
+          options: {A: "Berlin", B: "Paris", C: "Rome", D: "Madrid"},
+          correct: "B"
+        }];
+      }
+    }
+
+    let questions = [];
+    let currentQuestionIndex = 0;
+    let questionData = null;
+    let questionCompleted = false;
+    let score = 0;
+    let fallingOptions = [];
+    let baseSpeed = 1.5;
+    const difficultyIncrement = 0.05;
+    let lastTime = performance.now();
+    let spawnInterval = 1500;
+    let spawnTimer = 0;
+    let paused = false;
+    let backgroundFlashTimer = null;
+
+    const elements = {
+      question: document.getElementById('question'),
+      score: document.getElementById('score'),
+      canvas: document.getElementById('gameCanvas'),
+      optionsButton: document.getElementById('optionsButton'),
+      pauseModal: document.getElementById('pauseModal'),
+      resumeButton: document.getElementById('resumeButton'),
+      optionA: document.getElementById('optionA'),
+      optionB: document.getElementById('optionB'),
+      optionC: document.getElementById('optionC'),
+      optionD: document.getElementById('optionD'),
+      gameArea: document.getElementById('game-area')
+    };
+
+    const ctx = elements.canvas.getContext('2d');
+
+    function resizeCanvas() {
+      elements.canvas.width = elements.gameArea.clientWidth - 40;
+      elements.canvas.height = elements.gameArea.clientHeight - 200;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    function random(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    function flashBackground() {
+      elements.canvas.style.backgroundColor = "#ffe6e6";
+      if (backgroundFlashTimer) clearTimeout(backgroundFlashTimer);
+      backgroundFlashTimer = setTimeout(() => {
+        elements.canvas.style.backgroundColor = "#fff";
+      }, 1000);
+    }
+
+    function createFallingOption() {
+      const radius = 25;
+      const x = random(radius, elements.canvas.width - radius);
+      const letter = Math.random() < 0.3 ? questionData.correct : 
+        ["A", "B", "C", "D"].filter(l => l !== questionData.correct)[Math.floor(Math.random() * 3)];
+      
+      fallingOptions.push({
+        x: x,
+        y: -radius,
+        radius: radius,
+        letter: letter,
+        speed: baseSpeed + random(0, 1),
+        color: letter === questionData.correct ? '#58cc02' : '#58cc02'
+      });
+    }
+
+    function update(deltaTime) {
+      baseSpeed += difficultyIncrement * (deltaTime / 1000);
+      
+      for (let i = fallingOptions.length - 1; i >= 0; i--) {
+        const option = fallingOptions[i];
+        option.y += option.speed * (deltaTime / 16);
+
+        if (option.y - option.radius > elements.canvas.height) {
+          if (option.letter === questionData.correct) {
+            score -= 5;
+            flashBackground();
+          }
+          fallingOptions.splice(i, 1);
+        }
+      }
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, elements.canvas.width, elements.canvas.height);
+      fallingOptions.forEach(option => {
+        ctx.beginPath();
+        ctx.arc(option.x, option.y, option.radius, 0, Math.PI * 2);
+        const gradient = ctx.createRadialGradient(
+          option.x, option.y, 0,
+          option.x, option.y, option.radius
+        );
+        gradient.addColorStop(0, option.color);
+        gradient.addColorStop(1, shadeColor(option.color, -20));
+        ctx.fillStyle = gradient;
+        ctx.fill();
+        
+        ctx.fillStyle = 'white';
+        ctx.font = 'bold 20px Rubik';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(option.letter, option.x, option.y);
+        
+        ctx.shadowColor = 'rgba(0,0,0,0.1)';
+        ctx.shadowBlur = 8;
+        ctx.shadowOffsetY = 4;
+      });
+    }
+
+    function shadeColor(color, percent) {
+      const num = parseInt(color.replace('#',''),16);
+      const amt = Math.round(2.55 * percent);
+      const R = (num >> 16) + amt;
+      const G = (num >> 8 & 0x00FF) + amt;
+      const B = (num & 0x0000FF) + amt;
+      return '#' + (0x1000000 + (R<255?R<1?0:R:255)*0x10000 + (G<255?G<1?0:G:255)*0x100 + (B<255?B<1?0:B:255)).toString(16).slice(1);
+    }
+
+    function gameLoop(timestamp) {
+      if (paused) return;
+      const deltaTime = timestamp - lastTime;
+      lastTime = timestamp;
+
+      if (!questionCompleted) {
+        spawnTimer += deltaTime;
+        if (spawnTimer > spawnInterval) {
+          createFallingOption();
+          spawnTimer = 0;
+        }
+      }
+
+      update(deltaTime);
+      draw();
+      elements.score.textContent = score;
+      requestAnimationFrame(gameLoop);
+    }
+
+    elements.canvas.addEventListener('click', (e) => {
+      if (paused || questionCompleted) return;
+      const rect = elements.canvas.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const clickY = e.clientY - rect.top;
+
+      for (let i = fallingOptions.length - 1; i >= 0; i--) {
+        const option = fallingOptions[i];
+        const dx = clickX - option.x;
+        const dy = clickY - option.y;
+        if (Math.sqrt(dx * dx + dy * dy) < option.radius) {
+          if (option.letter === questionData.correct && !questionCompleted) {
+            score += 10;
+            questionCompleted = true;
+            fallingOptions = [];
+            createCelebration(option.x, option.y);
+            setTimeout(nextQuestion, 1500);
+          } else {
+            score -= 5;
+          }
+          fallingOptions.splice(i, 1);
+          break;
+        }
+      }
+    });
+
+    function createCelebration(x, y) {
+      const particles = [];
+      for(let i = 0; i < 20; i++) {
+        particles.push({
+          x: x,
+          y: y,
+          radius: random(2, 4),
+          color: ['#58cc02', '#ffd700', '#1cb0f6'][Math.floor(Math.random()*3)],
+          velocity: { x: random(-5, 5), y: random(-10, -5) },
+          alpha: 1
+        });
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, elements.canvas.width, elements.canvas.height);
+        draw();
+        particles.forEach((particle, index) => {
+          particle.x += particle.velocity.x;
+          particle.y += particle.velocity.y;
+          particle.alpha -= 0.03;
+
+          ctx.beginPath();
+          ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${parseInt(particle.color.slice(1,3),16)},${parseInt(particle.color.slice(3,5),16)},${parseInt(particle.color.slice(5,7),16)},${particle.alpha})`;
+          ctx.fill();
+          
+          if(particle.alpha <= 0) particles.splice(index, 1);
+        });
+        if(particles.length > 0) requestAnimationFrame(animate);
+      }
+      animate();
+    }
+
+    elements.optionsButton.addEventListener('click', () => {
+      paused = true;
+      elements.pauseModal.style.display = 'flex';
+    });
+
+    elements.resumeButton.addEventListener('click', () => {
+      paused = false;
+      elements.pauseModal.style.display = 'none';
+      lastTime = performance.now();
+      requestAnimationFrame(gameLoop);
+    });
+
+    function nextQuestion() {
+      currentQuestionIndex++;
+      if (currentQuestionIndex < questions.length) {
+        setCurrentQuestion();
+      } else {
+        alert(`Game Complete! Final Score: ${score}`);
+        paused = true;
+      }
+    }
+
+    function setCurrentQuestion() {
+      questionData = questions[currentQuestionIndex];
+      elements.question.textContent = questionData.question;
+      elements.optionA.textContent = `A: ${questionData.options.A}`;
+      elements.optionB.textContent = `B: ${questionData.options.B}`;
+      elements.optionC.textContent = `C: ${questionData.options.C}`;
+      elements.optionD.textContent = `D: ${questionData.options.D}`;
+      elements.canvas.style.backgroundColor = "#fff";
+      fallingOptions = [];
+      questionCompleted = false;
+      spawnTimer = 0;
+      baseSpeed = 1.5;
+    }
+
+    async function initGame() {
+      questions = await fetchQuestionsFromGemini();
+      currentQuestionIndex = 0;
+      setCurrentQuestion();
+      requestAnimationFrame(gameLoop);
+    }
+
+    initGame();
+  </script>
+</body>
+</html>

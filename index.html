@@ -85,6 +85,21 @@
       background: var(--text-color);
       transition: all 0.3s ease;
     }
+    .leaderboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .leaderboard-header h2 {
+      margin: 0;
+    }
+
+    /* Add this to existing CSS */
+    .leaderboard-section {
+      position: relative;
+    }
     /* Navigation */
     .main_nav {
       background: var(--white);
@@ -791,11 +806,17 @@
   </main>
 
   <section class="leaderboard-section">
+  <div class="leaderboard-header">
     <h2>🏆 Leaderboard</h2>
-    <div id="leaderboardEntries" class="leaderboard-entries">
-      <!-- Entries will be dynamically added here -->
-    </div>
-  </section>
+    <button class="action-btn" onclick="window.location.href='challenge.html'" 
+            style="margin: 0; padding: 0.5rem 1.5rem;">
+      🚀 Challenge
+    </button>
+  </div>
+  <div id="leaderboardEntries" class="leaderboard-entries">
+    <!-- Entries will be dynamically added here -->
+  </div>
+</section>
   <!-- Footer -->
   <footer class="footer">
     <div class="footer-container">
