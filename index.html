@@ -33,6 +33,16 @@
       --border-radius: 16px;
     }
 
+    [data-theme="dark"] {
+      --primary-color: #58cc02;
+      --secondary-color: #1cb0f6;
+      --accent-color: #ff6b6b;
+      --text-color: #ffffff;
+      --white: #111111;
+      --bg-color: #000000;
+      --card-shadow: 0 4px 12px rgba(192, 192, 192, 0.377);
+    }
+
     * {
       margin: 0;
       padding: 0;
@@ -44,9 +54,10 @@
       background: var(--bg-color);
       color: var(--text-color);
       line-height: 1.5;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
 
-    /* --- Header with Menu Toggle --- */
+    /* Header */
     .header {
       position: sticky;
       top: 0;
@@ -56,6 +67,7 @@
       z-index: 1000;
       border-bottom: 3px solid var(--secondary-color);
     }
+
     .header-container {
       display: flex;
       justify-content: space-between;
@@ -63,32 +75,36 @@
       padding: 1rem 2rem;
       flex-wrap: wrap;
     }
+
     .logo {
       height: 50px;
       transition: transform 0.2s ease;
     }
+
     .logo:hover {
       transform: scale(1.05);
     }
-    /* Hamburger Menu Button */
+
     .menu-toggle {
       background: none;
       border: none;
       cursor: pointer;
-      display: none; /* Hidden on larger screens */
+      display: none;
       flex-direction: column;
       gap: 4px;
     }
+
     .menu-toggle .hamburger {
       width: 25px;
       height: 3px;
       background: var(--text-color);
       transition: all 0.3s ease;
     }
-    /* Navigation */
+
     .main_nav {
       background: var(--white);
     }
+
     .main_nav_list {
       display: flex;
       gap: 1.5rem;
@@ -97,6 +113,7 @@
       align-items: center;
       justify-content: center;
     }
+
     .main_nav_link {
       text-decoration: none;
       color: var(--text-color);
@@ -109,10 +126,12 @@
       gap: 0.5rem;
       background: rgba(88, 204, 2, 0.05);
     }
+
     .main_nav_link:hover {
       background: rgba(88, 204, 2, 0.15);
       transform: translateY(-2px);
     }
+
     .larry_btn, .login_btn {
       background: var(--secondary-color);
       color: var(--white) !important;
@@ -123,15 +142,32 @@
       cursor: pointer;
     }
 
-    /* --- Main Content Styles --- */
+    /* Theme Toggle */
+    .theme-toggle {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1.5rem;
+      padding: 0.5rem;
+      margin-left: auto;
+      transition: transform 0.3s ease;
+    }
+
+    .theme-toggle:hover {
+      transform: rotate(20deg);
+    }
+
+    /* Main Content */
     main {
       margin-top: 100px;
       padding: 2rem;
     }
+
     .dashboard {
       max-width: 1200px;
       margin: 0 auto;
     }
+
     /* Status Bar */
     .status-bar {
       display: grid;
@@ -139,6 +175,7 @@
       gap: 1.5rem;
       margin-bottom: 3rem;
     }
+
     .status-card {
       background: var(--white);
       padding: 1.5rem;
@@ -149,9 +186,11 @@
       gap: 1rem;
       transition: transform 0.2s ease;
     }
+
     .status-card:hover {
       transform: translateY(-3px);
     }
+
     .status-icon {
       width: 50px;
       height: 50px;
@@ -161,6 +200,7 @@
       justify-content: center;
       font-size: 1.5rem;
     }
+
     .streak-icon { background: #ffd700; }
     .gems-icon { background: #1cb0f6; color: white; }
     .progress-icon { background: #58cc02; color: white; }
@@ -172,6 +212,7 @@
       gap: 2rem;
       margin: 3rem 0;
     }
+
     .subject-card {
       background: var(--white);
       padding: 2rem;
@@ -181,9 +222,11 @@
       overflow: hidden;
       transition: transform 0.2s ease;
     }
+
     .subject-card:hover {
       transform: translateY(-5px);
     }
+
     .subject-card::before {
       content: '';
       position: absolute;
@@ -193,12 +236,14 @@
       height: 8px;
       background: var(--subject-color);
     }
+
     .subject-header {
       display: flex;
       align-items: center;
       gap: 1rem;
       margin-bottom: 1.5rem;
     }
+
     .subject-icon {
       width: 60px;
       height: 60px;
@@ -209,6 +254,7 @@
       font-size: 2rem;
       background: rgba(88, 204, 2, 0.1);
     }
+
     /* Progress Circle */
     .progress-circle {
       width: 120px;
@@ -216,10 +262,12 @@
       margin: 1.5rem auto;
       position: relative;
     }
+
     .progress-circle svg {
       width: 100%;
       height: 100%;
     }
+
     .progress-text {
       position: absolute;
       top: 50%;
@@ -229,6 +277,7 @@
       font-size: 1.8rem;
       color: var(--subject-color);
     }
+
     /* Action Button */
     .action-btn {
       padding: 0.75rem 1.5rem;
@@ -245,6 +294,7 @@
       justify-content: center;
       box-shadow: 0 3px 0 #3ca900;
     }
+
     .action-btn:hover {
       opacity: 0.9;
       transform: translateY(-2px);
@@ -261,6 +311,7 @@
       position: relative;
       overflow: hidden;
     }
+
     .challenge-badge {
       background: var(--accent-color);
       color: white;
@@ -278,6 +329,7 @@
       gap: 2rem;
       margin: 3rem 0;
     }
+
     .achievement-card {
       background: var(--white);
       padding: 1.5rem;
@@ -286,30 +338,34 @@
       box-shadow: var(--card-shadow);
       transition: transform 0.2s ease;
     }
+
     .achievement-card:hover {
       transform: translateY(-3px);
     }
+
     .achievement-icon {
       font-size: 2.5rem;
       margin-bottom: 1rem;
     }
 
-    /* Modal Overlays */
+    /* Modals */
     .modal-overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0,0,0,0.5);
+      background: rgba(0, 0, 0, 0.644);
       display: none;
       justify-content: center;
       align-items: center;
       z-index: 2000;
     }
+
     .modal-overlay:not(.hidden) {
       display: flex;
     }
+
     .login-modal,
     .course-modal,
     .larry-modal-content {
@@ -321,18 +377,21 @@
       max-height: 80vh;
       overflow-y: auto;
     }
+
     .larry-modal-content {
       max-width: 800px;
       height: 90vh;
       position: relative;
       overflow: hidden;
     }
+
     .modal-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 1rem;
     }
+
     .close-modal {
       background: none;
       border: none;
@@ -340,50 +399,128 @@
       cursor: pointer;
     }
 
-    /* Ad Container */
-    .ad-container {
-      background: #fff;
-      border: 1px solid #ddd;
-      padding: 1rem;
-      text-align: center;
-      margin: 2rem 0;
+    /* Leaderboard */
+    .leaderboard-section {
+      background: var(--white);
+      padding: 2rem;
       border-radius: var(--border-radius);
       box-shadow: var(--card-shadow);
+      margin: 3rem 0;
     }
 
-    /* Footer */
-    .footer {
-      background: linear-gradient(135deg, #1CB0F6, #58CC02);
-      color: #fff;
+    .leaderboard-entries {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .leaderboard-entry {
+      display: flex;
+      align-items: center;
+      padding: 1rem;
+      background: var(--bg-color);
+      border-radius: var(--border-radius);
+      transition: transform 0.2s ease;
+    }
+
+    .leaderboard-entry:hover {
+      transform: translateX(5px);
+    }
+
+    .rank {
+      font-weight: 600;
+      width: 40px;
       text-align: center;
-      padding: 2rem 1rem;
-      margin-top: 2rem;
-      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.15);
-      font-size: 1.1rem;
-    }
-    .footer-container {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-    .footer p {
-      margin: 0;
-      padding-bottom: 0.5rem;
-    }
-    .footer .social-icons {
-      margin-top: 1rem;
-    }
-    .footer .social-icons a {
-      color: #fff;
-      margin: 0 0.5rem;
-      font-size: 1.5rem;
-      text-decoration: none;
-      transition: color 0.3s ease;
-    }
-    .footer .social-icons a:hover {
-      color: #FF6B6B;
+      color: var(--secondary-color);
     }
 
-    /* --- Mobile Responsive Styles --- */
+    .username {
+      flex: 1;
+      font-weight: 500;
+    }
+
+    .grade {
+      margin: 0 1rem;
+      color: var(--text-color);
+      opacity: 0.8;
+    }
+
+    .gems {
+      font-weight: 600;
+      color: var(--primary-color);
+    }
+
+    /* Dark Mode Overrides */
+    [data-theme="dark"] .ad-container,
+    [data-theme="dark"] .status-card,
+    [data-theme="dark"] .subject-card,
+    [data-theme="dark"] .achievement-card,
+    [data-theme="dark"] .leaderboard-section {
+      background: var(--white);
+      border-color: #333333;
+    }
+
+    [data-theme="dark"] .main_nav_link {
+      background: rgb(45, 105, 161);
+    }
+
+    [data-theme="dark"] .main_nav_link:hover {
+      background: rgba(63, 150, 209, 0.2);
+    }
+
+    [data-theme="dark"] .daily-challenge {  
+      background: linear-gradient(135deg, #2b5802, #0a5a7a);
+    }
+
+    [data-theme="dark"] .footer {
+      background: linear-gradient(135deg, #737779, #2b5802);
+    }
+
+    [data-theme="dark"] input,
+    [data-theme="dark"] select,
+    [data-theme="dark"] textarea {
+      background: #333 !important;
+      color: var(--text-color) !important;
+      border: 1px solid #444 !important;
+    }
+
+    [data-theme="dark"] .colorherefr {
+      color: black !important;
+    }
+
+    [data-theme="dark"] .progress-circle path:first-child {
+      stroke: #333333;
+    }
+
+    [data-theme="dark"] .modal-header {
+      background: #121212;
+      border-bottom: 1px solid #333333;
+    }
+
+    [data-theme="dark"] .leaderboard-entry {
+      background: #1a1a1a;
+    }
+
+    [data-theme="dark"] .hamburger {
+      background: var(--text-color);
+    }
+
+    [data-theme="dark"] .login-modal,
+    [data-theme="dark"] .course-modal,
+    [data-theme="dark"] .larry-modal-content {
+      background: #121212;
+      color: var(--text-color);
+    }
+
+    [data-theme="dark"] .close-modal {
+      color: #888;
+    }
+
+    [data-theme="dark"] .close-modal:hover {
+      color: var(--text-color);
+    }
+
+    /* Responsive Design */
     @media (max-width: 768px) {
       .header-container {
         padding: 0.75rem 1rem;
@@ -395,9 +532,7 @@
         flex-direction: column;
         gap: 1rem;
         padding: 0 1rem 1rem;
-        justify-content: center;
       }
-      /* Hide the navigation by default on mobile */
       .main_nav {
         display: none;
       }
@@ -415,20 +550,12 @@
       }
       .daily-challenge {
         padding: 1.5rem;
-        margin: 2rem 0;
-      }
-      .course-modal,
-      .login-modal,
-      .larry-modal-content {
-        width: 95%;
       }
     }
+
     @media (max-width: 480px) {
       .header-container {
         flex-direction: column;
-      }
-      .main_nav_list {
-        align-items: center;
       }
       .subject-card {
         padding: 1rem;
@@ -437,106 +564,270 @@
         width: 100px;
         height: 100px;
       }
-      .progress-text {
-        font-size: 1.5rem;
-      }
-      .action-btn {
-        font-size: 0.9rem;
-        padding: 0.5rem 1rem;
-      }
       .status-card {
         flex-direction: column;
         text-align: center;
       }
     }
-    .leaderboard-section {
-  background: var(--white);
-  padding: 2rem;
-  border-radius: var(--border-radius);
-  box-shadow: var(--card-shadow);
-  margin: 3rem 0;
-}
-
-.leaderboard-section h2 {
-  margin-bottom: 1.5rem;
-  color: var(--text-color);
-  font-size: 1.5rem;
-}
-
-.leaderboard-entries {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.leaderboard-entry {
-  display: flex;
-  align-items: center;
-  padding: 1rem;
-  background: var(--bg-color);
-  border-radius: var(--border-radius);
-  transition: transform 0.2s ease;
-}
-
-.leaderboard-entry:hover {
-  transform: translateX(5px);
-}
-
-.rank {
-  font-weight: 600;
-  width: 40px;
+    /* Footer */
+.footer {
+  background: linear-gradient(135deg, #1CB0F6, #58CC02);
+  color: #fff;
   text-align: center;
-  color: var(--secondary-color);
+  padding: 2rem 1rem;
+  margin-top: 2rem;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.15);
+  font-size: 1.1rem;
 }
 
-.username {
-  flex: 1;
-  font-weight: 500;
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-.grade {
-  margin: 0 1rem;
+.footer p {
+  margin: 0;
+  padding-bottom: 0.5rem;
+}
+
+.footer .social-icons {
+  margin-top: 1rem;
+}
+
+.footer .social-icons a {
+  color: #fff;
+  margin: 0 0.5rem;
+  font-size: 1.5rem;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer .social-icons a:hover {
+  color: #FF6B6B;
+}
+
+/* Dark Mode Footer */
+[data-theme="dark"] .footer {
+  background: linear-gradient(135deg, #0a5a7a, #2b5802);
+}
+/* Remove close modal button from bottom */
+#logoutModal.modal {
+  display: none !important;
+}
+
+/* Hide close button by default */
+.close-modal {
+  display: none;
+  position: absolute;
+  top: 15px;
+  right: 20px;
+}
+
+/* Show close button when modal is open */
+.modal-overlay:not(.hidden) .close-modal {
+  display: block;
+}
+
+/* Adjust modal header padding */
+.modal-header {
+  padding-right: 50px; /* Make space for close button */
+}
+
+
+/* Close button styling */
+.close-modal {
+  background: none;
+  border: none;
   color: var(--text-color);
+  font-size: 2rem;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+  z-index: 3000;
+  position: absolute;
+  top: 15px;
+  right: 20px;
+}
+
+.close-modal:hover {
   opacity: 0.8;
 }
 
-.gems {
-  font-weight: 600;
-  color: var(--primary-color);
+/* Dark mode close button */
+[data-theme="dark"] .close-modal {
+  color: #ffffff;
+}
+/* Mobile-specific styling */
+@media (max-width: 768px) {
+  .header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+  }
+  
+  /* Show the hamburger icon */
+  .menu-toggle {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+  
+  /* Style each line of the hamburger */
+  .menu-toggle .hamburger {
+    width: 25px;
+    height: 3px;
+    background: var(--text-color);
+    transition: all 0.3s ease;
+  }
+  
+  /* Animate hamburger to close icon when active */
+  .menu-toggle.active .hamburger:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+  .menu-toggle.active .hamburger:nth-child(2) {
+    opacity: 0;
+  }
+  .menu-toggle.active .hamburger:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+  
+  /* Mobile nav overlay styling */
+  .main_nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: var(--white);
+    box-shadow: var(--card-shadow);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    transform: translateY(-20px);
+    opacity: 0;
+    pointer-events: none;
+  }
+  
+  /* When active, the nav slides in */
+  .main_nav.active {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+  
+  /* Stack the nav links vertically with larger touch targets */
+  .main_nav_list {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+  }
+  
+  .main_nav_link {
+    padding: 1rem;
+    font-size: 1.2rem;
+    border-radius: 8px;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+  
+  .main_nav_link:hover {
+    background: rgba(88, 204, 2, 0.15);
+    transform: translateY(-2px);
+  }
+}
+@media (max-width: 768px) {
+  .header-container {
+    flex-direction: row;
+  }
+
+  .logo {
+    height: 40px;
+    margin-right: auto;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .menu-toggle {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .menu-toggle .hamburger {
+    width: 25px;
+    height: 3px;
+    background: var(--text-color);
+    transition: all 0.3s ease;
+  }
+
+  /* Animate hamburger into close icon */
+  .menu-toggle.active .hamburger:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  .menu-toggle.active .hamburger:nth-child(2) {
+    opacity: 0;
+  }
+
+  .menu-toggle.active .hamburger:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  /* Mobile Nav Overlay */
+  .main_nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: var(--white);
+    box-shadow: var(--card-shadow);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    transform: translateY(-20px);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .main_nav.active {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Align navigation to the left */
+  .main_nav_list {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+    align-items: flex-start; /* Left-align items */
+  }
+
+  .main_nav_link {
+    padding: 1rem;
+    font-size: 1.2rem;
+    border-radius: 8px;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+
+  .main_nav_link:hover {
+    background: rgba(88, 204, 2, 0.15);
+    transform: translateY(-2px);
+  }
+
+  /* Make login button fit better in mobile */
+  .login_btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
 }
 
-.leaderboard-entry:nth-child(1) .rank {
-  color: #ffd700;
-}
-
-.leaderboard-entry:nth-child(2) .rank {
-  color: #c0c0c0;
-}
-
-.leaderboard-entry:nth-child(3) .rank {
-  color: #cd7f32;
-}
-#chaptersPath {
-  max-height: 70vh;
-  overflow-y: auto;
-  padding: 1rem;
-}
-
-.modal-header {
-  position: sticky;
-  top: 0;
-  background: white;
-  padding: 1rem;
-  border-bottom: 1px solid #eee;
-  z-index: 1;
-}
-
-.modal-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--text-color);
-}
-  </style>
+</style>
 </head>
 <body>
   <!-- Login Modal -->
@@ -623,25 +914,33 @@
   <!-- Header with Menu -->
   <header class="header">
     <div class="header-container">
-      <img src="imgs/duolingo-landscape-lockup.png" alt="learnbite_logo" class="logo" />
-      <button class="menu-toggle" onclick="toggleMenu()">
-        <span class="hamburger"></span>
-        <span class="hamburger"></span>
-        <span class="hamburger"></span>
-      </button>
-      <!-- This button's text and onclick will update based on auth state -->
-      <button class="login_btn" onclick="openLoginModal()">Login</button>
+      <p><a href="https://sinanneedtocode.github.io/LearnBite">
+        <img src="imgs/duolingo-landscape-lockup.png" alt="LearnBite Logo" class="logo">
+      </a>
+        </p>
+      <div class="header-right">
+        <button id="themeToggle" class="theme-toggle">🌓</button>
+        <button class="login_btn" onclick="openLoginModal()">Login</button>
+        <button class="menu-toggle" onclick="toggleMenu()">
+          <span class="hamburger"></span>
+          <span class="hamburger"></span>
+          <span class="hamburger"></span>
+        </button>
+      </div>
     </div>
     <nav class="main_nav" id="mainNav">
       <ul class="main_nav_list">
         <li><a href="#home" class="main_nav_link">🏠 Home</a></li>
-        <li><a href="#subjects" class="main_nav_link">📚 Subjects</a></li>
         <li><a href="#" class="main_nav_link larry_btn" onclick="openLarryModal()">🦉 Ask Larry</a></li>
         <li><a href="timer.html" class="main_nav_link larry_btn">⏱️ Study Companion</a></li>
         <li><a href="profile.html" class="main_nav_link">👤 Profile</a></li>
+        <li><a href="mission.html" class="main_nav_link">Games</a></li>
       </ul>
     </nav>
   </header>
+  
+
+
 
   <!-- Main Content -->
   <main class="dashboard">
@@ -658,13 +957,6 @@
         <div>
           <h3><span id="gemCount">0</span> Gems</h3>
           <p>Redeem rewards</p>
-        </div>
-      </div>
-      <div class="status-card">
-        <div class="status-icon progress-icon">📈</div>
-        <div>
-          <h3>Daily Goal</h3>
-          <p>3/5 Lessons</p>
         </div>
       </div>
     </div>
@@ -688,9 +980,9 @@
               fill="none"
               stroke="var(--subject-color)"
               stroke-width="3"
-              stroke-dasharray="60, 100" />
+              stroke-dasharray="0, 100" />
           </svg>
-          <div class="progress-text">60%</div>
+          <div class="progress-text">0%</div>
         </div>
         <button class="action-btn explore-btn">Explore Chapters →</button>
       </div>
@@ -713,9 +1005,9 @@
               fill="none"
               stroke="var(--subject-color)"
               stroke-width="3"
-              stroke-dasharray="45, 100" />
+              stroke-dasharray="0, 100" />
           </svg>
-          <div class="progress-text">45%</div>
+          <div class="progress-text">0%</div>
         </div>
         <button class="action-btn explore-btn">Explore Chapters →</button>
       </div>
@@ -737,12 +1029,35 @@
               fill="none"
               stroke="var(--subject-color)"
               stroke-width="3"
-              stroke-dasharray="10, 100" />
+              stroke-dasharray="0, 100" />
           </svg>
-          <div class="progress-text">10%</div>
+          <div class="progress-text">0%</div>
         </div>
         <button class="action-btn explore-btn">Explore Chapters →</button>
       </div>
+    </div>
+    <div class="subject-card" style="--subject-color: #725555;" data-subject="social_science">
+      <div class="subject-header">
+        <div class="subject-icon">🧮</div>
+        <h2>social</h2>
+      </div>
+      <div class="progress-circle">
+        <svg viewBox="0 0 36 36">
+          <path
+            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+            fill="none"
+            stroke="#eee"
+            stroke-width="3" />
+          <path
+            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+            fill="none"
+            stroke="var(--subject-color)"
+            stroke-width="3"
+            stroke-dasharray="0, 100" />
+        </svg>
+        <div class="progress-text">0%</div>
+      </div>
+      <button class="action-btn explore-btn">Explore Chapters →</button>
     </div>
 
     <section class="daily-challenge">
@@ -791,11 +1106,14 @@
   </main>
 
   <section class="leaderboard-section">
+  <div class="leaderboard-header">
     <h2>🏆 Leaderboard</h2>
-    <div id="leaderboardEntries" class="leaderboard-entries">
-      <!-- Entries will be dynamically added here -->
-    </div>
-  </section>
+    <br>
+  </div>
+  <div id="leaderboardEntries" class="leaderboard-entries">
+    <!-- Entries will be dynamically added here -->
+  </div>
+</section>
   <!-- Footer -->
   <footer class="footer">
     <div class="footer-container">
@@ -805,373 +1123,429 @@
 
   <script>
     // Progress tracking functions
-function calculateSubjectProgress(chapters) {
-  if (!chapters || chapters.length === 0) return 0;
-  const totalProgress = chapters.reduce((sum, chapter) => sum + (chapter.progress || 0), 0);
-  return Math.round((totalProgress / (chapters.length * 100)) * 100);
-}
-
-function updateProgressCircle(element, progress) {
-  const circle = element.querySelector('path:last-child');
-  const text = element.querySelector('.progress-text');
-  if (circle && text) {
-    circle.setAttribute('stroke-dasharray', `${progress}, 100`);
-    text.textContent = `${progress}%`;
-  }
-}
-
-function initializeProgress(uid) {
-  const subjectsRef = firebase.database().ref(`users/${uid}/subjects`);
-  
-  subjectsRef.once('value').then((snapshot) => {
-    if (!snapshot.exists()) {
-      const defaultSubjects = {
-        mathematics: chaptersDatabase.mathematics.map(chapter => ({
-          title: chapter.title,
-          progress: 0
-        })),
-        science: chaptersDatabase.science.map(chapter => ({
-          title: chapter.title,
-          progress: 0
-        })),
-        english: chaptersDatabase.english.map(chapter => ({
-          title: chapter.title,
-          progress: 0
-        }))
-      };
-      subjectsRef.set(defaultSubjects);
+    function calculateSubjectProgress(chapters) {
+        if (!chapters || chapters.length === 0) return 0;
+        const totalProgress = chapters.reduce((sum, chapter) => sum + (chapter.progress || 0), 0);
+        return Math.round((totalProgress / (chapters.length * 100)) * 100);
     }
-  });
-}
 
-function listenToProgressUpdates(uid) {
-  const subjectsRef = firebase.database().ref(`users/${uid}/subjects`);
-  
-  subjectsRef.on('value', (snapshot) => {
-    const subjects = snapshot.val() || {};
-    
-    Object.keys(subjects).forEach(subject => {
-      const progress = calculateSubjectProgress(subjects[subject]);
-      const subjectCard = document.querySelector(`[data-subject="${subject}"]`);
-      if (subjectCard) {
-        const progressCircle = subjectCard.querySelector('.progress-circle');
-        updateProgressCircle(progressCircle, progress);
-      }
-    });
-  });
-}
+    function updateProgressCircle(element, progress) {
+        const circle = element.querySelector('path:last-child');
+        const text = element.querySelector('.progress-text');
+        if (circle && text) {
+            circle.setAttribute('stroke-dasharray', `${progress}, 100`);
+            text.textContent = `${progress}%`;
+        }
+    }
 
-function updateChapterProgress(uid, subject, chapterTitle, progress) {
-  const chapterRef = firebase.database()
-    .ref(`users/${uid}/subjects/${subject}`)
-    .orderByChild('title')
-    .equalTo(chapterTitle);
+    function initializeProgress(uid) {
+        const subjectsRef = firebase.database().ref(`users/${uid}/subjects`);
+        
+        subjectsRef.once('value').then((snapshot) => {
+            const userSubjects = snapshot.val() || {};
+            const updates = {};
 
-  chapterRef.once('value', (snapshot) => {
-    snapshot.forEach((childSnapshot) => {
-      childSnapshot.ref.update({ progress: progress });
-    });
-  });
-}
-    // --------------------------------------------------
-    // Firebase Configuration (Replace with your own values)
-    // --------------------------------------------------
+            Object.keys(chaptersDatabase).forEach(subject => {
+                const dbChapters = chaptersDatabase[subject];
+                const userChapters = userSubjects[subject] || [];
+                
+                // Create map of existing chapter titles
+                const existingTitles = new Set(userChapters.map(ch => ch.title));
+                
+                // Identify new chapters
+                const newChapters = dbChapters.filter(dbCh => 
+                    !existingTitles.has(dbCh.title)
+                ).map(ch => ({ title: ch.title, progress: 0 }));
+
+                if (newChapters.length > 0) {
+                    updates[subject] = [...userChapters, ...newChapters];
+                } else if (!userSubjects[subject]) {
+                    updates[subject] = dbChapters.map(ch => ({ title: ch.title, progress: 0 }));
+                }
+            });
+
+            if (Object.keys(updates).length > 0) {
+                subjectsRef.update(updates);
+            }
+        });
+    }
+
+    function checkForChapterUpdates(uid) {
+        const subjectsRef = firebase.database().ref(`users/${uid}/subjects`);
+        
+        subjectsRef.once('value').then((snapshot) => {
+            const userSubjects = snapshot.val() || {};
+            const updates = {};
+
+            Object.keys(chaptersDatabase).forEach(subject => {
+                const dbChapters = chaptersDatabase[subject];
+                const userChapters = userSubjects[subject] || [];
+                
+                const existingTitles = new Set(userChapters.map(ch => ch.title));
+                const newChapters = dbChapters.filter(dbCh => 
+                    !existingTitles.has(dbCh.title)
+                ).map(ch => ({ title: ch.title, progress: 0 }));
+
+                if (newChapters.length > 0) {
+                    updates[subject] = [...userChapters, ...newChapters];
+                }
+            });
+
+            if (Object.keys(updates).length > 0) {
+                subjectsRef.update(updates).then(() => {
+                    console.log('New chapters added for user:', uid);
+                });
+            }
+        });
+    }
+
+    function listenToProgressUpdates(uid) {
+        const subjectsRef = firebase.database().ref(`users/${uid}/subjects`);
+        
+        subjectsRef.on('value', (snapshot) => {
+            const subjects = snapshot.val() || {};
+            
+            Object.keys(subjects).forEach(subject => {
+                const progress = calculateSubjectProgress(subjects[subject]);
+                const subjectCard = document.querySelector(`[data-subject="${subject}"]`);
+                if (subjectCard) {
+                    const progressCircle = subjectCard.querySelector('.progress-circle');
+                    updateProgressCircle(progressCircle, progress);
+                }
+            });
+        });
+    }
+
+    function updateChapterProgress(uid, subject, chapterTitle, progress) {
+        const chapterRef = firebase.database()
+            .ref(`users/${uid}/subjects/${subject}`)
+            .orderByChild('title')
+            .equalTo(chapterTitle);
+
+        chapterRef.once('value', (snapshot) => {
+            snapshot.forEach((childSnapshot) => {
+                childSnapshot.ref.update({ progress: progress });
+            });
+        });
+    }
+
+    // Firebase Configuration
     const firebaseConfig = {
-      apiKey: "AIzaSyA6At0_PeY351303P85_o0wtYMXGQ_d_xg",
-      authDomain: "learnbite-e7673.firebaseapp.com",
-      databaseURL: "https://learnbite-e7673-default-rtdb.firebaseio.com/",
-      projectId: "learnbite-e7673",
-      storageBucket: "learnbite-e7673.firebasestorage.app",
-      messagingSenderId: "897857889201",
-      appId: "1:897857889201:web:c601789ccba7f1fe8b9390"
+        apiKey: "AIzaSyA6At0_PeY351303P85_o0wtYMXGQ_d_xg",
+        authDomain: "learnbite-e7673.firebaseapp.com",
+        databaseURL: "https://learnbite-e7673-default-rtdb.firebaseio.com/",
+        projectId: "learnbite-e7673",
+        storageBucket: "learnbite-e7673.firebasestorage.app",
+        messagingSenderId: "897857889201",
+        appId: "1:897857889201:web:c601789ccba7f1fe8b9390"
     };
     firebase.initializeApp(firebaseConfig);
 
-    // --------------------------------------------------
-    // Modal Functions
-    // --------------------------------------------------
-    function openLoginModal() {
-      document.getElementById('loginModal').classList.remove('hidden');
-      document.getElementById('registerModal').classList.add('hidden');
-    }
-    function closeLoginModal() {
-      document.getElementById('loginModal').classList.add('hidden');
-    }
-    function openRegisterModal() {
-      document.getElementById('registerModal').classList.remove('hidden');
-      document.getElementById('loginModal').classList.add('hidden');
-    }
-    function closeRegisterModal() {
-      document.getElementById('registerModal').classList.add('hidden');
-    }
-    function closeChaptersModal() {
-      document.getElementById('chaptersModal').classList.add('hidden');
-    }
-    function openLarryModal() {
-      document.getElementById('larryModal').classList.remove('hidden');
-    }
-    function closeLarryModal() {
-      document.getElementById('larryModal').classList.add('hidden');
-    }
-    function toggleMenu() {
-      var nav = document.getElementById('mainNav');
-      nav.classList.toggle('active');
-    }
-
-    // --------------------------------------------------
-    // Firebase Authentication and Database
-    // --------------------------------------------------
-    // --- Login Form Submission ---
+    // Authentication and Database Handlers
     document.getElementById('loginForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value.trim();
-      firebase.auth().signInWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-          closeLoginModal();
-          // UI will update via onAuthStateChanged
-        })
-        .catch((error) => {
-          alert("Login Error: " + error.message);
-        });
+        e.preventDefault();
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value.trim();
+        firebase.auth().signInWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+                closeLoginModal();
+            })
+            .catch((error) => {
+                alert("Login Error: " + error.message);
+            });
     });
-    // --- Register Form Submission ---
+
     document.getElementById('registerForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const email = document.getElementById('regEmail').value.trim();
-      const password = document.getElementById('regPassword').value.trim();
-      const grade = document.getElementById('regGrade').value;
-      if (password.length < 6) {
-        alert("Password must be at least 6 characters long.");
-        return;
-      }
-      firebase.auth().createUserWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-        const uid = userCredential.user.uid;
-        const email = userCredential.user.email;
-        firebase.database().ref('users/' + uid).set({
-        points: 0,
-        streak: 1,
-        grade: grade,
-        email: email // Add this line
-       }).then(() => {
-          closeRegisterModal();
-      });
-})
-        .catch((error) => {
-          alert("Registration Error: " + error.message);
-        });
+        e.preventDefault();
+        const email = document.getElementById('regEmail').value.trim();
+        const password = document.getElementById('regPassword').value.trim();
+        const grade = document.getElementById('regGrade').value;
+        if (password.length < 6) {
+            alert("Password must be at least 6 characters long.");
+            return;
+        }
+        firebase.auth().createUserWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+                const uid = userCredential.user.uid;
+                firebase.database().ref('users/' + uid).set({
+                    points: 0,
+                    streak: 1,
+                    grade: grade,
+                    email: email
+                });
+                closeRegisterModal();
+            })
+            .catch((error) => {
+                alert("Registration Error: " + error.message);
+            });
     });
-    // --- Update User Data ---
+
     function updateUserData(user) {
-      const uid = user.uid;
-      const userRef = firebase.database().ref('users/' + uid);
-      userRef.on('value', (snapshot) => {
-        const data = snapshot.val();
-        if (data) {
-          document.getElementById('gemCount').textContent = data.points || 0;
-          document.getElementById('streakCount').textContent = (data.streak || 0) + "-Day Streak";
-        }
-      });
-    }
-    // --- Listen for Auth State Changes and Update the Header Button ---
-    firebase.auth().onAuthStateChanged(user => {
-      const loginBtn = document.querySelector('.login_btn');
-      if (user) {
-        updateUserData(user);
-        updateStreak(user); // Update streak on login
-        loginBtn.textContent = "Logout";
-        loginBtn.onclick = function() {
-          firebase.auth().signOut().then(() => {
-            alert("Logged out successfully");
-          }).catch(error => {
-            alert("Error signing out: " + error.message);
-          });
-        };
-      } else {
-        loginBtn.textContent = "Login";
-        loginBtn.onclick = openLoginModal;
-      }
-    });
-
-    // --------------------------------------------------
-    // Daily Streak and Gems Fallback (localStorage)
-    // --------------------------------------------------
-    function updateStreak(user) {
-      const today = new Date().toISOString().slice(0, 10);
-      const uid = user.uid;
-      const userRef = firebase.database().ref('users/' + uid);
-
-      userRef.once('value').then((snapshot) => {
-        const userData = snapshot.val();
-        let streak = userData.streak || 0;
-        const lastVisit = userData.lastVisit || '';
-
-        if (!lastVisit) {
-          streak = 1;
-        } else if (lastVisit === today) {
-          // Already visited today, do nothing
-        } else {
-          const yesterday = new Date();
-          yesterday.setDate(yesterday.getDate() - 1);
-          const yesterdayStr = yesterday.toISOString().slice(0, 10);
-
-          if (lastVisit === yesterdayStr) {
-            streak += 1;
-          } else {
-            streak = 1;
-          }
-        }
-
-        // Update the streak and last visit date in Firebase
-        userRef.update({
-          streak: streak,
-          lastVisit: today
-        }).then(() => {
-          document.getElementById('streakCount').textContent = streak + "-Day Streak";
+        const uid = user.uid;
+        const userRef = firebase.database().ref('users/' + uid);
+        userRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                document.getElementById('gemCount').textContent = data.points || 0;
+                document.getElementById('streakCount').textContent = (data.streak || 0) + "-Day Streak";
+            }
         });
-      });
     }
-    function loadGems() {
-      
-      document.getElementById('gemCount').textContent = gems;
-    }
-    window.addEventListener('load', () => {
-      loadGems();
-      updateStreak();
+
+    // Auth State Listener with Chapter Sync
+    firebase.auth().onAuthStateChanged(user => {
+        const loginBtn = document.querySelector('.login_btn');
+        if (user) {
+            updateUserData(user);
+            updateStreak(user);
+            initializeProgress(user.uid);
+            checkForChapterUpdates(user.uid);
+            listenToProgressUpdates(user.uid);
+            loginBtn.textContent = "Logout";
+            loginBtn.onclick = function() {
+                firebase.auth().signOut().then(() => {
+                    alert("Logged out successfully");
+                }).catch(error => {
+                    alert("Error signing out: " + error.message);
+                });
+            };
+        } else {
+            loginBtn.textContent = "Login";
+            loginBtn.onclick = openLoginModal;
+        }
     });
 
-    // --------------------------------------------------
-    // Chapters Modal (Sample Implementation)
-    // --------------------------------------------------
+    // Chapters Database
     const chaptersDatabase = {
-      science: [
-        { title: "Structure of Atom", progress: 0 },
-        { title: "Motion", progress: 0 },
-        { title: "Force and Newton's Laws", progress: 0 }
-      ],
-      mathematics: [
-        { title: "Linear Equations", progress: 0 },
-        { title: "Number Systems", progress: 0 },
-        { title: "Polynomials", progress: 0 }
-      ],
-      english: [
-        { title: "The Fun They Had", progress: 0 },
-        { title: "The Road Not Taken", progress: 0 }
-      ]
+        science: [
+            { title: "Structure of Atom", progress: 0 },
+            { title: "Motion", progress: 0 },
+            { title: "Tissues", progress: 0 },
+            { title: "Atoms and Molecules", progress: 0 },
+            { title: "Structure of the Atom", progress: 0 },
+            { title: "The Fundamental Unit of Life", progress :0},
+        ],
+        mathematics: [
+            { title: "Linear Equations", progress: 0 },
+            { title: "Number Systems", progress: 0 },
+            { title: "Polynomials", progress: 0 }
+        ],
+        english: [
+            { title: "The Fun They Had", progress: 0 },
+            { title: "The Road Not Taken", progress: 0 }
+        ],
+        social_science: [
+            { title: "The French Revolution", progress: 0 },
+            { title: "Socialism in Europe and the Russian Revolution", progress: 0 },
+            { title: "Nazisam and the Rise of Hitler", progress: 0 }  
+        ],
     };
-    function showChaptersModal(subject) {
-    const modal = document.getElementById('chaptersModal');
-    const pathContainer = document.getElementById('chaptersPath');
-    const user = firebase.auth().currentUser;
 
-    if (!user) {
-      alert('Please login to view chapters');
-      openLoginModal();
-      return;
+    // Rest of the application logic
+    function updateStreak(user) {
+        const today = new Date().toISOString().slice(0, 10);
+        const uid = user.uid;
+        const userRef = firebase.database().ref('users/' + uid);
+
+        userRef.once('value').then((snapshot) => {
+            const userData = snapshot.val();
+            let streak = userData.streak || 0;
+            const lastVisit = userData.lastVisit || '';
+
+            if (!lastVisit) {
+                streak = 1;
+            } else if (lastVisit === today) {
+                // Already visited today
+            } else {
+                const yesterday = new Date();
+                yesterday.setDate(yesterday.getDate() - 1);
+                const yesterdayStr = yesterday.toISOString().slice(0, 10);
+
+                if (lastVisit === yesterdayStr) {
+                    streak += 1;
+                } else {
+                    streak = 1;
+                }
+            }
+
+            userRef.update({
+                streak: streak,
+                lastVisit: today
+            }).then(() => {
+                document.getElementById('streakCount').textContent = streak + "-Day Streak";
+            });
+        });
     }
 
-    const subjectRef = firebase.database().ref(`users/${user.uid}/subjects/${subject}`);
-    
-    subjectRef.once('value').then((snapshot) => {
-      const chapters = snapshot.val() || chaptersDatabase[subject];
-      pathContainer.innerHTML = '';
-      
-      chapters.forEach((chapter, index) => {
-        const chapterEl = document.createElement('div');
-        chapterEl.style.margin = '1rem 0';
-        chapterEl.style.padding = '1.5rem';
-        chapterEl.style.backgroundColor = 'white';
-        chapterEl.style.borderRadius = 'var(--border-radius)';
-        chapterEl.style.boxShadow = 'var(--card-shadow)';
+    // Modal Functions
+    window.openLoginModal = function() {
+        document.getElementById('loginModal').classList.remove('hidden');
+        document.getElementById('registerModal').classList.add('hidden');
+    }
+
+    window.closeLoginModal = function() {
+        document.getElementById('loginModal').classList.add('hidden');
+    }
+
+    window.openRegisterModal = function() {
+        document.getElementById('registerModal').classList.remove('hidden');
+        document.getElementById('loginModal').classList.add('hidden');
+    }
+
+    window.closeRegisterModal = function() {
+        document.getElementById('registerModal').classList.add('hidden');
+    }
+
+    window.toggleMenu = function() {
+      const mainNav = document.getElementById('mainNav');
+  const menuToggle = document.querySelector('.menu-toggle');
+  mainNav.classList.toggle('active');
+  menuToggle.classList.toggle('active');
+    }
+
+    // Chapter Modal Logic
+    window.showChaptersModal = function(subject) {
+        const modal = document.getElementById('chaptersModal');
+        const pathContainer = document.getElementById('chaptersPath');
+        const user = firebase.auth().currentUser;
+        document.body.style.overflow = 'hidden'; 
         
-        const progressBarWidth = chapter.progress || 0;
+        if (!user) {
+            alert('Please login to view chapters');
+            openLoginModal();
+            return;
+        }
+
+        const subjectRef = firebase.database().ref(`users/${user.uid}/subjects/${subject}`);
         
-        chapterEl.innerHTML = `
-          <div style="display: flex; align-items: center; justify-content: space-between;">
-            <div style="display: flex; align-items: center; gap: 1rem;">
-              <div style="width: 40px; height: 40px; border-radius: 50%; background: ${chapter.progress === 100 ? 'var(--primary-color)' : 'white'}; 
-                          border: 2px solid var(--primary-color); display: flex; align-items: center; justify-content: center; color: ${chapter.progress === 100 ? 'white' : 'var(--primary-color)'}">
-                ${chapter.progress === 100 ? '✓' : (index + 1)}
-              </div>
-              <div>
-                <h4 style="font-weight: 600; margin-bottom: 0.5rem;">${chapter.title}</h4>
-                <div style="width: 200px; height: 8px; background: #eee; border-radius: 4px; overflow: hidden;">
-                  <div style="width: ${progressBarWidth}%; height: 100%; background: var(--primary-color);"></div>
-                </div>
-              </div>
-            </div>
-            <a href="chapter.html?subject=${subject}&chapter=${encodeURIComponent(chapter.title)}" 
-              class="action-btn" style="margin: 0; padding: 0.5rem 1rem;">
-              ${chapter.progress === 0 ? 'Start' : chapter.progress === 100 ? 'Review' : 'Continue'}
-            </a>
-          </div>
-        `;
-        
-        pathContainer.appendChild(chapterEl);
-      });
-      
-      modal.classList.remove('hidden');
-      document.getElementById('modalSubject').textContent = 
-        subject.charAt(0).toUpperCase() + subject.slice(1) + " Learning Path";
+        subjectRef.once('value').then((snapshot) => {
+            const chapters = snapshot.val() || chaptersDatabase[subject];
+            pathContainer.innerHTML = '';
+            
+            chapters.forEach((chapter, index) => {
+                const chapterEl = document.createElement('div');
+                chapterEl.style.margin = '1rem 0';
+                chapterEl.style.padding = '1.5rem';
+                chapterEl.style.backgroundColor = 'white';
+                chapterEl.style.borderRadius = 'var(--border-radius)';
+                chapterEl.style.boxShadow = 'var(--card-shadow)';
+                
+                const progressBarWidth = chapter.progress || 0;
+                
+                chapterEl.innerHTML = `
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <div style="width: 40px; height: 40px; border-radius: 50%; 
+                                      background: ${chapter.progress === 100 ? 'var(--primary-color)' : 'white'}; 
+                                      border: 2px solid var(--primary-color); 
+                                      display: flex; align-items: center; 
+                                      justify-content: center; 
+                                      color: ${chapter.progress === 100 ? 'white' : 'var(--primary-color)'}">
+                                ${chapter.progress === 100 ? '✓' : (index + 1)}
+                            </div>
+                            <div>
+                                <h4 class="colorherefr" style="font-weight: 600; margin-bottom: 0.5rem;">${chapter.title}</h4>
+                                <div style="width: 200px; height: 8px; background: #eee; border-radius: 4px; overflow: hidden;">
+                                    <div style="width: ${progressBarWidth}%; height: 100%; background: var(--primary-color);"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="chapter.html?subject=${subject}&chapter=${encodeURIComponent(chapter.title)}" 
+                           class="action-btn" style="margin: 0; padding: 0.5rem 1rem;">
+                            ${chapter.progress === 0 ? 'Start' : chapter.progress === 100 ? 'Review' : 'Continue'}
+                        </a>
+                    </div>
+                `;
+                pathContainer.appendChild(chapterEl);
+            });
+            
+            modal.classList.remove('hidden');
+            document.getElementById('modalSubject').textContent = 
+                `${subject.charAt(0).toUpperCase() + subject.slice(1)} Learning Path`;
+        });
+    }
+
+    // Initialize explore buttons
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.explore-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const subject = this.closest('.subject-card').dataset.subject;
+                showChaptersModal(subject);
+            });
+        });
     });
+
+    // Theme Toggle
+    function toggleDarkMode() {
+        const body = document.body;
+        const isDark = body.getAttribute('data-theme') === 'dark';
+        body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+        localStorage.setItem('theme', isDark ? 'light' : 'dark');
+        updateToggleButton(isDark);
+    }
+
+    function updateToggleButton(isDark) {
+        const toggle = document.getElementById('themeToggle');
+        toggle.textContent = isDark ? '🌓' : '🌞';
+    }
+
+    // Initialize theme
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.body.setAttribute('data-theme', savedTheme);
+    updateToggleButton(savedTheme === 'dark');
+    document.getElementById('themeToggle').addEventListener('click', toggleDarkMode);
+
+    // Leaderboard
+    window.updateLeaderboard = function() {
+        const leaderboardEntries = document.getElementById('leaderboardEntries');
+        leaderboardEntries.innerHTML = '<div class="loading">Loading leaderboard...</div>';
+
+        firebase.database().ref('users').once('value').then(snapshot => {
+            const users = [];
+            snapshot.forEach(userSnapshot => {
+                const userData = userSnapshot.val();
+                const email = userData.email || '';
+                const username = email.split('@')[0] || 'Anonymous';
+                users.push({
+                    username: username,
+                    grade: userData.grade || 'N/A',
+                    gems: userData.points || 0,
+                });
+            });
+
+            users.sort((a, b) => b.gems - a.gems);
+            leaderboardEntries.innerHTML = '';
+            users.forEach((user, index) => {
+                const entry = document.createElement('div');
+                entry.className = 'leaderboard-entry';
+                entry.innerHTML = `
+                    <div class="rank">${index + 1}</div>
+                    <div class="username">${user.username}</div>
+                    <div class="grade">Grade ${user.grade}</div>
+                    <div class="gems">💎 ${user.gems}</div>
+                `;
+                leaderboardEntries.appendChild(entry);
+            });
+        }).catch(error => {
+            leaderboardEntries.innerHTML = '<div class="error">Error loading leaderboard</div>';
+            console.error('Leaderboard error:', error);
+        });
+    }
+// Add this function if not existing
+function closeChaptersModal() {
+  const modal = document.getElementById('chaptersModal');
+  if (modal) {
+    modal.classList.add('hidden');
+    document.body.style.overflow = 'auto'; // Restore scrolling
   }
-
-    function updateLeaderboard() {
-  const leaderboardEntries = document.getElementById('leaderboardEntries');
-  leaderboardEntries.innerHTML = '<div class="loading">Loading leaderboard...</div>';
-
-  firebase.database().ref('users').once('value').then(snapshot => {
-    const users = [];
-    snapshot.forEach(userSnapshot => {
-      const userData = userSnapshot.val();
-      const email = userData.email || '';
-      const username = email.split('@')[0] || 'Anonymous';
-      users.push({
-        username: username,
-        grade: userData.grade || 'N/A',
-        gems: userData.points || 0,
-      });
-    });
-
-    // Sort users by gems descending
-    users.sort((a, b) => b.gems - a.gems);
-
-    leaderboardEntries.innerHTML = '';
-    users.forEach((user, index) => {
-      const entry = document.createElement('div');
-      entry.className = 'leaderboard-entry';
-      entry.innerHTML = `
-        <div class="rank">${index + 1}</div>
-        <div class="username">${user.username}</div>
-        <div class="grade">Grade ${user.grade}</div>
-        <div class="gems">💎 ${user.gems}</div>
-      `;
-      leaderboardEntries.appendChild(entry);
-    });
-  }).catch(error => {
-    leaderboardEntries.innerHTML = '<div class="error">Error loading leaderboard</div>';
-    console.error('Error fetching leaderboard data:', error);
-  });
 }
-// Add event listeners for explore buttons
-document.addEventListener('DOMContentLoaded', function() {
-  document.querySelectorAll('.explore-btn').forEach(button => {
-    button.addEventListener('click', function() {
-      const subject = this.closest('.subject-card').dataset.subject;
-      showChaptersModal(subject);
-    });
-  });
-});
-// Initialize progress tracking when user logs in
-firebase.auth().onAuthStateChanged(user => {
-  if (user) {
-    initializeProgress(user.uid);
-    listenToProgressUpdates(user.uid);
-  }
-});
-// Call on page load
-window.addEventListener('load', updateLeaderboard);
-  </script>
+    window.addEventListener('load', updateLeaderboard);
+</script>
+  <div id="logoutModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <p id="logoutMessage"></p>
+    </div>
+  </div>
 </body>
 </html>

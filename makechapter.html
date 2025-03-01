@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chapter Editor</title>
+  <!-- Include TinyMCE from CDN (replace "no-api-key" with your API key if available) -->
+  <script src="https://cdn.tiny.cloud/1/ogvdvlx2xy8xtx3o3ayfdxmqyc8fdv7paylxt7euyfkv2lhu/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+  <script>
+    // Initialize TinyMCE on the textarea with id "editor"
+    tinymce.init({
+      selector: '#editor',
+      plugins: 'lists link image table code',
+      toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | link image',
+      height: 500,
+      setup: function(editor) {
+        // Optional: Listen for changes to auto-save or update your state
+        editor.on('change', function() {
+          const content = editor.getContent();
+          console.log("Editor content changed:", content);
+          // You can update your chaptersDatabase here if needed
+        });
+      }
+    });
+  </script>
+</head>
+<body>
+  <h1>Chapter Editor</h1>
+  <!-- Textarea to be converted into a rich text editor -->
+  <textarea id="editor"></textarea>
+  <br>
+  <!-- Button to trigger save action -->
+  <button id="saveButton">Save Chapter</button>
+
+  <script>
+    // When the save button is clicked, get the HTML content from TinyMCE
+    document.getElementById("saveButton").addEventListener("click", function() {
+      var chapterContent = tinymce.get("editor").getContent();
+      console.log("Chapter saved:", chapterContent);
+      // Example: Update your chaptersDatabase object here:
+      // chaptersDatabase.science.push({ title: 'New Chapter', content: chapterContent, subject: 'Science', difficulty: 'Intermediate', relatedChapters: [] });
+      // You can also send chapterContent to your server via AJAX or fetch
+    });
+  </script>
+</body>
+</html>

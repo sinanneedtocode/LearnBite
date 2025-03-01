@@ -13,6 +13,7 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900&display=swap');
 
+    /* Base Variables for Light Mode */
     :root {
       --primary-color: #58cc02;
       --secondary-color: #1cb0f6;
@@ -21,6 +22,18 @@
       --white: #ffffff;
       --bg-color: #f8f9fa;
       --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --border-radius: 16px;
+    }
+
+    /* Dark Mode Overrides */
+    [data-theme="dark"] {
+      --primary-color: #58cc02;
+      --secondary-color: #1cb0f6;
+      --accent-color: #ff6b6b;
+      --text-color: #e0e0e0;
+      --white: #1e1e1e;
+      --bg-color: #121212;
+      --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.8);
       --border-radius: 16px;
     }
 
@@ -37,7 +50,7 @@
       line-height: 1.5;
     }
 
-    /* header styles */
+    /* Header styles */
     .header {
       position: sticky;
       top: 0;
@@ -98,160 +111,153 @@
       box-shadow: 0 3px 0 #0f8ecb;
     }
 
+    /* Dark Mode Toggle Button */
+    #dark-mode-toggle {
+      background: var(--secondary-color);
+      color: var(--white);
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      margin-left: 1rem;
+    }
+    #dark-mode-toggle:hover {
+      background: var(--accent-color);
+    }
+
+    /* Profile Section */
     .profile-section {
-  max-width: 1200px;
-  margin: 2rem auto;
-  padding: 0 2rem;
-}
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+    }
+    .profile-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+    .profile-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+    .profile-card {
+      background: var(--white);
+      border-radius: var(--border-radius);
+      padding: 2rem;
+      box-shadow: var(--card-shadow);
+    }
+    .profile-info {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .avatar {
+      width: 80px;
+      height: 80px;
+      background: var(--primary-color);
+      color: var(--white);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: bold;
+    }
+    .user-details h3 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .user-level {
+      color: var(--primary-color);
+      margin-top: 0.5rem;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    .stat-card {
+      background: var(--bg-color);
+      padding: 1rem;
+      border-radius: var(--border-radius);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .stat-icon {
+      font-size: 1.5rem;
+    }
+    .stats-section {
+      background: var(--white);
+      border-radius: var(--border-radius);
+      padding: 2rem;
+      box-shadow: var(--card-shadow);
+    }
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      background: var(--bg-color);
+      border-radius: var(--border-radius);
+      margin: 1rem 0;
+    }
+    .stat-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .stat-value {
+      font-weight: bold;
+    }
+    .achievements-list {
+      margin-top: 1rem;
+    }
+    .achievement-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem;
+      background: var(--bg-color);
+      border-radius: var(--border-radius);
+      margin: 0.5rem 0;
+    }
+    .edit-form {
+      margin: 1rem 0;
+    }
+    .edit-form.hidden {
+      display: none;
+    }
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #ddd;
+      border-radius: var(--border-radius);
+    }
 
-.profile-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2rem;
-}
-
-.profile-content {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-}
-
-.profile-card {
-  background: var(--white);
-  border-radius: var(--border-radius);
-  padding: 2rem;
-  box-shadow: var(--card-shadow);
-}
-
-.profile-info {
-  display: flex;
-  gap: 1.5rem;
-  margin-bottom: 2rem;
-}
-
-.avatar {
-  width: 80px;
-  height: 80px;
-  background: var(--primary-color);
-  color: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2rem;
-  font-weight: bold;
-}
-
-.user-details h3 {
-  font-size: 1.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.user-level {
-  color: var(--primary-color);
-  margin-top: 0.5rem;
-}
-
-.stats-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  margin-top: 2rem;
-}
-
-.stat-card {
-  background: var(--bg-color);
-  padding: 1rem;
-  border-radius: var(--border-radius);
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.stat-icon {
-  font-size: 1.5rem;
-}
-
-.stats-section {
-  background: var(--white);
-  border-radius: var(--border-radius);
-  padding: 2rem;
-  box-shadow: var(--card-shadow);
-}
-
-.stat-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem;
-  background: var(--bg-color);
-  border-radius: var(--border-radius);
-  margin: 1rem 0;
-}
-
-.stat-label {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.stat-value {
-  font-weight: bold;
-}
-
-.achievements-list {
-  margin-top: 1rem;
-}
-
-.achievement-item {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 1rem;
-  background: var(--bg-color);
-  border-radius: var(--border-radius);
-  margin: 0.5rem 0;
-}
-
-.edit-form {
-  margin: 1rem 0;
-}
-
-.edit-form.hidden {
-  display: none;
-}
-
-.form-group {
-  margin-bottom: 1rem;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 0.5rem;
-}
-
-.form-group input,
-.form-group select {
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #ddd;
-  border-radius: var(--border-radius);
-}
-
-@media (max-width: 768px) {
-  .profile-content {
-    grid-template-columns: 1fr;
-  }
-  
-  .stats-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .profile-section {
-    padding: 0 1rem;
-  }
-}
+    @media (max-width: 768px) {
+      .profile-content {
+        grid-template-columns: 1fr;
+      }
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+      .profile-section {
+        padding: 0 1rem;
+      }
+    }
 
     @media (max-width: 768px) {
       .header-container {
@@ -274,18 +280,17 @@
   </style>
 </head>
 <body>
-  <!-- header -->
+  <!-- Header -->
   <header class="header">
     <div class="header-container">
       <a href="index.html">
         <img src="imgs/duolingo-landscape-lockup.png" alt="learnbite_logo" class="logo" />
       </a>
-      <button class="menu-toggle" onclick="toggleMenu()">
-        <span class="hamburger"></span>
-        <span class="hamburger"></span>
-        <span class="hamburger"></span>
-      </button>
-      <button class="login_btn" onclick="handleAuthAction()">Login</button>
+      <div>
+        <button class="login_btn" onclick="handleAuthAction()">Login</button>
+        <!-- Dark Mode Toggle Button -->
+        <button id="dark-mode-toggle" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+      </div>
     </div>
     <nav class="main_nav" id="mainNav">
       <ul class="main_nav_list">
@@ -298,6 +303,7 @@
     </nav>
   </header>
 
+  <!-- Profile Section -->
   <div class="profile-section">
     <div class="profile-header">
       <h2>My Profile</h2>
@@ -305,9 +311,9 @@
         ✏️ Edit Profile
       </button>
     </div>
-  
+
     <div class="profile-content">
-      <!-- user Info -->
+      <!-- User Info -->
       <div class="profile-card">
         <div class="profile-info">
           <div class="avatar">You</div>
@@ -317,8 +323,8 @@
             <p class="user-level">🏆 Advanced Learner</p>
           </div>
         </div>
-  
-        <!-- edit form (its hidden by default) -->
+
+        <!-- Edit Form (hidden by default) -->
         <div class="edit-form hidden" id="editForm">
           <div class="form-group">
             <label for="editName">Display Name:</label>
@@ -337,7 +343,7 @@
             💾 Save Changes
           </button>
         </div>
-  
+
         <div class="stats-grid">
           <div class="stat-card">
             <span class="stat-icon">📅</span>
@@ -355,8 +361,8 @@
           </div>
         </div>
       </div>
-  
-      <!-- statistics -->
+
+      <!-- Statistics -->
       <div class="stats-section">
         <h3>Statistics</h3>
         <div class="stat-row">
@@ -373,7 +379,7 @@
           </div>
           <div class="stat-value" id="gemsValue">1,240</div>
         </div>
-  
+
         <h3>Recent Achievements</h3>
         <div class="achievements-list">
           <div class="achievement-item">
@@ -415,62 +421,61 @@
     });
 
     // Function to toggle edit mode
-function toggleEditMode() {
-  const editForm = document.getElementById('editForm');
-  const editBtn = document.querySelector('.edit-profile-btn');
-  
-  if (editForm.classList.contains('hidden')) {
-    editForm.classList.remove('hidden');
-    editBtn.innerHTML = '❌ Cancel';
-  } else {
-    editForm.classList.add('hidden');
-    editBtn.innerHTML = '✏️ Edit Profile';
-  }
-}
+    function toggleEditMode() {
+      const editForm = document.getElementById('editForm');
+      const editBtn = document.querySelector('.edit-profile-btn');
+      if (editForm.classList.contains('hidden')) {
+        editForm.classList.remove('hidden');
+        editBtn.innerHTML = '❌ Cancel';
+      } else {
+        editForm.classList.add('hidden');
+        editBtn.innerHTML = '✏️ Edit Profile';
+      }
+    }
 
-// Function to save profile changes
-function saveProfile() {
-  const newName = document.getElementById('editName').value;
-  const newGrade = document.getElementById('editGrade').value;
-  
-  // Update display
-  document.getElementById('userName').textContent = newName;
-  document.getElementById('userGrade').textContent = `Grade ${newGrade} Student`;
-  
-  // If using Firebase, update the database
-  const user = firebase.auth().currentUser;
-  if (user) {
-    firebase.database().ref('users/' + user.uid).update({
-      displayName: newName,
-      grade: newGrade
-    }).then(() => {
-      alert('Profile updated successfully!');
-      toggleEditMode();
-    }).catch(error => {
-      alert('Error updating profile: ' + error.message);
+    // Function to save profile changes
+    function saveProfile() {
+      const newName = document.getElementById('editName').value;
+      const newGrade = document.getElementById('editGrade').value;
+      
+      // Update display
+      document.getElementById('userName').textContent = newName;
+      document.getElementById('userGrade').textContent = `Grade ${newGrade} Student`;
+      
+      // If using Firebase, update the database
+      const user = firebase.auth().currentUser;
+      if (user) {
+        firebase.database().ref('users/' + user.uid).update({
+          displayName: newName,
+          grade: newGrade
+        }).then(() => {
+          alert('Profile updated successfully!');
+          toggleEditMode();
+        }).catch(error => {
+          alert('Error updating profile: ' + error.message);
+        });
+      }
+    }
+
+    // Load user data when authenticated
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        firebase.database().ref('users/' + user.uid).once('value')
+          .then(snapshot => {
+            const data = snapshot.val();
+            if (data) {
+              document.getElementById('userName').textContent = data.displayName || user.email.split('@')[0];
+              document.getElementById('userGrade').textContent = `Grade ${data.grade || 'N/A'} Student`;
+              document.getElementById('streakValue').textContent = `${data.streak || 0} Days`;
+              document.getElementById('gemsValue').textContent = data.points || 0;
+              
+              // Set form values
+              document.getElementById('editName').value = data.displayName || user.email.split('@')[0];
+              document.getElementById('editGrade').value = data.grade || '10';
+            }
+          });
+      }
     });
-  }
-}
-
-// Load user data when authenticated
-firebase.auth().onAuthStateChanged(user => {
-  if (user) {
-    firebase.database().ref('users/' + user.uid).once('value')
-      .then(snapshot => {
-        const data = snapshot.val();
-        if (data) {
-          document.getElementById('userName').textContent = data.displayName || user.email.split('@')[0];
-          document.getElementById('userGrade').textContent = `Grade ${data.grade || 'N/A'} Student`;
-          document.getElementById('streakValue').textContent = `${data.streak || 0} Days`;
-          document.getElementById('gemsValue').textContent = data.points || 0;
-          
-          // Set form values
-          document.getElementById('editName').value = data.displayName || user.email.split('@')[0];
-          document.getElementById('editGrade').value = data.grade || '10';
-        }
-      });
-  }
-});
 
     function toggleMenu() {
       const nav = document.getElementById('mainNav');
@@ -491,6 +496,18 @@ firebase.auth().onAuthStateChanged(user => {
         window.location.href = 'index.html';
       }
     }
+
+    // Dark Mode Toggle Functionality
+    function toggleDarkMode() {
+      const currentTheme = document.body.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      document.body.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      document.body.setAttribute('data-theme', savedTheme);
+    });
   </script>
 </body>
 </html>

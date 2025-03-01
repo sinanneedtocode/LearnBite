@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SECURE CYBER TERMINAL</title>
+  <style>
+    body {
+      background-color: #001100;
+      color: #00ff00;
+      font-family: 'Courier New', monospace;
+      margin: 0;
+      overflow: hidden;
+    }
+    /* Matrix Canvas */
+    #matrix {
+      position: fixed;
+      opacity: 0.1;
+      z-index: 0;
+    }
+    /* Terminal Window */
+    #terminal {
+      position: relative;
+      z-index: 2;
+      padding: 20px;
+      height: 90vh;
+      overflow-y: auto;
+      text-shadow: 0 0 5px #00ff00;
+    }
+    /* Command Prompt */
+    .prompt {
+      display: flex;
+      align-items: center;
+      position: fixed;
+      bottom: 20px;
+      width: 95%;
+      background: #001100;
+      padding: 10px;
+      z-index: 3;
+    }
+    #input {
+      background: transparent;
+      border: none;
+      color: #00ff00;
+      font-family: 'Courier New', monospace;
+      font-size: 16px;
+      margin-left: 10px;
+      width: 80%;
+      text-shadow: 0 0 5px #00ff00;
+    }
+    #input:focus { outline: none; }
+    /* Glowing Text */
+    .glow { animation: glow 1s infinite alternate; }
+    @keyframes glow {
+      from { text-shadow: 0 0 5px #00ff00; }
+      to { text-shadow: 0 0 20px #00ff00, 0 0 10px #00ff00; }
+    }
+    /* Error Shake */
+    .error { color: #ff0000; animation: error-shake 0.5s; }
+    @keyframes error-shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(5px); }
+      75% { transform: translateX(-5px); }
+    }
+    /* Scanline Effect */
+    .scanline {
+      position: fixed;
+      width: 100%;
+      height: 2px;
+      background: rgba(0, 255, 0, 0.3);
+      animation: scan 4s linear infinite;
+      z-index: 1;
+    }
+    @keyframes scan {
+      0% { top: 0; }
+      100% { top: 100%; }
+    }
+    /* Timer Display */
+    #timerDisplay {
+      position: fixed;
+      top: 10px;
+      right: 20px;
+      font-family: 'Courier New', monospace;
+      font-size: 18px;
+      color: #00ff00;
+      background: rgba(0, 0, 0, 0.8);
+      padding: 5px 10px;
+      border: 1px solid #00ff00;
+      border-radius: 5px;
+      z-index: 4;
+    }
+    /* Success Blink */
+    .success { color: #00ff00; animation: blink 0.3s 3; }
+    @keyframes blink { 50% { opacity: 0; } }
+    /* Glitch Text */
+    .glitch {
+      text-shadow: 2px 2px #ff00ff, -2px -2px #00ffff;
+      animation: glitch 0.5s infinite;
+    }
+    @keyframes glitch {
+      0% { transform: translate(0); }
+      20% { transform: translate(-2px, 2px); }
+      40% { transform: translate(-2px, -2px); }
+      60% { transform: translate(2px, 2px); }
+      80% { transform: translate(2px, -2px); }
+      100% { transform: translate(0); }
+    }
+    /* Progress Bar */
+    .progress-bar {
+      width: 200px;
+      height: 20px;
+      border: 2px solid #00ff00;
+      margin: 10px 0;
+    }
+    .progress-fill {
+      height: 100%;
+      background: #00ff00;
+      transition: width 0.5s;
+    }
+    /* Background Hacking Logs */
+    .log-line {
+      color: #00ff00;
+      opacity: 0.2;
+      font-size: 12px;
+      margin: 2px 0;
+      font-family: 'Courier New', monospace;
+      text-shadow: 0 0 5px #00ff00;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="matrix"></canvas>
+  <div class="scanline"></div>
+  <div id="terminal"></div>
+  <div class="prompt">
+    <span class="glow">ROOT@SECURE:~#</span>
+    <input type="text" id="input" autofocus>
+  </div>
+
+  <script>
+    // MATRIX RAIN WITH GLITCH EFFECT
+    const canvas = document.getElementById('matrix');
+    const ctx = canvas.getContext('2d');
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()';
+    let drops = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      drops = Array(Math.floor(canvas.width/10)).fill(0);
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    function drawMatrix() {
+      let glitch = false;
+      if (Math.random() < 0.02) { // occasional glitch effect
+        ctx.save();
+        ctx.translate(Math.random()*10-5, Math.random()*10-5);
+        glitch = true;
+      }
+      ctx.fillStyle = 'rgba(0, 17, 0, 0.05)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#0F0';
+      ctx.font = '15px monospace';
+      drops.forEach((drop, i) => {
+        const text = chars[Math.floor(Math.random() * chars.length)];
+        ctx.fillText(text, i*10, drop*10);
+        if(drop*10 > canvas.height && Math.random() > 0.975) drops[i] = 0;
+        drops[i]++;
+      });
+      if (glitch) {
+        ctx.restore();
+      }
+    }
+    setInterval(drawMatrix, 50);
+
+    // Terminal and Game Logic
+    const terminal = document.getElementById('terminal');
+    const input = document.getElementById('input');
+    let attempts = 0;
+    let progress = 0;
+    let currentAnswer = '';
+    let isProcessing = false;
+    let commandHistory = [];
+    let historyIndex = -1;
+    let questionTimer;
+    let timeRemaining = 10;
+    let gameStarted = false;
+    let hackingLogsInterval;
+
+    // Gemini API Configuration (Replace with your key if using)
+    const API_KEY = 'AIzaSyCASUDy0da3IOOsPn3Z9otr6yMAc50SWEw'; 
+    const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
+
+    async function generateQuestion() {
+      isProcessing = true;
+      addMessage('[█] ESTABLISHING SECURE CONNECTION...', 'system');
+      playSound(600, 0.3);
+      
+      try {
+        const response = await fetch(`${API_URL}?key=${API_KEY}`, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            contents: [{
+              parts: [{
+                text: "Generate a CBSE Grade 9 question with SINGLE WORD ANSWER. Format: 'Question: [question] Answer: [answer]'"
+              }]
+            }]
+          })
+        });
+
+        const data = await response.json();
+        const result = data.candidates[0].content.parts[0].text;
+        const answerIndex = result.indexOf('Answer: ');
+        
+        if(answerIndex === -1) throw new Error('Invalid response format');
+        
+        const questionPart = result.substring(0, answerIndex).replace('Question: ', '').trim();
+        currentAnswer = result.substring(answerIndex + 8).toLowerCase().replace(/[^a-z0-9]/g, '');
+        
+        addMessage('[!] OVERRIDE INITIATED: ACADEMIC CHALLENGE', 'warning');
+        addTypingEffect(questionPart, 'question');
+        
+      } catch (error) {
+        addMessage('[X] AI MODULE FAILURE. USING FALLBACK PROTOCOL...', 'error');
+        currentAnswer = 'photosynthesis';
+        addTypingEffect('Process by which plants make food?', 'question');
+      }
+
+      attempts = 0;
+      isProcessing = false;
+      startQuestionTimer();
+    }
+
+    function addTypingEffect(text, type) {
+      const div = document.createElement('div');
+      div.className = type;
+      terminal.appendChild(div);
+      let i = 0;
+      const typing = setInterval(() => {
+        div.innerHTML = text.slice(0, i) + (i % 3 === 0 ? '_' : '');
+        i++;
+        if(i > text.length) {
+          clearInterval(typing);
+          div.innerHTML = text;
+          terminal.scrollTop = terminal.scrollHeight;
+          playSound(1200, 0.1);
+        }
+      }, 50);
+    }
+
+    function playSound(freq, duration) {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        oscillator.frequency.value = freq;
+        gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        oscillator.start();
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+        oscillator.stop(audioCtx.currentTime + duration);
+      } catch(e) { /* AudioContext not supported */ }
+    }
+
+    function startQuestionTimer() {
+      console.log(currentAnswer)
+      clearInterval(questionTimer);
+      timeRemaining = 10;
+      updateTimerDisplay();
+      questionTimer = setInterval(() => {
+        timeRemaining--;
+        updateTimerDisplay();
+        if(timeRemaining <= 0) {
+          clearInterval(questionTimer);
+          addMessage("[X] TIME EXPIRED! SYSTEM LOCKDOWN INITIATED.", "error");
+          endGame(false);
+        }
+      }, 1000);
+    }
+
+    function updateTimerDisplay() {
+      const timerDisplay = document.getElementById('timerDisplay') || createTimerDisplay();
+      timerDisplay.textContent = `Time: ${timeRemaining}s`;
+      timerDisplay.style.color = timeRemaining <= 5 ? "red" : "#00ff00";
+    }
+
+    function createTimerDisplay() {
+      const timer = document.createElement('div');
+      timer.id = 'timerDisplay';
+      document.body.appendChild(timer);
+      return timer;
+    }
+
+    function addMessage(msg, type = 'system') {
+      const div = document.createElement('div');
+      div.innerHTML = msg;
+      div.className = type;
+      terminal.appendChild(div);
+      terminal.scrollTop = terminal.scrollHeight;
+    }
+
+    // Random background hacking logs
+    function startHackingLogs() {
+      if(hackingLogsInterval) return;
+      hackingLogsInterval = setInterval(() => {
+        if (!gameStarted) return;
+        const logs = [
+          'Bypassing firewall...',
+          'Decrypting secure packets...',
+          'Accessing restricted node...',
+          'Routing through proxy servers...',
+          'Compiling intrusion data...',
+          'Overriding security protocols...',
+          'Synchronizing encrypted streams...'
+        ];
+        const randomLog = logs[Math.floor(Math.random() * logs.length)];
+        addMessage(randomLog, 'log-line');
+      }, 3000);
+    }
+
+    input.addEventListener('keydown', async (e) => {
+      if(e.key === 'Enter' && !isProcessing) {
+        // Random screen shake for extra effect
+        if(Math.random() > 0.8) document.body.style.transform = `translate(${Math.random()*4-2}px, ${Math.random()*4-2}px)`;
+        setTimeout(() => document.body.style.transform = '', 100);
+        
+        playSound(800, 0.1);
+        const cmd = input.value.trim();
+        commandHistory.push(cmd);
+        historyIndex = commandHistory.length;
+        addMessage(`> ${cmd}`, 'command');
+
+        if(cmd === 'help') {
+          addMessage('Commands: connect, ans [answer], status', 'system');
+        }
+        else if(cmd === 'connect') {
+          if(!gameStarted) {
+            gameStarted = true;
+            addMessage('[█] INITIALIZING SECURE ACCESS PROTOCOL...', 'system');
+            await new Promise(r => setTimeout(r, 1000));
+            startHackingLogs();
+            generateQuestion();
+          } else {
+            addMessage('[!] CONNECTION ALREADY ESTABLISHED.', 'system');
+          }
+        }
+        else if(!gameStarted) {
+          addMessage('[X] NO ACTIVE CONNECTION. TYPE "connect" TO BEGIN.', 'error');
+        }
+        else if(cmd === 'status') {
+          addMessage(`Progress: ${progress}%`, 'system');
+          updateProgress();
+        }
+        else if(cmd.startsWith('ans ')) {
+          const answer = cmd.slice(4).trim().toLowerCase();
+          processAnswer(answer);
+        }
+        else {
+          processAnswer(cmd.toLowerCase());
+        }
+        input.value = '';
+      }
+      else if(e.key === 'ArrowUp') {
+        if(historyIndex > 0) input.value = commandHistory[--historyIndex];
+      }
+      else if(e.key === 'ArrowDown') {
+        if(historyIndex < commandHistory.length - 1) input.value = commandHistory[++historyIndex];
+      }
+    });
+
+    function processAnswer(answer) {
+      const cleanAnswer = answer.toLowerCase().replace(/[^a-z0-9]/g, '');
+      if(cleanAnswer === currentAnswer) {
+        terminal.classList.add('glow');
+        setTimeout(() => terminal.classList.remove('glow'), 500);
+        playSound(1200, 0.5);
+        addMessage('[✓] ACCESS GRANTED - CORRECT ANSWER', 'success');
+        progress += 34;
+        updateProgress();
+        clearInterval(questionTimer);
+        addMessage(`KNOWLEDGE PROGRESS: ${progress}%`, 'system');
+        progress >= 100 ? endGame(true) : generateQuestion();
+      } else {
+        document.body.classList.add('error');
+        setTimeout(() => document.body.classList.remove('error'), 500);
+        playSound(200, 0.5);
+        attempts++;
+        clearInterval(questionTimer);
+        addMessage(`[X] ACCESS DENIED (${attempts}/3)`, 'error glitch');
+        attempts >= 3 ? endGame(false) : startQuestionTimer();
+      }
+    }
+
+    function updateProgress() {
+      let progressBar = document.querySelector('.progress-fill');
+      if(!progressBar) {
+        const bar = document.createElement('div');
+        bar.className = 'progress-bar';
+        bar.innerHTML = '<div class="progress-fill" style="width:0"></div>';
+        terminal.appendChild(bar);
+        progressBar = bar.querySelector('.progress-fill');
+      }
+      progressBar.style.width = `${progress}%`;
+    }
+
+    function endGame(won) {
+      clearInterval(questionTimer);
+      clearInterval(hackingLogsInterval);
+      input.disabled = true;
+      if(won) {
+        addMessage(`<pre style="color:#00ff00;">
+  ╦  ╦ ╦╔═╗╔╗╔╔╦╗╔═╗╦═╗
+  ║  ║║║╠═╣║║║ ║ ║ ║╠╦╝
+  ╩═╝╚╩╝╩ ╩╝╚╝ ╩ ╚═╝╩╚═
+        </pre>`, 'success');
+        addMessage('[✓] SYSTEM OVERRIDE SUCCESSFUL. ACCESS FULL.', 'success');
+      } else {
+        addMessage(`<pre style="color:#ff0000;">
+ 
+ ▄▄▄▄▄▄▄▄▄▄▄  ▄▄▄▄▄▄▄▄▄▄▄  ▄▄▄▄▄▄▄▄▄▄▄  ▄▄▄▄▄▄▄▄▄▄▄  ▄▄▄▄▄▄▄▄▄▄▄ 
+▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌
+▐░█▀▀▀▀▀▀▀▀▀ ▐░█▀▀▀▀▀▀▀█░▌▐░█▀▀▀▀▀▀▀█░▌▐░█▀▀▀▀▀▀▀█░▌▐░█▀▀▀▀▀▀▀█░▌
+▐░▌          ▐░▌       ▐░▌▐░▌       ▐░▌▐░▌       ▐░▌▐░▌       ▐░▌
+▐░█▄▄▄▄▄▄▄▄▄ ▐░█▄▄▄▄▄▄▄█░▌▐░█▄▄▄▄▄▄▄█░▌▐░▌       ▐░▌▐░█▄▄▄▄▄▄▄█░▌
+▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌▐░▌       ▐░▌▐░░░░░░░░░░░▌
+▐░█▀▀▀▀▀▀▀▀▀ ▐░█▀▀▀▀█░█▀▀ ▐░█▀▀▀▀█░█▀▀ ▐░▌       ▐░▌▐░█▀▀▀▀█░█▀▀ 
+▐░▌          ▐░▌     ▐░▌  ▐░▌     ▐░▌  ▐░▌       ▐░▌▐░▌     ▐░▌  
+▐░█▄▄▄▄▄▄▄▄▄ ▐░▌      ▐░▌ ▐░▌      ▐░▌ ▐░█▄▄▄▄▄▄▄█░▌▐░▌      ▐░▌ 
+▐░░░░░░░░░░░▌▐░▌       ▐░▌▐░▌       ▐░▌▐░░░░░░░░░░░▌▐░▌       ▐░▌
+ ▀▀▀▀▀▀▀▀▀▀▀  ▀         ▀  ▀         ▀  ▀▀▀▀▀▀▀▀▀▀▀  ▀         ▀ 
+        </pre>`, 'error');
+        addMessage('[X] SECURITY BREACH DETECTED. SYSTEM LOCKDOWN ENGAGED!', 'error');
+      }
+    }
+
+    // Initialization Messages
+    addMessage(`<pre style="color:#00ff00;">
+ 
+   ██████╗ ██████╗ ██╗   ██╗███████╗██╗     ██╗     
+  ██╔════╝██╔═══██╗██║   ██║██╔════╝██║     ██║     
+  ██║     ██║   ██║██║   ██║█████╗  ██║     ██║     
+  ██║     ██║   ██║╚██╗ ██╔╝██╔══╝  ██║     ██║     
+  ╚██████╗╚██████╔╝ ╚████╔╝ ███████╗███████╗███████╗  
+   ╚═════╝ ╚═════╝   ╚═══╝  ╚══════╝╚══════╝╚══════╝  
+</pre>`, 'system');
+    addMessage('SECURE CYBER TERMINAL v2.1.3', 'system');
+    addMessage('Type "connect" to initiate secure access.', 'system');
+  </script>
+</body>
+</html>

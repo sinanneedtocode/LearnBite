@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Generated Questions Game</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    /* Reset and base styles */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #e0e0e0;
+      font-family: Arial, sans-serif;
+    }
+    /* Main container using flex to hold game area and sidebar */
+    #game-container {
+      width: 800px;
+      height: 600px;
+      margin: 20px auto;
+      display: flex;
+      border: 2px solid #333;
+      background: #f9f9f9;
+      position: relative;
+      overflow: hidden;
+    }
+    /* Left game area */
+    #game-area {
+      flex: 7;
+      position: relative;
+      background: #fff;
+    }
+    /* Right sidebar for option details */
+    #optionList {
+      flex: 3;
+      background: #f1f1f1;
+      padding: 10px;
+      border-left: 2px solid #333;
+    }
+    #optionList h3 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    #optionList ul {
+      list-style: none;
+    }
+    #optionList li {
+      margin-bottom: 8px;
+      font-size: 18px;
+    }
+    /* Question text at the top */
+    #question {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      right: 10px;
+      text-align: center;
+      font-size: 20px;
+      font-weight: bold;
+      z-index: 2;
+    }
+    /* Score display */
+    #score {
+      position: absolute;
+      top: 40px;
+      left: 10px;
+      font-size: 18px;
+      z-index: 2;
+    }
+    /* Canvas for falling circles */
+    canvas {
+      position: absolute;
+      top: 80px;
+      left: 0;
+      right: 0;
+      bottom: 60px;
+      background: #fff; /* Default background */
+    }
+    /* Options (pause/settings) button */
+    #optionsButton {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      padding: 8px 16px;
+      font-size: 16px;
+    }
+    /* Modal for pausing the game */
+    #pauseModal {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+    }
+    #pauseModalContent {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+    }
+    #pauseModalContent button {
+      margin-top: 10px;
+      padding: 5px 10px;
+    }
+  </style>
+</head>
+<body>
+  <div id="game-container">
+    <div id="game-area">
+      <div id="question">Loading question...</div>
+      <div id="score">Score: 0</div>
+      <canvas id="gameCanvas"></canvas>
+      <button id="optionsButton">Options</button>
+      <div id="pauseModal">
+        <div id="pauseModalContent">
+          <h2>Game Paused</h2>
+          <button id="resumeButton">Resume</button>
+        </div>
+      </div>
+    </div>
+    <div id="optionList">
+      <h3>Options</h3>
+      <ul>
+        <li id="optionA">A: ...</li>
+        <li id="optionB">B: ...</li>
+        <li id="optionC">C: ...</li>
+        <li id="optionD">D: ...</li>
+      </ul>
+    </div>
+  </div>
+  
+  <script>
+    /* -------------------------------
+       Simulate fetching 5 questions from the Gemini API.
+       Replace this with an actual API call in production.
+    ------------------------------- */
+    async function fetchQuestionsFromGemini() {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          resolve([
+            {
+              question: "What is the capital of France?",
+              options: { A: "Berlin", B: "Paris", C: "Rome", D: "Madrid" },
+              correct: "B"
+            },
+            {
+              question: "What is 2 + 2?",
+              options: { A: "3", B: "4", C: "5", D: "6" },
+              correct: "B"
+            },
+            {
+              question: "Which planet is the largest?",
+              options: { A: "Earth", B: "Mars", C: "Jupiter", D: "Saturn" },
+              correct: "C"
+            },
+            {
+              question: "What is the chemical symbol for water?",
+              options: { A: "H2O", B: "CO2", C: "NaCl", D: "O2" },
+              correct: "A"
+            },
+            {
+              question: "Which language is widely used for web development?",
+              options: { A: "Python", B: "Java", C: "JavaScript", D: "C++" },
+              correct: "C"
+            }
+          ]);
+        }, 1000); // Simulate a 1-second delay
+      });
+    }
+    
+    /* -------------------------------
+       Global Game Variables
+    ------------------------------- */
+    let questions = [];
+    let currentQuestionIndex = 0;
+    let questionData = null; // The current question
+    let questionCompleted = false;
+    
+    let score = 0;
+    let fallingOptions = [];  // Array to hold falling circle objects
+    let baseSpeed = 1.5;      // Base falling speed
+    const difficultyIncrement = 0.05; // Speed increases over time
+    let lastTime = performance.now();
+    let spawnInterval = 1500; // Spawn a new falling option every 1.5 seconds
+    let spawnTimer = 0;
+    let paused = false;
+    
+    /* -------------------------------
+       DOM Elements
+    ------------------------------- */
+    const questionEl = document.getElementById('question');
+    const scoreDisplay = document.getElementById('score');
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const optionsButton = document.getElementById('optionsButton');
+    const pauseModal = document.getElementById('pauseModal');
+    const resumeButton = document.getElementById('resumeButton');
+    const optionAEl = document.getElementById('optionA');
+    const optionBEl = document.getElementById('optionB');
+    const optionCEl = document.getElementById('optionC');
+    const optionDEl = document.getElementById('optionD');
+    const gameArea = document.getElementById('game-area');
+    
+    /* -------------------------------
+       Canvas Sizing
+    ------------------------------- */
+    function resizeCanvas() {
+      canvas.width = gameArea.clientWidth;
+      canvas.height = gameArea.clientHeight - 140; // Leave room for question/score and button
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+    
+    /* -------------------------------
+       Utility: Random Number Generator
+    ------------------------------- */
+    function random(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+    
+    /* -------------------------------
+       Flash Background Function
+       Temporarily sets the canvas background to red for 500ms
+    ------------------------------- */
+    function flashBackground() {
+      canvas.style.backgroundColor = "red";
+      setTimeout(() => {
+        canvas.style.backgroundColor = "#fff";
+      }, 500);
+    }
+    
+    /* -------------------------------
+       Create a Falling Option
+       Each falling circle displays an option letter (A, B, C, or D)
+       There’s a 30% chance the spawned letter is the correct answer.
+    ------------------------------- */
+    function createFallingOption() {
+      const radius = 20;
+      const x = random(radius, canvas.width - radius);
+      const y = -radius; // Start above the canvas
+      let letter;
+      if (Math.random() < 0.3) {
+        letter = questionData.correct;
+      } else {
+        const letters = ["A", "B", "C", "D"].filter(l => l !== questionData.correct);
+        letter = letters[Math.floor(random(0, letters.length))];
+      }
+      const option = {
+        x: x,
+        y: y,
+        radius: radius,
+        letter: letter,
+        speed: baseSpeed + random(0, 1)
+      };
+      fallingOptions.push(option);
+    }
+    
+    /* -------------------------------
+       Update Game State
+    ------------------------------- */
+    function update(deltaTime) {
+      // Increase falling speed for difficulty scaling
+      baseSpeed += difficultyIncrement * (deltaTime / 1000);
+      
+      // Update falling options positions
+      for (let i = fallingOptions.length - 1; i >= 0; i--) {
+        let option = fallingOptions[i];
+        option.y += option.speed * (deltaTime / 16);
+        
+        // If an option falls off the canvas, remove it
+        if (option.y - option.radius > canvas.height) {
+          // If the correct answer touches the ground, flash the background red
+          if (option.letter === questionData.correct) {
+            score -= 5;
+            flashBackground();
+          }
+          fallingOptions.splice(i, 1);
+        }
+      }
+    }
+    
+    /* -------------------------------
+       Draw Falling Options
+    ------------------------------- */
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      fallingOptions.forEach(option => {
+        ctx.beginPath();
+        ctx.arc(option.x, option.y, option.radius, 0, Math.PI * 2);
+        ctx.fillStyle = '#66ccff';
+        ctx.fill();
+        ctx.strokeStyle = '#333';
+        ctx.stroke();
+        ctx.closePath();
+        
+        ctx.fillStyle = '#000';
+        ctx.font = '16px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(option.letter, option.x, option.y);
+      });
+    }
+    
+    /* -------------------------------
+       Main Game Loop
+    ------------------------------- */
+    function gameLoop(timestamp) {
+      if (paused) {
+        lastTime = timestamp; // Reset time delta when paused
+        return;
+      }
+      const deltaTime = timestamp - lastTime;
+      lastTime = timestamp;
+      
+      // Spawn new falling options only if the current question is not yet solved
+      if (!questionCompleted) {
+        spawnTimer += deltaTime;
+        if (spawnTimer > spawnInterval) {
+          createFallingOption();
+          spawnTimer = 0;
+        }
+      }
+      
+      update(deltaTime);
+      draw();
+      scoreDisplay.textContent = 'Score: ' + score;
+      requestAnimationFrame(gameLoop);
+    }
+    
+    /* -------------------------------
+       Handle Canvas Clicks
+       Check if a falling option was clicked
+    ------------------------------- */
+    canvas.addEventListener('click', function(e) {
+      if (paused || questionCompleted) return;
+      const rect = canvas.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const clickY = e.clientY - rect.top;
+      
+      for (let i = fallingOptions.length - 1; i >= 0; i--) {
+        const option = fallingOptions[i];
+        const dx = clickX - option.x;
+        const dy = clickY - option.y;
+        if (Math.sqrt(dx * dx + dy * dy) < option.radius) {
+          if (option.letter === questionData.correct && !questionCompleted) {
+            score += 10;
+            questionCompleted = true;
+            fallingOptions = []; // Clear remaining falling options
+            // Move to the next question after a short delay
+            setTimeout(nextQuestion, 1000);
+          } else {
+            score -= 5;
+          }
+          fallingOptions.splice(i, 1);
+          break;
+        }
+      }
+    });
+    
+    /* -------------------------------
+       Pause/Resume Functionality
+    ------------------------------- */
+    optionsButton.addEventListener('click', function() {
+      paused = true;
+      pauseModal.style.display = 'flex';
+    });
+    resumeButton.addEventListener('click', function() {
+      paused = false;
+      pauseModal.style.display = 'none';
+      lastTime = performance.now();
+      requestAnimationFrame(gameLoop);
+    });
+    
+    /* -------------------------------
+       Move to the Next Question
+    ------------------------------- */
+    function nextQuestion() {
+      currentQuestionIndex++;
+      if (currentQuestionIndex < questions.length) {
+        setCurrentQuestion();
+      } else {
+        // End of questions – display final score and pause the game
+        alert("Game Complete! Your final score is: " + score);
+        paused = true;
+      }
+    }
+    
+    /* -------------------------------
+       Set the Current Question and Update UI
+    ------------------------------- */
+    function setCurrentQuestion() {
+      questionData = questions[currentQuestionIndex];
+      questionEl.textContent = questionData.question;
+      optionAEl.textContent = "A: " + questionData.options.A;
+      optionBEl.textContent = "B: " + questionData.options.B;
+      optionCEl.textContent = "C: " + questionData.options.C;
+      optionDEl.textContent = "D: " + questionData.options.D;
+      // Reset variables for the new question
+      fallingOptions = [];
+      questionCompleted = false;
+      spawnTimer = 0;
+      baseSpeed = 1.5; // Optionally reset speed for each new question
+    }
+    
+    /* -------------------------------
+       Initialize the Game
+    ------------------------------- */
+    async function initGame() {
+      questions = await fetchQuestionsFromGemini();
+      currentQuestionIndex = 0;
+      setCurrentQuestion();
+      requestAnimationFrame(gameLoop);
+    }
+    
+    initGame();
+  </script>
+</body>
+</html>

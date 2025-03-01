@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2D Space Shooter - Ultimate Edition</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      /* A subtle radial gradient for atmosphere */
+      background: radial-gradient(circle, #001133, #000011);
+      font-family: Arial, sans-serif;
+    }
+    canvas {
+      display: block;
+      border: 2px solid #ffffff;
+      transition: transform 0.05s;
+    }
+    /* Question display styling */
+    #questionContainer {
+      position: absolute;
+      top: 100px;
+      width: 100%;
+      text-align: center;
+      color: white;
+      z-index: 100;
+      pointer-events: none;
+    }
+    #questionText {
+      font-size: 24px;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 10px 20px;
+      border-radius: 10px;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+  <div id="questionContainer">
+    <div id="questionText"></div>
+  </div>
+  <canvas id="gameCanvas"></canvas>
+  <script>
+    // Setup canvas
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    /* ================= Audio Settings ================= */
+    const bgMusicSrc = 'https://cdn.pixabay.com/audio/2024/04/02/audio_a0c3cc207b.mp3';
+    const playerShootSFXSrc = 'YOUR_PLAYER_SHOOT_SFX_URL';
+    const enemyShootSFXSrc = 'YOUR_ENEMY_SHOOT_SFX_URL';
+    const explosionSFXSrc  = 'YOUR_EXPLOSION_SFX_URL';
+    const playerHitSFXSrc  = 'YOUR_PLAYER_HIT_SFX_URL';
+    const powerupSFXSrc    = 'YOUR_POWERUP_SFX_URL';
+
+    const bgMusic = new Audio(bgMusicSrc);
+    bgMusic.loop = true;
+    bgMusic.volume = 0.2;
+    window.addEventListener('click', () => {
+      if (bgMusic.paused) bgMusic.play();
+    });
+
+    function playSFX(src, volume = 0.2) {
+      if (!src) return;
+      const audio = new Audio(src);
+      audio.volume = volume;
+      audio.play();
+    }
+
+    /* ================= Sprites ================= */
+    const playerSprite = new Image();
+    playerSprite.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpolygon points='20,0 40,40 20,30 0,40' fill='%2300ff00' stroke='white' stroke-width='2'/%3E%3C/svg%3E";
+    
+    function createEnemySprite(color) {
+      const img = new Image();
+      img.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect x='5' y='5' width='30' height='30' rx='5' fill='${encodeURIComponent(color)}' stroke='white' stroke-width='2'/%3E%3C/svg%3E`;
+      return img;
+    }
+    
+    const enemyTypes = ['A', 'B', 'C', 'D'];
+    const enemyColors = ['#ff6666', '#66ff66', '#6666ff', '#ffff66'];
+    const enemySprites = {
+      A: createEnemySprite(enemyColors[0]),
+      B: createEnemySprite(enemyColors[1]),
+      C: createEnemySprite(enemyColors[2]),
+      D: createEnemySprite(enemyColors[3])
+    };
+
+    // Health power-up sprite (a heart icon)
+    const powerupSprite = new Image();
+    powerupSprite.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 29.6'%3E%3Cpath fill='%23ff3333' d='M23.6,0c-3.4,0-6.4,1.9-8,4.7C13.8,1.9,10.8,0,7.4,0C3.3,0,0,3.3,0,7.4c0,4.5,3.6,8.2,9.1,13.1L16,29.6l6.9-9.1 C28.4,15.6,32,11.9,32,7.4C32,3.3,28.7,0,24.6,0H23.6z'/%3E%3C/svg%3E";
+
+    /* ================= Game State ================= */
+    let score = 0;
+    let gameOver = false;
+    let playerHealth = 100;
+    const maxPlayerHealth = 100;
+
+    // Player configuration
+    const player = {
+      x: canvas.width / 2 - 20,
+      y: canvas.height - 100,
+      width: 40,
+      height: 40,
+      speed: 15
+    };
+
+    // Arrays for game objects
+    const bullets = [];
+    const enemyBullets = [];
+    const enemies = [];
+    const particles = [];
+    const stars = [];
+    const powerups = [];
+
+    const waveFrequency = 2000;
+    let lastShotTime = 0;
+    const shotInterval = 100;
+    const keys = {
+      ArrowLeft: false,
+      ArrowRight: false,
+      Space: false
+    };
+
+    window.addEventListener('keydown', (e) => {
+      if (e.code in keys) keys[e.code] = true;
+      if (gameOver && e.code === 'Enter') restartGame();
+    });
+    window.addEventListener('keyup', (e) => {
+      if (e.code in keys) keys[e.code] = false;
+    });
+
+    /* ================= Background Stars ================= */
+    function spawnStars() {
+      for (let i = 0; i < 150; i++) {
+        stars.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          size: Math.random() * 2 + 1,
+          speed: Math.random() * 0.5 + 0.2
+        });
+      }
+    }
+    function drawStars() {
+      ctx.fillStyle = '#ffffff';
+      stars.forEach(star => {
+        star.y += star.speed;
+        if (star.y > canvas.height) star.y = 0;
+        ctx.fillRect(star.x, star.y, star.size, star.size);
+      });
+    }
+
+    /* ================= Enemy Spawning and Shooting ================= */
+    function spawnEnemy() {
+      const enemyTypeIndex = Math.floor(Math.random() * 4);
+      const isBuff = Math.random() < 0.5;
+      const baseSpeed = 0.8 + Math.random() * 1.2;
+      const regularMultiplier = 1.5;
+      const buffMultiplier = 1.0;
+      const enemy = {
+        x: Math.random() * (canvas.width - 40),
+        y: -40,
+        width: 40,
+        height: 40,
+        color: enemyColors[enemyTypeIndex],
+        type: enemyTypes[enemyTypeIndex],
+        direction: Math.random() < 0.5 ? -1 : 1,
+        // Buff enemies require more hits
+        health: isBuff ? 12 : 3,
+        speed: baseSpeed * (isBuff ? buffMultiplier : regularMultiplier),
+        horizontalSpeed: (0.8 + Math.random() * 1.2) * (isBuff ? buffMultiplier : regularMultiplier),
+        shootCooldown: isBuff ? (400 + Math.random() * 200) : (1000 + Math.random() * 500),
+        isBuff: isBuff,
+        label: currentQuestion ? currentQuestion.options[enemyTypes[enemyTypeIndex]] : enemyTypes[enemyTypeIndex]
+      };
+      enemies.push(enemy);
+    }
+
+    function updateEnemies() {
+      enemies.forEach(enemy => {
+        enemy.shootCooldown -= 16.67;
+        if (enemy.shootCooldown <= 0) {
+          const chance = enemy.isBuff ? 0.9 : 0.6;
+          if (Math.random() < chance) {
+            enemyShoot(enemy);
+          }
+          enemy.shootCooldown = enemy.isBuff ? (400 + Math.random() * 200) : (1000 + Math.random() * 500);
+        }
+      });
+    }
+
+    function enemyShoot(enemy) {
+      enemyBullets.push({
+        x: enemy.x + enemy.width / 2 - 2.5,
+        y: enemy.y + enemy.height,
+        width: 5,
+        height: 10,
+        speed: enemy.isBuff ? 8 : 6
+      });
+      function playSFX(src, volume = 0.2) {
+  if (!src || src.startsWith("YOUR_")) return;
+  const audio = new Audio(src);
+  audio.volume = volume;
+  audio.play();
+}
+
+    }
+
+    /* ================= Power-Up Spawning ================= */
+    setInterval(() => {
+      const powerup = {
+        x: Math.random() * (canvas.width - 30),
+        y: -30,
+        width: 30,
+        height: 30,
+        type: 'health',
+        speed: 3
+      };
+      powerups.push(powerup);
+    }, 15000);
+
+    function updatePowerups() {
+      powerups.forEach((powerup, index) => {
+        powerup.y += powerup.speed;
+        if (powerup.y > canvas.height) {
+          powerups.splice(index, 1);
+        }
+      });
+    }
+
+    function drawPowerups() {
+      powerups.forEach(powerup => {
+        ctx.drawImage(powerupSprite, powerup.x, powerup.y, powerup.width, powerup.height);
+      });
+    }
+
+    function checkPowerupCollisions() {
+      powerups.forEach((powerup, index) => {
+        if (
+          powerup.x < player.x + player.width &&
+          powerup.x + powerup.width > player.x &&
+          powerup.y < player.y + player.height &&
+          powerup.y + powerup.height > player.y
+        ) {
+          playerHealth = Math.min(maxPlayerHealth, playerHealth + 20);
+          playSFX(powerupSFXSrc);
+          for (let i = 0; i < 20; i++) {
+            particles.push({
+              x: player.x + player.width / 2,
+              y: player.y + player.height / 2,
+              size: Math.random() * 2 + 1,
+              color: '#ff3333',
+              speedX: (Math.random() - 0.5) * 4,
+              speedY: (Math.random() - 0.5) * 4,
+              life: 30
+            });
+          }
+          powerups.splice(index, 1);
+        }
+      });
+    }
+
+    /* ================= Drawing Functions ================= */
+    function drawPlayer() {
+      ctx.drawImage(playerSprite, player.x, player.y, player.width, player.height);
+    }
+
+    function drawBullets() {
+      ctx.fillStyle = '#ffffff';
+      bullets.forEach((bullet, index) => {
+        bullet.y -= bullet.speed;
+        if (bullet.y + bullet.height < 0) bullets.splice(index, 1);
+        ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
+        createShootingParticles(bullet);
+      });
+    }
+    
+    function drawEnemyBullets() {
+      ctx.fillStyle = '#ff0000';
+      enemyBullets.forEach((bullet, index) => {
+        bullet.y += bullet.speed;
+        if (bullet.y > canvas.height) enemyBullets.splice(index, 1);
+        ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
+      });
+    }
+
+    function drawEnemies() {
+      enemies.forEach((enemy) => {
+        enemy.y += enemy.speed;
+        enemy.x += enemy.direction * enemy.horizontalSpeed;
+        if (enemy.x <= 0 || enemy.x + enemy.width >= canvas.width) enemy.direction *= -1;
+        ctx.drawImage(enemySprites[enemy.type], enemy.x, enemy.y, enemy.width, enemy.height);
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '14px Arial';
+        ctx.fillText(enemy.label, enemy.x + enemy.width / 2, enemy.y + enemy.height * 0.8);
+        if (enemy.isBuff) {
+          ctx.fillStyle = '#ffcc00';
+          ctx.font = 'bold 16px Arial';
+          ctx.fillText('BUFF', enemy.x + enemy.width / 2, enemy.y - 5);
+        }
+      });
+    }
+
+    function shoot() {
+      bullets.push({
+        x: player.x + player.width / 2 - 2.5,
+        y: player.y,
+        width: 5,
+        height: 10,
+        speed: 12
+      });
+      playSFX(playerShootSFXSrc);
+      screenShake(15, 150);
+    }
+
+    function createShootingParticles(bullet) {
+      for (let i = 0; i < 3; i++) {
+        particles.push({
+          x: bullet.x + bullet.width / 2,
+          y: bullet.y + bullet.height,
+          size: Math.random() * 2 + 1,
+          color: '#ffffff',
+          speedX: (Math.random() - 0.5) * 3,
+          speedY: Math.random() * 3,
+          life: 20
+        });
+      }
+    }
+    
+    function createExplosionParticles(enemy) {
+      playSFX(explosionSFXSrc);
+      for (let i = 0; i < 50; i++) {
+        particles.push({
+          x: enemy.x + enemy.width / 2,
+          y: enemy.y + enemy.height / 2,
+          size: Math.random() * 5 + 5,
+          color: enemy.color,
+          speedX: (Math.random() - 0.5) * 12,
+          speedY: (Math.random() - 0.5) * 12,
+          life: 60
+        });
+      }
+      screenShake(120, 150);
+    }
+    
+    function drawParticles() {
+      particles.forEach((particle, index) => {
+        particle.x += particle.speedX;
+        particle.y += particle.speedY;
+        particle.life -= 1;
+        if (particle.life <= 0) particles.splice(index, 1);
+        ctx.fillStyle = particle.color;
+        ctx.beginPath();
+        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+        ctx.fill();
+      });
+    }
+
+    /* ================= UI Elements ================= */
+    function drawHealthBar() {
+      const barWidth = 200, barHeight = 20;
+      const x = 20, y = 20;
+      ctx.fillStyle = '#444';
+      ctx.fillRect(x, y, barWidth, barHeight);
+      const healthWidth = Math.min(barWidth, (playerHealth / maxPlayerHealth) * barWidth);
+      ctx.fillStyle = '#00ff00';
+      ctx.fillRect(x, y, healthWidth, barHeight);
+      ctx.strokeStyle = '#ffffff';
+      ctx.strokeRect(x, y, barWidth, barHeight);
+      ctx.font = '16px Arial';
+      ctx.fillStyle = '#ffffff';
+      ctx.textAlign = 'center';
+      ctx.fillText('Health', x + barWidth / 2, y + barHeight - 4);
+    }
+    
+    function drawScore() {
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '24px Arial';
+      ctx.textAlign = 'left';
+      ctx.fillText(`Score: ${score}`, 20, 70);
+    }
+    
+    function screenShake(intensity, duration) {
+      const shakeDuration = duration || 150;
+      const startTime = Date.now();
+      function shake() {
+        const elapsed = Date.now() - startTime;
+        if (elapsed < shakeDuration) {
+          const offsetX = (Math.random() - 0.5) * intensity;
+          const offsetY = (Math.random() - 0.5) * intensity;
+          canvas.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+          requestAnimationFrame(shake);
+        } else {
+          canvas.style.transform = 'translate(0, 0)';
+        }
+      }
+      shake();
+    }
+
+    /* ================= Game Mechanics ================= */
+    function updatePlayer() {
+      if (keys.ArrowLeft && player.x > 0) {
+        player.x -= player.speed;
+      }
+      if (keys.ArrowRight && player.x + player.width < canvas.width) {
+        player.x += player.speed;
+      }
+      const now = Date.now();
+      if (keys.Space && now - lastShotTime > shotInterval) {
+        shoot();
+        lastShotTime = now;
+      }
+    }
+
+    // When a bullet collides with an enemy, check if it’s the correct answer.
+    function checkCollisions() {
+      bullets.forEach((bullet, bIndex) => {
+        enemies.forEach((enemy, eIndex) => {
+          if (
+            bullet.x < enemy.x + enemy.width &&
+            bullet.x + bullet.width > enemy.x &&
+            bullet.y < enemy.y + enemy.height &&
+            bullet.y + bullet.height > enemy.y
+          ) {
+            bullets.splice(bIndex, 1);
+            enemy.health -= 1;
+            createExplosionParticles(enemy);
+            if (enemy.health <= 0) {
+              // Check if the enemy shot is the correct answer.
+              if (enemy.type === correctAnswer) {
+                score += 50;
+                generateQuestion(); // Generate a new question on correct hit
+              } else {
+                score = Math.max(0, score - 20);
+                playerHealth -= 10;
+              }
+            }
+          }
+        });
+      });
+      enemyBullets.forEach((bullet, index) => {
+        if (
+          bullet.x < player.x + player.width &&
+          bullet.x + bullet.width > player.x &&
+          bullet.y < player.y + player.height &&
+          bullet.y + bullet.height > player.y
+        ) {
+          enemyBullets.splice(index, 1);
+          playerHealth -= 10;
+          screenShake(90, 150);
+          playSFX(playerHitSFXSrc);
+          for (let i = 0; i < 20; i++) {
+            particles.push({
+              x: player.x + player.width / 2,
+              y: player.y + player.height / 2,
+              size: Math.random() * 3 + 2,
+              color: '#ff0000',
+              speedX: (Math.random() - 0.5) * 8,
+              speedY: (Math.random() - 0.5) * 8,
+              life: 30
+            });
+          }
+        }
+      });
+      checkPowerupCollisions();
+    }
+    
+    function regenerateHealth() {
+      if (playerHealth < maxPlayerHealth) playerHealth += 0.05;
+    }
+    
+    function gameLoop() {
+      if (gameOver || playerHealth <= 0) {
+        screenShake(150, 500);
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#ff0000';
+        ctx.font = '48px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2 - 50);
+        ctx.font = '24px Arial';
+        ctx.fillStyle = '#ffffff';
+        ctx.fillText('Press Enter to Restart', canvas.width / 2, canvas.height / 2);
+        return;
+      }
+    
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawStars();
+      updatePlayer();
+      regenerateHealth();
+      updateEnemies();
+      updatePowerups();
+      drawPlayer();
+      drawBullets();
+      drawEnemyBullets();
+      drawEnemies();
+      drawPowerups();
+      drawParticles();
+      checkCollisions();
+      drawHealthBar();
+      drawScore();
+      requestAnimationFrame(gameLoop);
+    }
+    
+    function restartGame() {
+      score = 0;
+      gameOver = false;
+      playerHealth = 100;
+      bullets.length = 0;
+      enemyBullets.length = 0;
+      enemies.length = 0;
+      particles.length = 0;
+      powerups.length = 0;
+      player.x = canvas.width / 2 - 20;
+      player.y = canvas.height - 100;
+      lastShotTime = 0;
+      gameLoop();
+    }
+
+    /* ================= Gemini API and Question Generation ================= */
+    let currentQuestion = null;
+    let correctAnswer = null;
+    const API_KEY = "AIzaSyCASUDy0da3IOOsPn3Z9otr6yMAc50SWEw"; // Replace with your actual Gemini API key
+    const QUESTION_INTERVAL = 15000; // New question every 15 seconds
+
+    async function generateQuestion() {
+      const apiKey = API_KEY;
+      if (!apiKey) return;
+      
+      try {
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            contents: [{
+              parts: [{
+                text: "Generate one general knowledge multiple-choice question with 4 options. Format: Question: [question] A) [option1] B) [option2] C) [option3] D) [option4] Answer: [letter]"
+              }]
+            }]
+          })
+        });
+        const data = await response.json();
+        const text = data.candidates[0].content.parts[0].text;
+        const questionMatch = text.match(/Question: (.*?)\nA\) (.*?)\nB\) (.*?)\nC\) (.*?)\nD\) (.*?)\nAnswer: ([A-D])/i);
+        
+        if (questionMatch) {
+          currentQuestion = {
+            text: questionMatch[1],
+            options: {
+              A: questionMatch[2],
+              B: questionMatch[3],
+              C: questionMatch[4],
+              D: questionMatch[5]
+            },
+            answer: questionMatch[6].toUpperCase()
+          };
+          document.getElementById('questionText').textContent = `${currentQuestion.text} (Shoot the correct answer!)`;
+          correctAnswer = currentQuestion.answer;
+          updateEnemyLabels();
+        }
+      } catch (error) {
+        console.error('Error generating question:', error);
+      }
+      
+      // Update enemy labels to match the new question options
+      function updateEnemyLabels() {
+        enemies.forEach(enemy => {
+          if (currentQuestion && enemy.type in currentQuestion.options) {
+            enemy.label = currentQuestion.options[enemy.type];
+          }
+        });
+      }
+    }
+    
+    // Initialize periodic question generation and manual refresh with Enter
+    setInterval(generateQuestion, QUESTION_INTERVAL);
+    window.addEventListener('keydown', (e) => {
+      if (e.code === 'Enter' && !gameOver) generateQuestion();
+    });
+
+    spawnStars();
+    setInterval(spawnEnemy, waveFrequency);
+    gameLoop();
+  </script>
+</body>
+</html>
