@@ -318,7 +318,7 @@ function addMessage(message, isUser = false) {
     
             try {
                 const googleAI = await initializeGoogleAI();
-                const model = googleAI.getGenerativeModel({ model: "gemini-pro" });
+                const model = googleAI.getGenerativeModel({ model: "gemini-2.0-flash" });
                 const history = JSON.parse(sessionStorage.getItem(SESSION_STORAGE_KEY) || '[]');
                 
                 const prompt = `As a study assistant with conversation memory, consider this context:
@@ -330,7 +330,7 @@ function addMessage(message, isUser = false) {
                 4. Provide examples matching the user's level
                 5. Make learning fun (not fun fact)
                 6. If the user asks for a specific chapter then give them detailed expplanation of that chapter. if the chapter contains formulas then give the formulas 
-                7. Summarize the topic and cover all the thing
+                7. Summarize the topic and cover all the things
                 Current question: ${question}`;
     
                 const result = await model.generateContent(prompt);

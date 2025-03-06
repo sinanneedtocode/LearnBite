@@ -57,7 +57,7 @@ function addMessage(message, isUser = false) {
     
             try {
                 const googleAI = await initializeGoogleAI();
-                const model = googleAI.getGenerativeModel({ model: "gemini-pro" });
+                const model = googleAI.getGenerativeModel({ model: "gemini-2.0-flash" });
                 const history = JSON.parse(sessionStorage.getItem(SESSION_STORAGE_KEY) || '[]');
                 
                 const prompt = `As a study assistant with conversation memory, consider this context:

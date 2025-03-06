@@ -284,14 +284,150 @@
         background: #222;
         box-shadow: 0 4px 12px rgba(255,255,255,0.1);
     }
+    /* Header Container */
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+}
+
+/* Logo styling */
+.logo {
+  height: 50px;
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+.logo:hover {
+  transform: scale(1.1);
+  filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+}
+
+/* Header Right Section */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Dark Mode Toggle Button */
+#dark-mode-toggle {
+  background: var(--secondary-color);
+  color: var(--white);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+#dark-mode-toggle:hover {
+  background: var(--accent-color);
+}
+
+/* Hamburger Menu (Hidden by default on larger screens) */
+.menu-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+}
+.menu-toggle .hamburger {
+  width: 25px;
+  height: 3px;
+  background: var(--text-color);
+  transition: all 0.3s ease;
+}
+
+/* Navigation Menu */
+.main_nav {
+  background: var(--white);
+}
+.main_nav_list {
+  display: flex;
+  gap: 1.5rem;
+  list-style: none;
+  align-items: center;
+  /* On larger screens, center nav items if needed */
+  justify-content: center;
+}
+
+/* Nav Link Styling */
+.main_nav_link {
+  text-decoration: none;
+  color: var(--text-color);
+  font-weight: 500;
+  padding: 0.75rem 1.25rem;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(88, 204, 2, 0.05);
+}
+.main_nav_link:hover {
+  background: rgba(88, 204, 2, 0.15);
+  transform: translateY(-2px);
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  /* Show hamburger menu */
+  .menu-toggle {
+    display: flex;
+  }
+  /* Adjust header container padding */
+  .header-container {
+    padding: 0.75rem 1rem;
+  }
+  /* Ensure logo stays on the left */
+  .logo {
+    height: 40px;
+    margin-right: auto;
+  }
+  /* Mobile Navigation - hide by default */
+  .main_nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: var(--white);
+    box-shadow: var(--card-shadow);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    transform: translateY(-20px);
+    opacity: 0;
+    pointer-events: none;
+  }
+  .main_nav.active {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+  /* Stack nav items vertically and left-align them */
+  .main_nav_list {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+    align-items: flex-start;
+  }
+}
+
   </style>
 </head>
 <body>
   <header class="header">
-    <img src="imgs/duolingo-landscape-lockup.png" alt="learnbite_logo" class="logo">
-    <!-- Dark Mode Toggle Button -->
-    <button id="dark-mode-toggle" onclick="toggleDarkMode()">Toggle Dark Mode</button>
-    <nav class="main_nav">
+    <div class="header-container">
+      <img src="imgs/duolingo-landscape-lockup.png" alt="learnbite_logo" class="logo">
+      <div class="header-right">
+        <button id="dark-mode-toggle" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+        <button class="menu-toggle" onclick="toggleMenu()">
+          <span class="hamburger"></span>
+          <span class="hamburger"></span>
+          <span class="hamburger"></span>
+        </button>
+      </div>
+    </div>
+    <nav class="main_nav" id="mainNav">
       <ul class="main_nav_list">
         <li><a href="index.html#home" class="main_nav_link">🏠 Home</a></li>
         <li><a href="index.html#subjects" class="main_nav_link">📚 Subjects</a></li>
@@ -300,6 +436,7 @@
       </ul>
     </nav>
   </header>
+  
 
   <main class="dashboard">
     <div class="grid md:grid-cols-2 gap-8 mb-8">
@@ -345,6 +482,12 @@
       document.body.setAttribute('data-theme', newTheme);
       localStorage.setItem('theme', newTheme);
     }
+function toggleMenu() {
+  const mainNav = document.getElementById('mainNav');
+  const menuToggle = document.querySelector('.menu-toggle');
+  mainNav.classList.toggle('active');
+  menuToggle.classList.toggle('active');
+}
 
     // Initialize theme on page load
     const savedTheme = localStorage.getItem('theme') || 'light';

@@ -825,11 +825,99 @@
     padding: 0.5rem 1rem;
     font-size: 0.9rem;
   }
-}
 
+}
+.chat-container {
+      background: var(--white);
+      border-radius: var(--border-radius);
+      box-shadow: var(--card-shadow);
+      padding: 1rem;
+      margin-top: 1rem;
+    }
+  
+    .chat-message {
+      background: rgba(88, 204, 2, 0.1);
+      padding: 0.8rem;
+      border-radius: 1rem;
+      margin: 0.5rem 0;
+      max-width: 70%;
+    }
+  
+    .chat-message.self {
+      background: var(--primary-color);
+      color: white;
+      margin-left: auto;
+    }
+  
+    /* Notifications */
+    .notification-bell {
+      position: relative;
+      cursor: pointer;
+    }
+  
+    .notification-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: var(--accent-color);
+      color: white;
+      border-radius: 50%;
+      padding: 2px 6px;
+      font-size: 0.8rem;
+    }
+  
+    .notifications-dropdown {
+      position: absolute;
+      right: 0;
+      top: 100%;
+      background: var(--white);
+      box-shadow: var(--card-shadow);
+      border-radius: var(--border-radius);
+      padding: 1rem;
+      width: 300px;
+      max-height: 400px;
+      overflow-y: auto;
+      display: none;
+    }   
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        iframe {
+            width: 100%;
+            height: 500px;
+            border: none;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
 </style>
 </head>
 <body>
+        <!-- Modal container -->
+      <div class="modal-overlay hidden" id="larryModal">
+        <div class="larry-modal-content">
+          <button class="close-modal" onclick="closeLarryModal()">×</button>
+          <iframe id="larryFrame" src="" style="width:100%; height:100%; border:0;"></iframe>
+        </div>
+      </div>
   <!-- Login Modal -->
   <div class="modal-overlay hidden" id="loginModal">
     <div class="login-modal">
@@ -903,13 +991,7 @@
     </div>
   </div>
 
-  <!-- Larry Chat Modal Popup -->
-  <div class="modal-overlay hidden" id="larryModal">
-    <div class="larry-modal-content">
-      <button class="close-modal" onclick="closeLarryModal()">×</button>
-      <iframe src="larry.html" style="width:100%; height:100%; border:0;"></iframe>
-    </div>
-  </div>
+
 
   <!-- Header with Menu -->
   <header class="header">
@@ -931,7 +1013,7 @@
     <nav class="main_nav" id="mainNav">
       <ul class="main_nav_list">
         <li><a href="#home" class="main_nav_link">🏠 Home</a></li>
-        <li><a href="#" class="main_nav_link larry_btn" onclick="openLarryModal()">🦉 Ask Larry</a></li>
+        <li><a href="#" class="main_nav_link" onclick="openLarryModal()">🦉 Ask Larry</a></li>
         <li><a href="timer.html" class="main_nav_link larry_btn">⏱️ Study Companion</a></li>
         <li><a href="profile.html" class="main_nav_link">👤 Profile</a></li>
         <li><a href="mission.html" class="main_nav_link">Games</a></li>
@@ -1215,7 +1297,43 @@
             });
         });
     }
-
+        // Function to open the Larry modal
+        function openLarryModal() {
+            // Get the modal element
+            const modal = document.getElementById('larryModal');
+            
+            // Get the iframe element
+            const iframe = document.getElementById('larryFrame');
+            
+            // Set the iframe src to larry.html
+            iframe.src = 'larry.html';
+            
+            // Display the modal
+            modal.style.display = 'block';
+        }
+        
+        // Function to close the Larry modal
+        function closeLarryModal() {
+            // Get the modal element
+            const modal = document.getElementById('larryModal');
+            
+            // Get the iframe element
+            const iframe = document.getElementById('larryFrame');
+            
+            // Clear the iframe src
+            iframe.src = '';
+            
+            // Hide the modal
+            modal.style.display = 'none';
+        }
+        
+        // Close the modal if the user clicks outside of it
+        window.onclick = function(event) {
+            const modal = document.getElementById('larryModal');
+            if (event.target == modal) {
+                closeLarryModal();
+            }
+        }
     function updateChapterProgress(uid, subject, chapterTitle, progress) {
         const chapterRef = firebase.database()
             .ref(`users/${uid}/subjects/${subject}`)
@@ -1228,7 +1346,14 @@
             });
         });
     }
+        // Games Modal Functions
+    window.openGamesModal = function() {
+      document.getElementById('gamesModal').classList.remove('hidden');
+    }
 
+    window.closeGamesModal = function() {
+      document.getElementById('gamesModal').classList.add('hidden');
+    }
     // Firebase Configuration
     const firebaseConfig = {
         apiKey: "AIzaSyA6At0_PeY351303P85_o0wtYMXGQ_d_xg",
@@ -1540,6 +1665,137 @@ function closeChaptersModal() {
   }
 }
     window.addEventListener('load', updateLeaderboard);
+    let currentChatUser = null;
+  
+    function openChatModal() {
+      if(!firebase.auth().currentUser) {
+        alert('Please login to chat!');
+        return;
+      }
+      document.getElementById('chatModal').classList.remove('hidden');
+      loadUserList();
+      setupChatListeners();
+    }
+  
+    async function loadUserList() {
+      const snapshot = await firebase.database().ref('users').once('value');
+      const currentUID = firebase.auth().currentUser.uid;
+      let html = '<h3>Online Users:</h3>';
+      
+      snapshot.forEach(user => {
+        if(user.key !== currentUID) {
+          html += `<div class="user-item" onclick="startChat('${user.key}')">
+            ${user.val().email.split('@')[0]}
+          </div>`;
+        }
+      });
+      
+      document.getElementById('userList').innerHTML = html;
+    }
+  
+    function startChat(uid) {
+      currentChatUser = uid;
+      document.getElementById('chatMessages').innerHTML = '';
+      setupChatListeners();
+    }
+  
+    function setupChatListeners() {
+      const currentUser = firebase.auth().currentUser;
+      if(!currentUser || !currentChatUser) return;
+  
+      const chatRef = firebase.database().ref(`chats/${getChatId(currentUser.uid, currentChatUser)}`);
+      
+      chatRef.orderByChild('timestamp').limitToLast(50).on('value', snapshot => {
+        const messages = [];
+        snapshot.forEach(msg => {
+          messages.push(msg.val());
+        });
+        
+        let html = '';
+        messages.forEach(msg => {
+          const isSelf = msg.sender === currentUser.uid;
+          html += `<div class="chat-message ${isSelf ? 'self' : ''}">
+            <p>${msg.text}</p>
+            <small>${new Date(msg.timestamp).toLocaleTimeString()}</small>
+          </div>`;
+        });
+        
+        document.getElementById('chatMessages').innerHTML = html;
+      });
+    }
+  
+    function getChatId(uid1, uid2) {
+      return [uid1, uid2].sort().join('_');
+    }
+  
+    function sendMessage() {
+      const text = document.getElementById('messageInput').value.trim();
+      if(!text || !currentChatUser) return;
+  
+      const currentUser = firebase.auth().currentUser;
+      const chatRef = firebase.database().ref(`chats/${getChatId(currentUser.uid, currentChatUser)}`);
+      
+      chatRef.push({
+        sender: currentUser.uid,
+        receiver: currentChatUser,
+        text: text,
+        timestamp: Date.now()
+      });
+  
+      // Send notification
+      firebase.database().ref(`notifications/${currentChatUser}`).push({
+        type: 'message',
+        from: currentUser.uid,
+        text: `New message from ${currentUser.email.split('@')[0]}`,
+        timestamp: Date.now(),
+        read: false
+      });
+  
+      document.getElementById('messageInput').value = '';
+    }
+  
+    // Notifications System
+    function setupNotifications() {
+      const user = firebase.auth().currentUser;
+      if(!user) return;
+  
+      firebase.database().ref(`notifications/${user.uid}`).on('value', snapshot => {
+        let count = 0;
+        const notifications = [];
+        
+        snapshot.forEach(notif => {
+          if(!notif.val().read) count++;
+          notifications.push(notif.val());
+        });
+        
+        document.getElementById('notificationCount').textContent = count;
+        renderNotifications(notifications);
+      });
+    }
+  
+    function renderNotifications(notifications) {
+      let html = '';
+      notifications.forEach(notif => {
+        html += `<div class="notification-item">
+          <p>${notif.text}</p>
+          <small>${new Date(notif.timestamp).toLocaleString()}</small>
+        </div>`;
+      });
+      document.getElementById('notificationsList').innerHTML = html;
+    }
+  
+    function toggleNotifications() {
+      const dropdown = document.getElementById('notificationsDropdown');
+      dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+    }
+  
+    // Update Auth Listener
+    firebase.auth().onAuthStateChanged(user => {
+      if(user) {
+        setupNotifications();
+        // ... existing auth code ...
+      }
+    });
 </script>
   <div id="logoutModal" class="modal">
     <div class="modal-content">
