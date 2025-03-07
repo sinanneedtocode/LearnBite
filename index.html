@@ -908,6 +908,28 @@
         button:hover {
             background-color: #45a049;
         }
+        /* Add these styles to your existing CSS */
+#larryModal .larry-modal-content {
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  max-width: 800px;
+  height: 90vh;
+  padding: 0; /* Remove padding to prevent iframe overflow */
+}
+
+#larryModal iframe {
+  flex: 1; /* Fill remaining space */
+  width: 100%;
+  height: calc(100% - 40px); /* Account for close button */
+  margin-top: 40px; /* Space for close button */
+}
+
+#larryModal .close-modal {
+  top: 15px;
+  right: 15px;
+  z-index: 1; /* Ensure it's above iframe */
+}
 </style>
 </head>
 <body>
@@ -1453,7 +1475,8 @@
         mathematics: [
             { title: "Linear Equations", progress: 0 },
             { title: "Number Systems", progress: 0 },
-            { title: "Polynomials", progress: 0 }
+            { title: "Polynomials", progress: 0 },
+            { title: "Lines and Angles", progress:0}
         ],
         english: [
             { title: "The Fun They Had", progress: 0 },

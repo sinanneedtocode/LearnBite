@@ -2106,6 +2106,296 @@ Average Mass = (Mass₁ × Abundance₁%) + (Mass₂ × Abundance₂%)
             "difficulty": "Intermediate",
             "relatedChapters": ["Linear Equations", "Quadratic Equations"]
         },
+        {
+            "title": "Euclid’s Geometry",
+            "content": `
+<p>&nbsp;</p>
+<h1>📚&nbsp;<strong>Euclid&rsquo;s Geometry &ndash; Class 9 Mathematics</strong></h1>
+<h2><strong>1. Introduction to Euclidean Geometry</strong></h2>
+<p>Euclidean Geometry is named after the Greek mathematician <strong>Euclid</strong>, who introduced the <strong>axiomatic method</strong> of proving mathematical truths.<br>It is based on fundamental <strong>axioms and postulates</strong> that define shapes, lines, and angles in two-dimensional space.</p>
+<hr>
+<h2><strong>2. Euclid&rsquo;s Definitions</strong></h2>
+<p>Euclid provided precise definitions for basic geometrical terms:</p>
+<ul>
+<li><strong>Point:</strong> A location that has no size or dimension.</li>
+<li><strong>Line:</strong> A one-dimensional figure that extends infinitely in both directions.</li>
+<li><strong>Plane:</strong> A flat, two-dimensional surface that extends infinitely.</li>
+<li><strong>Line Segment:</strong> A part of a line with two endpoints.</li>
+<li><strong>Ray:</strong> A line that starts at one point and extends infinitely in one direction.</li>
+<li><strong>Angle:</strong> Formed when two rays originate from a common endpoint.</li>
+</ul>
+<hr>
+<h2><strong>3. Euclid&rsquo;s Axioms (Universal Truths)</strong></h2>
+<p>Euclid&rsquo;s axioms are self-evident truths that do not require proof.</p>
+<ol>
+<li>
+<p><strong>Things which are equal to the same thing are equal to one another.</strong><br><em>Example:</em> If <span class="katex">a=ba = b</span> and <span class="katex">b=cb = c</span>, then <span class="katex">a=ca = c</span>.</p>
+</li>
+<li>
+<p><strong>If equals are added to equals, the wholes are equal.</strong><br><em>Example:</em> If <span class="katex">a=ba = b</span>, then <span class="katex">a+c=b+ca + c = b + c</span>.</p>
+</li>
+<li>
+<p><strong>If equals are subtracted from equals, the remainders are equal.</strong><br><em>Example:</em> If <span class="katex">a=ba = b</span>, then <span class="katex">a&minus;c=b&minus;ca - c = b - c</span>.</p>
+</li>
+<li>
+<p><strong>Things that coincide with one another are equal to one another.</strong><br><em>Example:</em> Two overlapping circles are equal in size.</p>
+</li>
+<li>
+<p><strong>The whole is greater than the part.</strong><br><em>Example:</em> A full pizza is larger than any single slice.</p>
+</li>
+<li>
+<p><strong>Things which are double of the same things are equal to one another.</strong><br><em>Example:</em> If <span class="katex">a=ba = b</span>, then <span class="katex">2a=2b2a = 2b</span>.</p>
+</li>
+<li>
+<p><strong>Things which are halves of the same things are equal to one another.</strong><br><em>Example:</em> If <span class="katex">a=ba = b</span>, then <span class="katex">a2=b2\frac{a}{2} = \frac{b}{2}</span>.</p>
+</li>
+</ol>
+<hr>
+<h2><strong>4. Euclid&rsquo;s Five Postulates (Geometrical Assumptions)</strong></h2>
+<p>Euclid&rsquo;s postulates are specific assumptions about geometry:</p>
+<ol>
+<li>
+<p><strong>A straight line may be drawn from any one point to any other point.</strong><br>✅ This means we can always connect two points with a straight line.</p>
+</li>
+<li>
+<p><strong>A terminated line (line segment) can be extended indefinitely.</strong><br>✅ A line segment can always be extended to form a full line.</p>
+</li>
+<li>
+<p><strong>A circle can be drawn with any center and any radius.</strong><br>✅ Given a point and a radius, a circle can always be drawn.</p>
+</li>
+<li>
+<p><strong>All right angles are equal to one another.</strong><br>✅ A right angle is always <span class="katex">90∘90^\circ</span>, no matter where it is.</p>
+</li>
+<li>
+<p><strong>If a straight line, falling on two other straight lines, makes the interior angles on the same side sum up to less than two right angles, then the two lines, if extended indefinitely, meet on that side.</strong><br>✅ This is called the <strong>parallel postulate</strong>.</p>
+</li>
+</ol>
+<hr>
+<h2><strong>5. Equivalent Versions of Euclid&rsquo;s Fifth Postulate</strong></h2>
+<p>Several mathematicians provided alternate versions of Euclid&rsquo;s Fifth Postulate:</p>
+<ul>
+<li><strong>Two distinct intersecting lines cannot be parallel to the same line.</strong></li>
+<li><strong>Through a given point, only one parallel line can be drawn to a given line.</strong></li>
+<li><strong>The sum of interior angles in a triangle is always <span class="katex">180∘180^\circ</span>.</strong></li>
+</ul>
+<hr>
+<h2><strong>6. Common Notions (Additional Self-Evident Truths)</strong></h2>
+<ol>
+<li><strong>Things which are equal to the same thing are equal to one another.</strong></li>
+<li><strong>If equals are added to equals, their sums are equal.</strong></li>
+<li><strong>If equals are subtracted from equals, their differences are equal.</strong></li>
+<li><strong>Things which coincide are equal to one another.</strong></li>
+<li><strong>The whole is greater than the part.</strong></li>
+</ol>
+<p>These common notions are frequently used in proofs.</p>
+<hr>
+<h2><strong>7. Importance of Euclidean Geometry</strong></h2>
+<p>Euclidean Geometry forms the basis of modern mathematics and is widely used in:</p>
+<ul>
+<li><strong>Architecture</strong></li>
+<li><strong>Engineering</strong></li>
+<li><strong>Physics</strong></li>
+<li><strong>Computer Graphics</strong></li>
+<li><strong>GPS and Mapping Technologies</strong></li>
+</ul>
+<hr>
+<h2><strong>8. Summary &ndash; Quick Recap 🚀</strong></h2>
+<p>✅ <strong>Euclid&rsquo;s Geometry</strong> is based on axioms, postulates, and logical proofs.<br>✅ <strong>Axioms</strong> are universal mathematical truths.<br>✅ <strong>Postulates</strong> are specific to geometry and form its foundation.<br>✅ <strong>The Fifth Postulate</strong> (Parallel Postulate) is a key concept in Euclidean geometry.<br>✅ <strong>Real-Life Applications</strong> include construction, physics, and navigation.</p>
+<hr>
+<p>🎯 <strong>Now you&rsquo;re a Euclidean Geometry Pro! 🚀🔥</strong></p>
+            `,
+            "subject": "Mathematics",
+            "difficulty": "Intermediate",
+            "relatedChapters": ["Linear Equations", "Quadratic Equations"]
+        },
+        {
+            "title": "Lines and Angles",
+            "content":`
+            <p>&nbsp;</p>
+<h1>📚&nbsp;<strong>Lines and Angles &ndash; Class 9 Mathematics</strong></h1>
+<h2><strong>1. Introduction to Lines and Angles</strong></h2>
+<ul>
+<li><strong>Geometry</strong> is the branch of mathematics that deals with shapes, sizes, and properties of figures.</li>
+<li><strong>Lines and angles</strong> are fundamental components of geometry, forming the basis for many theorems and constructions.</li>
+</ul>
+<hr>
+<h2><strong>2. Basic Terms and Definitions</strong></h2>
+<h3><strong>Point</strong></h3>
+<ul>
+<li>A location in space with no size or dimensions.</li>
+<li>Represented by a capital letter (e.g., A, B, C).</li>
+</ul>
+<h3><strong>Line</strong></h3>
+<ul>
+<li>A collection of infinite points extending in both directions.</li>
+<li>Has no endpoints.</li>
+<li>Represented as <strong>&harr;</strong> (e.g., <strong>AB &harr;</strong>).</li>
+</ul>
+<h3><strong>Line Segment</strong></h3>
+<ul>
+<li>A part of a line with two endpoints.</li>
+<li>Represented as <strong>&minus;</strong> (e.g., <strong>AB &minus;</strong>).</li>
+</ul>
+<h3><strong>Ray</strong></h3>
+<ul>
+<li>A part of a line that starts at a point and extends infinitely in one direction.</li>
+<li>Represented as <strong>&rarr;</strong> (e.g., <strong>AB &rarr;</strong>).</li>
+</ul>
+<h3><strong>Angle</strong></h3>
+<ul>
+<li>Formed when two rays meet at a common point (vertex).</li>
+<li>Measured in degrees (<strong>&deg;</strong>).</li>
+</ul>
+<hr>
+<h2><strong>3. Types of Angles</strong></h2>
+<ol>
+<li><strong>Acute Angle</strong>: Less than <span class="katex">90∘90^\circ</span>.</li>
+<li><strong>Right Angle</strong>: Exactly <span class="katex">90∘90^\circ</span>.</li>
+<li><strong>Obtuse Angle</strong>: Between <span class="katex">90∘90^\circ</span> and <span class="katex">180∘180^\circ</span>.</li>
+<li><strong>Straight Angle</strong>: Exactly <span class="katex">180∘180^\circ</span>.</li>
+<li><strong>Reflex Angle</strong>: Between <span class="katex">180∘180^\circ</span> and <span class="katex">360∘360^\circ</span>.</li>
+<li><strong>Complete Angle</strong>: Exactly <span class="katex">360∘360^\circ</span>.</li>
+</ol>
+<hr>
+<h2><strong>4. Types of Pairs of Angles</strong></h2>
+<ol>
+<li>
+<p><strong>Adjacent Angles</strong></p>
+<ul>
+<li>Two angles with a common vertex and a common arm but no overlap.</li>
+<li>Example: <span class="katex">&ang;ABC\angle ABC</span> and <span class="katex">&ang;CBD\angle CBD</span>.</li>
+</ul>
+</li>
+<li>
+<p><strong>Linear Pair of Angles</strong></p>
+<ul>
+<li>Two adjacent angles that form a straight line.</li>
+<li><strong>Sum = <span class="katex">180∘180^\circ</span></strong>.</li>
+<li>Example: If <span class="katex">&ang;A+&ang;B=180∘\angle A + \angle B = 180^\circ</span>, they are a linear pair.</li>
+</ul>
+</li>
+<li>
+<p><strong>Vertically Opposite Angles</strong></p>
+<ul>
+<li>Formed when two lines intersect.</li>
+<li><strong>Always equal</strong>.</li>
+<li>Example: If <span class="katex">&ang;A=50∘\angle A = 50^\circ</span>, then opposite <span class="katex">&ang;B=50∘\angle B = 50^\circ</span>.</li>
+</ul>
+</li>
+<li>
+<p><strong>Complementary Angles</strong></p>
+<ul>
+<li><strong>Sum = <span class="katex">90∘90^\circ</span></strong>.</li>
+<li>Example: <span class="katex">30∘+60∘=90∘30^\circ + 60^\circ = 90^\circ</span>.</li>
+</ul>
+</li>
+<li>
+<p><strong>Supplementary Angles</strong></p>
+<ul>
+<li><strong>Sum = <span class="katex">180∘180^\circ</span></strong>.</li>
+<li>Example: <span class="katex">110∘+70∘=180∘110^\circ + 70^\circ = 180^\circ</span>.</li>
+</ul>
+</li>
+<li>
+<p><strong>Explementary Angles</strong></p>
+<ul>
+<li><strong>Sum = <span class="katex">360∘360^\circ</span></strong>.</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2><strong>5. Intersecting and Parallel Lines</strong></h2>
+<h3><strong>Transversal</strong></h3>
+<p>A line that cuts two or more lines at different points.</p>
+<h3><strong>Angles Formed by a Transversal</strong></h3>
+<ol>
+<li>
+<p><strong>Corresponding Angles</strong></p>
+<ul>
+<li>On the same side of the transversal.</li>
+<li><strong>Equal when lines are parallel</strong>.</li>
+<li>Example: <span class="katex">&ang;1=&ang;5\angle 1 = \angle 5</span>.</li>
+</ul>
+</li>
+<li>
+<p><strong>Alternate Interior Angles</strong></p>
+<ul>
+<li>On opposite sides of the transversal, inside the parallel lines.</li>
+<li><strong>Equal when lines are parallel</strong>.</li>
+<li>Example: <span class="katex">&ang;3=&ang;6\angle 3 = \angle 6</span>.</li>
+</ul>
+</li>
+<li>
+<p><strong>Alternate Exterior Angles</strong></p>
+<ul>
+<li>On opposite sides of the transversal, outside the parallel lines.</li>
+<li><strong>Equal when lines are parallel</strong>.</li>
+<li>Example: <span class="katex">&ang;1=&ang;8\angle 1 = \angle 8</span>.</li>
+</ul>
+</li>
+<li>
+<p><strong>Consecutive Interior (Co-Interior) Angles</strong></p>
+<ul>
+<li>Inside parallel lines, on the same side of the transversal.</li>
+<li><strong>Sum = <span class="katex">180∘180^\circ</span> when lines are parallel</strong>.</li>
+<li>Example: <span class="katex">&ang;3+&ang;5=180∘\angle 3 + \angle 5 = 180^\circ</span>.</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2><strong>6. Important Theorems on Lines and Angles</strong></h2>
+<h3><strong>Theorem 1: If two lines intersect, then the vertically opposite angles are equal.</strong></h3>
+<p>✅ <strong>Proof:</strong></p>
+<ul>
+<li>Let two lines intersect at <span class="katex">OO</span>, forming angles <span class="katex">A,B,C,DA, B, C, D</span>.</li>
+<li>Since angles on a straight line sum to <span class="katex">180∘180^\circ</span>: <span class="katex">&ang;A+&ang;B=180∘\angle A + \angle B = 180^\circ</span> <span class="katex">&ang;C+&ang;D=180∘\angle C + \angle D = 180^\circ</span></li>
+<li>But also: <span class="katex">&ang;A=&ang;C,&ang;B=&ang;D\angle A = \angle C, \quad \angle B = \angle D</span></li>
+<li><strong>Conclusion:</strong> Vertically opposite angles are equal.</li>
+</ul>
+<hr>
+<h3><strong>Theorem 2: If a transversal intersects two parallel lines, then</strong></h3>
+<ul>
+<li><strong>Corresponding angles are equal</strong></li>
+<li><strong>Alternate interior angles are equal</strong></li>
+<li><strong>Co-interior angles are supplementary</strong></li>
+</ul>
+<p>✅ <strong>Proof:</strong></p>
+<ul>
+<li>Given two parallel lines <span class="katex">ll</span> and <span class="katex">mm</span>, transversal <span class="katex">tt</span> cuts them.</li>
+<li>Using the straight-line property and parallelism, we prove the above relationships.</li>
+</ul>
+<hr>
+<h3><strong>Theorem 3: Lines Parallel to the Same Line are Parallel to Each Other.</strong></h3>
+<p>✅ <strong>Statement:</strong><br>If two lines are parallel to the same third line, they are parallel to each other.</p>
+<p>✅ <strong>Proof:</strong></p>
+<ul>
+<li>Given three lines: <span class="katex">A∥BA \parallel B</span> and <span class="katex">B∥CB \parallel C</span>.</li>
+<li>By the transitive property, <span class="katex">A∥CA \parallel C</span>.</li>
+</ul>
+<hr>
+<h2><strong>7. Angle Sum Property of a Triangle</strong></h2>
+<p>✅ <strong>Statement:</strong><br>The sum of the interior angles of a triangle is always <span class="katex">180∘180^\circ</span>.</p>
+<p>✅ <strong>Proof:</strong></p>
+<ul>
+<li>Draw a parallel line through one vertex.</li>
+<li>Use alternate interior angles and straight-line properties to show: <span class="katex">&ang;A+&ang;B+&ang;C=180∘\angle A + \angle B + \angle C = 180^\circ</span></li>
+</ul>
+<hr>
+<h2><strong>8. Summary &ndash; Quick Recap 🚀</strong></h2>
+<p>✅ <strong>Types of angles</strong>: Acute, Right, Obtuse, Straight, Reflex, Complete.<br>✅ <strong>Angle pairs</strong>: Complementary (<span class="katex">90∘90^\circ</span>), Supplementary (<span class="katex">180∘180^\circ</span>), Linear Pair, Vertically Opposite, etc.<br>✅ <strong>Transversal angles</strong>: Corresponding, Alternate Interior, Alternate Exterior, Co-Interior.<br>✅ <strong>Key Theorems</strong>:</p>
+<ul>
+<li><strong>Vertically opposite angles are equal.</strong></li>
+<li><strong>Parallel lines with a transversal follow specific angle rules.</strong></li>
+<li><strong>Sum of angles in a triangle is <span class="katex">180∘180^\circ</span>.</strong></li>
+</ul>
+<hr>
+<p>🎯 <strong>Now you&rsquo;re a master of Lines and Angles! 🚀🔥</strong></p>
+            `,
+            "subject": "Mathematics",
+            "difficulty": "Intermediate",
+            "relatedChapters": ["Linear Equations", "Quadratic Equations"]
+        }
+        
         
         // Add more detailed chapters here
     ],
@@ -2252,6 +2542,7 @@ Average Mass = (Mass₁ × Abundance₁%) + (Mass₂ × Abundance₂%)
             "difficulty": "Intermediate",
             "relatedChapters": ["The Fun They Had", "The Little Girl"]
         },
+
         
         
     ],
