@@ -2542,6 +2542,156 @@ Average Mass = (Mass₁ × Abundance₁%) + (Mass₂ × Abundance₂%)
             "difficulty": "Intermediate",
             "relatedChapters": ["The Fun They Had", "The Little Girl"]
         },
+        {
+            "title":"The Lost Child",
+            "content":`
+            <h1>📚 The Lost Child &ndash; Detailed Notes</h1>
+<h2>📌 Author: <strong>Mulk Raj Anand</strong></h2>
+<h2>📌 Genre: Fiction, Realism</h2>
+<h2>📌 Theme: <strong>Childhood Innocence, Parental Love, Material vs. Emotional Needs</strong></h2>
+<hr>
+<h2>🌟 Summary &ndash; The Lost Child</h2>
+<p>The story follows a little boy who visits a village fair with his parents. He is fascinated by the sights, sounds, and vibrant attractions but is denied all his desires. However, when he suddenly gets separated from his parents, he realizes that everything he wished for earlier becomes meaningless in the absence of his parents.</p>
+<hr>
+<h2>📝 In-Depth Explanation &ndash; Scene by Scene</h2>
+<h3>🌼 1. The Journey to the Fair</h3>
+<ul>
+<li>A little <em>boy and his parents are on their way to a village fair</em>.</li>
+<li>The <em>boy is full of excitement</em> as he observes nature:
+<ul>
+<li><em>He sees mustard fields, dragonflies, butterflies, and flowers</em>.</li>
+</ul>
+</li>
+<li>The parents walk ahead while the child gets distracted.</li>
+<li><em>His mother calls him</em>, and he runs toward them.</li>
+</ul>
+<h3>🎡 2. Attractions in the Fair</h3>
+<ul>
+<li>The fair is full of <em>vibrant colors, different stalls, and entertaining acts</em>.</li>
+<li>The boy sees:
+<ul>
+<li>A <em>toy shop</em> 🎎 &ndash; He <em>wants a toy</em> but <em>fears refusal</em> from his parents.</li>
+<li>A <em>sweet shop</em> 🍭 &ndash; He sees <em>gulab jamun, rasgulla, burfi, jalebi</em> but does not ask for them.</li>
+<li>A <em>garland shop</em> 💐 &ndash; He sees <em>beautiful flower garlands</em> but <em>moves on without asking</em>.</li>
+<li>A <em>balloon vendor</em> 🎈 &ndash; He wishes to have balloons but <em>knows his parents will refuse</em>.</li>
+<li>A <em>snake charmer</em> 🐍 &ndash; He is <em>attracted by the flute music</em> but <em>doesn&rsquo;t stop as he knows his parents disapprove</em>.</li>
+</ul>
+</li>
+</ul>
+<h3>🚶&zwj;♂ 3. The Moment He Gets Lost</h3>
+<ul>
+<li>He sees a <em>roundabout (merry-go-round)</em> 🎠 and gets excited.</li>
+<li>He <em>turns around to ask his parents for a ride &ndash; but they are not there!</em></li>
+<li><em>Fear grips him; he realizes he is lost!</em> 😨</li>
+<li>He starts <em>crying loudly, calling out for his parents.</em></li>
+<li>His <em>joy turns into deep sorrow</em>.</li>
+</ul>
+<h3>💔 4. The Child&rsquo;s Despair</h3>
+<ul>
+<li>The boy <em>runs in all directions, searching for his parents.</em></li>
+<li>His *clothes get dusty, his *<em>face is tear-streaked</em>.</li>
+<li>He <em>shouts for his mother and father</em>, but no one answers.</li>
+<li>His <em>previous desires vanish</em> &ndash; he only <em>wants his parents back</em>.</li>
+</ul>
+<h3>🤚 5. A Kind Stranger Helps</h3>
+<ul>
+<li>A <em>kind-hearted man notices the lost child</em> and tries to comfort him.</li>
+<li>He *offers him sweets, balloons, a ride on the merry-go-round, but the child *<em>rejects everything</em>.</li>
+<li><em>He only wants his parents.</em> 💔</li>
+</ul>
+<hr>
+<h2>📚 Themes &amp; Message</h2>
+<h3>1. Childhood Innocence &amp; Material Desires</h3>
+<ul>
+<li>The boy is initially <em>fascinated by toys, sweets, and attractions</em>.</li>
+<li>But once he is lost, <em>his priorities change</em> &ndash; proving that material things are <em>meaningless without love and security</em>.</li>
+</ul>
+<h3>2. Parental Love &amp; Bond</h3>
+<ul>
+<li>The child <em>realizes the importance of his parents only after losing them</em>.</li>
+<li><em>Emotional needs are greater than materialistic desires.</em></li>
+</ul>
+<h3>3. Fear &amp; Anxiety of Separation</h3>
+<ul>
+<li>The story portrays the <em>deep fear of a lost child</em>.</li>
+<li>His <em>helplessness &amp; vulnerability</em> make the reader empathize with him.</li>
+</ul>
+<h3>4. Kindness &amp; Compassion</h3>
+<ul>
+<li>The *stranger tries to comfort the child, showing that *<em>human kindness exists even among strangers</em>.</li>
+</ul>
+<hr>
+<h2>💡 Literary Devices &amp; Symbolism</h2>
+<h3>1. Imagery 🎨</h3>
+<ul>
+<li>*Nature&rsquo;s Beauty: The description of the mustard fields, butterflies, and dragonflies creates a *<em>vivid visual</em>.</li>
+<li>*The Vibrant Fair: Bright colors, dazzling sights, and mouth-watering sweets make the fair *<em>come alive</em>.</li>
+</ul>
+<h3>2. Contrast (Before vs. After Getting Lost)</h3>
+<ul>
+<li>*Before: The child is *<em>joyful, excited, and curious</em> about the fair.</li>
+<li>*After: He is *<em>terrified, crying, and desperate to find his parents.</em></li>
+</ul>
+<h3>3. Symbolism</h3>
+<ul>
+<li><em>Toys, sweets, and attractions</em> = <em>Childish desires</em> (materialism).</li>
+<li><em>Separation from parents</em> = <em>Emotional realization</em> (love &gt; material things).</li>
+<li><em>Stranger&rsquo;s kindness</em> = <em>Hope &amp; humanity</em>.</li>
+</ul>
+<hr>
+<h2>📝 Important Questions &amp; Answers</h2>
+<h3>1. Why didn&rsquo;t the child ask for the things he wanted at the fair?</h3>
+<p>✔ The child <em>knew his parents would refuse</em> to buy him unnecessary things.</p>
+<h3>2. What happened when the child turned around at the roundabout?</h3>
+<p>✔ He realized that <em>his parents were gone</em> and started crying.</p>
+<h3>3. How did the child react after getting lost?</h3>
+<p>✔ He was <em>terrified, crying loudly, running in all directions</em> to find his parents.</p>
+<h3>4. What did the stranger do for the child?</h3>
+<p>✔ He *tried to comfort the boy, offering sweets, balloons, and rides, but the child *<em>only wanted his parents</em>.</p>
+<h3>5. What is the main message of the story?</h3>
+<p>✔ <em>Parental love is more valuable than materialistic desires.</em></p>
+<hr>
+<h2>🎯 Summary Table &ndash; Quick Revision</h2>
+<table>
+<thead>
+<tr>
+<th><em>Scene</em></th>
+<th><em>What Happens?</em></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>1. The Journey</em></td>
+<td>Boy and parents walk to the fair, he gets distracted.</td>
+</tr>
+<tr>
+<td><em>2. Fair Attractions</em></td>
+<td>He wants toys, sweets, balloons, but doesn&rsquo;t ask.</td>
+</tr>
+<tr>
+<td><em>3. Getting Lost</em></td>
+<td>He turns around at the merry-go-round and finds his parents missing.</td>
+</tr>
+<tr>
+<td><em>4. Fear &amp; Crying</em></td>
+<td>Runs everywhere, shouts for his parents.</td>
+</tr>
+<tr>
+<td><em>5. The Kind Stranger</em></td>
+<td>A man helps him, but he only wants his parents.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>📝 Final Thoughts &ndash; Why This Story is Important</h2>
+<p>✔ <em>It reminds us that love and family are more valuable than any material things.</em><br>✔ <em>It captures childhood innocence and the deep fear of separation.</em><br>✔ <em>The simple yet emotional storytelling makes it relatable to all.</em></p>
+<hr>
+<p>🔥 <em>Congratulations!</em> Now you know everything about <em>The Lost Child</em>! 🚀💯 Let me know if you need more explanations or practice questions. 🎯</p>
+            `,
+            "subject": "English",
+            "difficulty": "Intermediate",
+            "relatedChapters": ["The Fun They Had", "The Little Girl"]
+        }
 
         
         
